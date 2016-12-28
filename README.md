@@ -1,2 +1,2 @@
 # discord-bot-core
-Core framework for a python-based Discord bot
+WIP: simple, easily expandable, and well documented framework to add custom commands and interactions to Discord
