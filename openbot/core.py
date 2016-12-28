@@ -7,3 +7,4 @@ class BotCore(config_file='config/openbot.json'):
     pass
 
   def load_plugins(self):
+    pass
