@@ -2,10 +2,16 @@ from abc import ABC, abstractmethod
 
 class BotFunction(ABC):
 
-  @abstractmethod
-  def __init__(self):
-    pass
+  fnc_help_test = None
+  fnc_name = None
+  fnc_allowed_args_length = "0"
+  fnc_allowed_modifiers = None
+
+
+  def __init__(self, core):
+    self.core = core
+
 
   @abstractmethod
-  def call(self, core, args):
+  def call(self, args, mod):
     pass
