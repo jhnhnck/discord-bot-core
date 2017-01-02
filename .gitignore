@@ -1,3 +1,6 @@
+# Project Specific Ignores
+music-cache/*
+config/*
 
 # Created by https://www.gitignore.io/api/pycharm,pycharm,python,linux,windows,macos
 
