@@ -6,6 +6,7 @@ class BotPlugin(ABC):
   plugin_name = None
   plugin_prefix = None
   plugin_description = None
+  plugin_version = None
 
   def __init__(self, core):
     self.core = core
