@@ -1,8 +1,38 @@
 {
   "core": {
     "name": "openbot-discord",
+    "info": {
+      "plaintext": "{}"
+    },
+    "error": {
+      "locale_missing": "{error.error_base} Message \"{message}\" could not be associated to parent \"{locale_string}\""
+    }
   },
-  "error": {
-
+  "base": {
+    "error_base": "{colors.red}Error: {message}{format.reset}"
+  },
+  "colors": {
+    "black": "\u001B[30m",
+    "dark_red" : "\u001B[31m",
+    "green": "\u001B[32m",
+    "dark_yellow": "\u001B[33m",
+    "dark_blue": "\u001B[34m",
+    "magenta": "\u001B[35m",
+    "dark_cyan": "\u001B[36m",
+    "gray": "\u001B[37m",
+    "dark_gray": "\u001B[90m",
+    "red" : "\u001B[91m",
+    "lime": "\u001B[92m",
+    "yellow": "\u001B[93m",
+    "blue": "\u001B[94m",
+    "purple": "\u001B[95m",
+    "cyan": "\u001B[96m",
+    "white": "\u001B[97m"
+  },
+  "format": {
+    "reset": "\u001B[0m",
+    "bold": "\u001B[1m",
+    "italic": "\u001B[1m",
+    "underline": "\u001B[4m"
   }
 }
