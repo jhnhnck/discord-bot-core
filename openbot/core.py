@@ -1,4 +1,5 @@
 import os
+import argparse
 import importlib.util
 
 from openbot.client import BotClient
@@ -11,12 +12,12 @@ class BotCore:
 
   CORE_VERSION = "0.0.1"
   CORE_RELEASE_TYPE = "alpha"
+  CORE_DESCRIPTION = "A simple, easily expandable, and well documented framework to add custom commands and interactions to Discord"
 
-  def __init__(self):
-    self.config = ConfigStream(self)
+  def __init__(self, config_file, locale):
+    self.logger = Logger(self, locale)
     self.server = BotClient(self)
     self.permissions = BotPerms()
-    self.logger = Logger(self)
 
     self.store, self.plugins = self.load_plugins()
     # self.tasks = self.load_tasks()
@@ -67,4 +68,11 @@ class BotCore:
     return "No, fuck you"
 
 if __name__ == "__main__":
-  BotCore()
+  parser = argparse.ArgumentParser(description=BotCore.CORE_DESCRIPTION)
+  parser.add_argument('-c', '--config', nargs=1, default='config/openbot.json',
+                      help='location of config file')
+  parser.add_argument('-l', '--locale', nargs=1, default='en_us',
+                      help='language')
+  args = parser.parse_args()
+
+  BotCore(args.config, args.locale)
