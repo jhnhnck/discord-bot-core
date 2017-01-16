@@ -37,14 +37,24 @@ class BotCore:
         spec.loader.exec_module(store[plugin_name])
         plugins[plugin_name] = store[plugin_name].PluginBase()
       except Exception as e:
-        print("Error loading plugin: {}".format(plugin))
+        self.logger.log(plugin,
+                        parent="core.error.plugin_loading",
+                        type=LogLevel.error,
+                        error_point=e,
+                        send_to_chat=False)
 
+    """
     # Debug code for now
     for name, plugin in plugins.items():
       if name == plugin.get_definitions()['plugin_name'].split('.')[-1]:
-        print("Sucessfully loaded plugin {}\n -> {}".format(name, plugin.get_definitions()['plugin_description']))
+        print("Successfully loaded plugin {}\n -> {}".format(name, plugin.get_definitions()['plugin_description']))
       else:
+        self.logger.log(name,
+                        parent="core.error.plugin_loading",
+                        error_point="idk wtf this does",
+                        send_to_chat=False)
         print("Error loading plugin: {}".format(name))
+    """
 
     return store, plugins
 
@@ -54,12 +64,19 @@ class BotCore:
   def load_functions(self):
     functions = []
     for name, plugin in self.plugins.items():
+      self.logger.log(name,
+                      parent='core.debug.load_function_plugin_title',
+                      type=LogLevel.debug,
+                      send_to_chat=False)
       prefix = plugin.get_definitions()['plugin_prefix']
       for ftn in plugin.get_functions():
         functions.append("{command_prefix}{plugin_prefix}.{ftn}".format(command_prefix=command_prefix,
                                                                         plugin_prefix=prefix,
                                                                         ftn=ftn))
-        print("Successfully loaded function: {}".format(functions[-1]))
+        self.logger.log(functions[-1],
+                        parent="core.debug.load_function_success",
+                        type=LogLevel.debug,
+                        send_to_chat=False)
       functions.append(plugin.get_functions())
 
     return functions
