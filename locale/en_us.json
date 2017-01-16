@@ -2,14 +2,36 @@
   "core": {
     "name": "openbot-discord",
     "info": {
-      "plaintext": "{}"
+      "plaintext": "{message}",
+      "bot_logged": "Bot connected to Discord as \"{message}\""
     },
     "error": {
-      "locale_missing": "{error.error_base} Message \"{message}\" could not be associated to parent \"{locale_string}\""
+      "locale_missing": "Message {message} could not be associated to parent \"{error_point}\"",
+      "locale_early_termination": "Message {message} provided with trucated parent \"{error_point}\"",
+      "plugin_loading": "Plugin \"{message}\" could not be loaded. [{error_point}]"
+    },
+    "debug": {
+      "load_function_plugin_title": "Enumerating functions for [{message}]",
+      "load_function_success": " Added function \"{message}\""
     }
   },
   "base": {
-    "error_base": "{colors.red}Error: {message}{format.reset}"
+    "cli": {
+      "trace_base": "{green}> trace. {message}{reset}",
+      "debug_base": "{blue}> debug. {message}{reset}",
+      "info_base": "> info.  {message}",
+      "warn_base": "{yellow}> warn.  {message}{reset}",
+      "error_base": "{red}> error. {message}{reset}",
+      "fatal_base": "{dark_red}> fatal. {message}{reset}"
+    },
+    "chat": {
+      "trace_base": "```\nTrace.\n{message}\n```",
+      "debug_base": "```\nDebug.\n{message}\n```",
+      "info_base": "{message}",
+      "warn_base": "```\nWarning.\n{message}\n```",
+      "error_base": "```\nAn error occured.\n{message}\n```",
+      "fatal_base": "```\nA fatal error occured.\n{message}\n```"
+    }
   },
   "colors": {
     "black": "\u001B[30m",
