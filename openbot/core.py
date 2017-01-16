@@ -5,7 +5,7 @@ import importlib.util
 from openbot.client import BotClient
 from openbot.permissions import BotPerms
 from openbot.config import ConfigStream
-from openbot.logger import Logger
+from openbot.logger import Logger, LogLevel
 
 
 class BotCore:
