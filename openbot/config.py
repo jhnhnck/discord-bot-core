@@ -65,18 +65,17 @@ class ConfigStream:
     return matched_set
 
 
-  def get_config(self, package, key):
+  def get_config(self, key):
     # TODO: Get config from package and key
     pass
 
 
-  def set_config(self, package, key, value):
+  def set_config(self, key, value):
     # TODO: Get config from package and key
     pass
 
 
   def _unpack_config_key(self, key):
-    # TODO: unpack dot-separated config key
     pass
 
 
