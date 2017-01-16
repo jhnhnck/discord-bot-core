@@ -25,7 +25,7 @@ class BotCore:
     self.server.run('***REMOVED***')
 
 
-  def load_plugins(self):
+  def _load_plugins(self):
     store = {}
     plugins = {}
 
@@ -58,10 +58,10 @@ class BotCore:
 
     return store, plugins
 
-  def load_tasks(self):
+  def _load_tasks(self):
     pass
 
-  def load_functions(self):
+  def _load_functions(self):
     functions = []
     for name, plugin in self.plugins.items():
       self.logger.log(name,
