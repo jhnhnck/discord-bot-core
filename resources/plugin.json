@@ -1,0 +1,28 @@
+{
+  "description": {
+    "plugin_name": "",
+    "domain_name": "",
+    "plugin_prefix": "",
+    "plugin_description": ""
+  },
+  "versioning": {
+    "plugin_version": "",
+    "requires": "[*]",
+    "update_repo": "",
+    "beta_update_repo": ""
+  },
+  "user": {
+    "enabled": true,
+    "auto_update": true,
+    "beta_testing": false
+  },
+  "config_template": {},
+  "functions": {
+    "example": {
+      "help_test": "",
+      "function_name": "",
+      "allowed_args_length": "[*]",
+      "allowed_modifiers": {}
+    }
+  }
+}

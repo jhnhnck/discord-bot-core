@@ -25,6 +25,62 @@ class BotCore:
     self.server.run('***REMOVED***')
 
 
+
+  """
+  Basic Plugin Structure.
+
+  Naming.
+    The plugin should be contained within a directory in the 'plugins/' directory named in the form 'domain_plugin'.
+    The domain should be an identifier for the specific developer and/or developing group and the plugin be a somewhat
+    unique plugin name. Domain name is only used if both plugin names and plugin prefixes conflict which "probably won't
+    ever happen"^(tm).
+
+  Plugin Structure.
+    Plugins are defined based upon a json file located in the root of the plugin directory (see Naming. above). You can
+    use the following commented example as a starting point or make a copy of the 'plugin.json' file within the
+    'resources/' directory. Note that this format and its fields may change with development without notice. The file
+    and the below example may not always be up to date. As always the best example of plugin structure can be found in
+    the 'jhnhnck_coreftns' plugin located at 'https://github.com/jhnhnck/discord-bot-coreftns'
+
+    Example:
+    {
+      "description": {                          -> SECTION: Appearance of the plugin
+        "plugin_name": "coreftns",               -> name of plugin (should match directory name)
+        "domain_name": "jhnhnck",                -> developer identifier
+        "plugin_prefix": "core",                 -> used in case of function name conflicts
+        "plugin_description":                    -> provided to the end user via the help function
+          "Core functions included with discord-bot-core"
+      },
+      "versioning": {                           -> SECTION: Handles compatibility and updating
+        "plugin_version": "1.0.0r0",             -> plugin version: defaults to major.minor.patch with optional revision
+                                                    for beta versions; if you wish to use a different form, you must
+                                                    override the '_compare_versions' function in your 'plugin_name.py'
+        "release_type": "stable",                -> valid options are stable, preview, beta, alpha, and internal
+        "requires": "[*]",                       -> bot-core compatible versions; available symbols are "[]()<>=!,*"
+        "update_check_url": "",                  -> url to json formatted update description (see update.json)
+        "beta_update_check_url": "",             -> same as above
+      },
+      "user": {                                 -> SECTION: User options (leave at default settings)
+        "enabled": true,                         -> if enabled, plugin will load
+        "auto_update": true,                     -> if enabled, check update url on start
+        "beta_testing": false                    -> if enabled, download beta releases if provided
+      },
+      "config_template": {},                    -> SECTION: Default config that will be copied to master config upon
+                                                   first load or update
+      "functions": {                            -> SECTION: Each function definition
+        "example": {                             -> internal name of function
+          "help_test": "provides an example",     -> provided to the end user via the help function
+          "function_name": "example",               -> name of function as it will be called
+          "allowed_args_length": "[0,>7,<9]",       -> number of space-delimited or comma-delimited arguments to allow;
+                                                       available symbols are "[]()<>=!,*"
+          "allowed_modifiers": {                    -> modifiers that do not count toward arguments; key should contain
+            "-a=": "file to use",                      actual modifier (trailing equals allows for '-a=myfile.txt' or
+            "--list": "list available files"           '-a myfile.txt') and value should be a brief description
+          }
+        }
+      }
+    }
+  """
   def _load_plugins(self):
     store = {}
     plugins = {}
