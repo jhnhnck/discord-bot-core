@@ -87,7 +87,16 @@ class BotCore:
 
     for plugin in os.listdir('plugins/'):
       try:
-        plugin_name = plugin.split('.')[-1]
+        # Splits fully-qualified plugin name into plugin domain/group name and plugin name.
+        if plugin.find('_') != -1:
+          split = plugin.split('_')
+          plugin_name = split[:-1]
+          domain_name = split[0]
+        else:
+          self.logger.log(plugin, error_point='nodomain', parent='core.warn.plugin_domain_malformed')
+          domain_name = 'nodomain'
+          plugin_name = plugin
+
         spec = importlib.util.spec_from_file_location(plugin,"plugins/{}/{}.py".format(plugin, plugin_name))
         store[plugin_name] = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(store[plugin_name])
