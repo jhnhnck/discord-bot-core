@@ -118,7 +118,7 @@ class BotCore:
         spec = importlib.util.spec_from_file_location(plugin,"plugins/{}/{}.py".format(plugin, plugin_name))
         store[plugin_name] = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(store[plugin_name])
-        plugins[plugin_name] = store[plugin_name].PluginBase()
+        plugins[plugin_name] = store[plugin_name].PluginBase(self)
       except Exception as e:
         self.logger.log(plugin,
                         parent="core.error.plugin_loading",
