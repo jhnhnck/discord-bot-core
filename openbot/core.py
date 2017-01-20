@@ -80,6 +80,15 @@ class BotCore:
         }
       }
     }
+
+    Additionally, the plugin must also have a python file named in the form 'plugin_name.py' that contains a class
+    'PluginBase' that inherits 'openbot.abstract.plugin'. This class does not have to implement any methods (you may
+    simply put 'pass' in the body) but can override the other methods present in the abstract class for more
+    customization such as changing the default versioning scheme or (see 'openbot/abstract/plugin.py' for more details).
+
+  Internal Plugin Structure.
+    Each plugin is loaded into a dictionary with the above keys and values with an additional key of 'store' for the
+    loaded class and 'plugin' for the initialized plugin.
   """
   def _load_plugins(self):
     store = {}

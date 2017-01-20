@@ -1,34 +1,11 @@
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 
 
 class BotPlugin(ABC):
 
-  plugin_name = None
-  plugin_prefix = None
-  plugin_description = None
-  plugin_version = None
-
   def __init__(self, core):
     self.core = core
 
-  @abstractmethod
-  def load(self):
-    pass
 
-  @abstractmethod
-  def get_functions(self):
+  def _compare_versions(self):
     pass
-
-  @abstractmethod
-  def get_default_config(self):
-    """
-      This should be in the form of a dictionary
-    """
-    pass
-
-  def get_definitions(self):
-    return {
-      'plugin_name': self.plugin_name,
-      'plugin_prefix': self.plugin_prefix,
-      'plugin_description': self.plugin_description,
-    }
