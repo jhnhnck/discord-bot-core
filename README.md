@@ -4,5 +4,6 @@ WIP: simple, easily expandable, and well documented framework to add custom comm
 # Development Setup
 Run the following command to setup the plugins directory:
 ```git
-git submodule update --recursive --remote
+git submodule init
+git submodule update
 ```
