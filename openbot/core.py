@@ -12,18 +12,27 @@ class BotCore:
 
   CORE_VERSION = "0.0.1"
   CORE_RELEASE_TYPE = "alpha"
-  CORE_DESCRIPTION = "A simple, easily expandable, and well documented framework to add custom commands and interactions to Discord"
+  CORE_DESCRIPTION = "A simple, easily expandable, and well documented framework to add custom commands and \
+                      interactions to Discord"
 
   def __init__(self, config_file, locale):
+    self.loop = asyncio.AbstractEventLoop()
     self.logger = Logger(self, locale)
+    self.logger.self_test()
+
+    self.store, self.plugins = self.load_plugins()
+
+    self.config = ConfigStream(self, config_file=config_file)
     self.server = BotClient(self)
     self.permissions = BotPerms()
 
-    self.store, self.plugins = self.load_plugins()
     # self.tasks = self.load_tasks()
-    self.functions = self.load_functions()
-    self.server.run('***REMOVED***')
+    self.functions = self._load_functions()
+    self._register_configs()
 
+  def run(self):
+    # Client token: '***REMOVED***'
+    self.server.run(self.config.get_config())
 
 
   """
@@ -155,8 +164,11 @@ class BotCore:
 
     return functions
 
-  def fuck_you_bitch(self):
-    return "No, fuck you"
+  def _register_configs(self):
+      for name, plugin in self.plugins.items():
+        # TODO: Log level=Debug "Config given to plugins [{}]" (array of registered plugins)
+        
+
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=BotCore.CORE_DESCRIPTION)
@@ -166,4 +178,5 @@ if __name__ == "__main__":
                       help='language')
   args = parser.parse_args()
 
-  BotCore(args.config, args.locale)
+  core = BotCore(args.config, args.locale)
+  core.run()
