@@ -153,7 +153,8 @@ class BotCore:
                       send_to_chat=False)
       prefix = plugin.get_definitions()['plugin_prefix']
       for ftn in plugin.get_functions():
-        functions.append("{command_prefix}{plugin_prefix}.{ftn}".format(command_prefix=command_prefix,
+        functions.append("{command_prefix}{plugin_prefix}.{ftn}"
+                         .format(command_prefix=self.config.get_config('core', 'command_prefix'),
                                                                         plugin_prefix=prefix,
                                                                         ftn=ftn))
         self.logger.log(functions[-1],
