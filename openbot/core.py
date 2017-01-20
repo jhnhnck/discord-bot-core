@@ -16,11 +16,10 @@ class BotCore:
                       interactions to Discord"
 
   def __init__(self, config_file, locale):
-    self.loop = asyncio.AbstractEventLoop()
     self.logger = Logger(self, locale)
     self.logger.self_test()
 
-    self.store, self.plugins = self.load_plugins()
+    self.store, self.plugins = self._load_plugins()
 
     self.config = ConfigStream(self, config_file=config_file)
     self.server = BotClient(self)
@@ -154,7 +153,7 @@ class BotCore:
       prefix = plugin.get_definitions()['plugin_prefix']
       for ftn in plugin.get_functions():
         functions.append("{command_prefix}{plugin_prefix}.{ftn}"
-                         .format(command_prefix=self.config.get_config('core', 'command_prefix'),
+                         .format(command_prefix=self.config.get_config('core.command_prefix'),
                                                                         plugin_prefix=prefix,
                                                                         ftn=ftn))
         self.logger.log(functions[-1],
@@ -168,6 +167,7 @@ class BotCore:
   def _register_configs(self):
       for name, plugin in self.plugins.items():
         # TODO: Log level=Debug "Config given to plugins [{}]" (array of registered plugins)
+        pass
         
 
 
