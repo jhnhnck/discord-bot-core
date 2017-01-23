@@ -65,17 +65,25 @@ class ConfigStream:
     return matched_set
 
 
+  # Unpacks config value from '.' separated keys
   def get_config(self, key):
-    # TODO: Get config from package and key
-    pass
+    store = self.config
+
+    try:
+      for branch in key.split('.'):
+        store = store[branch]
+      if isinstance(store, dict):
+        # TODO: Handle endpoint on dict (or don't)
+        pass
+    except KeyError:
+      # TODO: Handle invalid keys
+      pass
+
+    return store
 
 
   def set_config(self, key, value):
     # TODO: Get config from package and key
-    pass
-
-
-  def _unpack_config_key(self, key):
     pass
 
 
