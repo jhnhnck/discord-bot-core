@@ -13,6 +13,7 @@
   - Use of abstract base classes
   - Well formatted and consistent text output (All plugins should feel like they fit together)
   - Use of python dictionaries, custom objects, and custom error types
+  - Make use of a version control system ([git](https://en.wikipedia.org/wiki/Git))
 
 ### Basic Features ###
   - Simple and expandable document-driven plugin format
