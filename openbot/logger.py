@@ -46,7 +46,7 @@ class Logger:
         .format(message=message, error_point=error_point)
       cli_base_string = self.get_locale_string("base.cli.{}_base".format(type.name))\
         .format(message=parent_string, **self.locale['colors'], **self.locale['format'])
-      # TODO: Fix some fuckery here
+      # TODO: Fix something here
 
       self._print(cli_base_string)
 
@@ -57,14 +57,14 @@ class Logger:
         pass
 
     except ParentNotFoundException:
-      # TODO: Fix this shit, don't to this ever -jhnhnck
+      # TODO: Fix this, don't to this ever -jhnhnck
       self.log("\"{}\" with level \"{}\"".format(message, type.name),
                parent="core.error.locale_missing",
                type=LogLevel.error,
                error_point=parent,
                send_to_chat=send_to_chat)
     except ParentScopeException:
-      # TODO: Fix this shit, don't to this ever -jhnhnck
+      # TODO: Fix this, don't to this ever -jhnhnck
       self.log("\"{}\" with level \"{}\"".format(message, type.name),
                parent="core.error.locale_early_termination",
                type=LogLevel.error,
