@@ -21,8 +21,8 @@ class BotCore:
 
     self.store, self.plugins = self._load_plugins()
 
-    self.config = ConfigStream(self, config_file=config_file)
-    self.server = BotClient(self)
+    self.config = ConfigStream(self, self.logger, config_file=config_file)
+    self.server = BotClient(self, self.logger)
     self.permissions = BotPerms()
 
     # self.tasks = self.load_tasks()
@@ -31,7 +31,7 @@ class BotCore:
 
   def run(self):
     # Client token: '***REMOVED***'
-    self.server.run(self.config.get_config())
+    self.server.run(self.config.get_config("core.token"))
 
 
   """
