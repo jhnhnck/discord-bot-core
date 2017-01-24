@@ -45,8 +45,8 @@ class ConfigStream:
 
 
   def _unload(self):
-    # TODO: Config unloading to path
-    pass
+    with open(self.config_file, 'w') as file:
+      json.dump(self.config, file)
 
 
   def _match_keys(self, old, new):
