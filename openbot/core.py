@@ -18,8 +18,9 @@ class BotCore:
   Init.
 
   Loading Order.
-    1. Logger: In loaded in 'en_us' mode or provided locale mode
+    1. Logger: In loaded in 'en_us' mode or provided locale mode first and reloaded if changed via config
     2. Config: The configuration is loaded from 'config/openbot.json' or the provided path
+      - Logger is reloaded if loaded in 'en_us' mode and config has a differing locale
     3. Permissions: The permissions are loaded from 'config/perms.json'
     4. Plugins, Functions, Tasks: These are loaded into separate dictionaries via the Loader class
   """
@@ -28,6 +29,12 @@ class BotCore:
     self.logger.self_test()
 
     self.config = ConfigStream(self, self.logger, config_file=config_file)
+
+    # Logger is reloaded if loaded in 'en_us' mode and config has a differing locale
+    if locale == 'en_us' and self.config.get_config('core.locale') != 'en_us':
+      self.logger = Logger(BotCore.CORE_VERSION,
+                           BotCore.CORE_RELEASE_TYPE,
+                           self.config.get_config('core.locale'))
 
     # TODO: Make permissions movable
     self.permissions = BotPerms()

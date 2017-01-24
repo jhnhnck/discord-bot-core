@@ -96,6 +96,7 @@ class ConfigStream:
         'command_prefix': '//',
         'debug_mode': 'False',
         'version': self.core.CORE_VERSION,
+        'locale': 'en_us',
       },
       'chat': {
         'restrict_text_channels': {
