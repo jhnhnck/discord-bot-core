@@ -15,7 +15,7 @@ class BotCore:
                       interactions to Discord"
 
   def __init__(self, config_file, locale):
-    self.logger = Logger(self, locale)
+    self.logger = Logger(BotCore.CORE_VERSION, BotCore.CORE_RELEASE_TYPE, locale)
     self.logger.self_test()
 
     self.config = ConfigStream(self, self.logger, config_file=config_file)

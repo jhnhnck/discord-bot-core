@@ -22,9 +22,10 @@ class LogLevel(Enum):
 
 
 class Logger:
-  def __init__(self, core, locale):
+  def __init__(self, core_version, core_level, locale):
     self.locale = self._load_locale(locale)
-    self.core = core
+    self.core_version = core_version
+    self.core_level = core_level
 
 
   def _load_locale(self, locale):
