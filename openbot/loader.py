@@ -1,12 +1,12 @@
 import os
 import importlib.util
 
+import openbot.logger as logger
 from openbot.logger import LogLevel
 
 
 class Loader:
-  def __init__(self, logger, config):
-    self.logger = logger
+  def __init__(self, config):
     self.config = config
 
 
@@ -54,7 +54,7 @@ class Loader:
           plugin_name = split[:-1]
           domain_name = split[0]
         else:
-          self.logger.log(plugin, error_point='nodomain', parent='core.warn.plugin_domain_malformed')
+          logger.log(plugin, error_point='nodomain', parent='core.warn.plugin_domain_malformed')
           domain_name = 'nodomain'
           plugin_name = plugin
 
@@ -63,11 +63,11 @@ class Loader:
         spec.loader.exec_module(store[plugin_name])
         plugins[plugin_name] = store[plugin_name].PluginBase(self)
       except Exception as e:
-        self.logger.log(plugin,
-                        parent="core.error.plugin_loading",
-                        type=LogLevel.error,
-                        error_point=e,
-                        send_to_chat=False)
+        logger.log(plugin,
+                   parent="core.error.plugin_loading",
+                   type=LogLevel.error,
+                   error_point=e,
+                   send_to_chat=False)
 
     return store, plugins
 
@@ -83,20 +83,20 @@ class Loader:
 
     # TODO: This doesn't actually load with the proper form correctly
     for name, plugin in plugins.items():
-      self.logger.log(name,
-                      parent='core.debug.load_function_plugin_title',
-                      type=LogLevel.debug,
-                      send_to_chat=False)
+      logger.log(name,
+                 parent='core.debug.load_function_plugin_title',
+                 type=LogLevel.debug,
+                 send_to_chat=False)
       prefix = plugin.get_definitions()['plugin_prefix']
       for ftn in plugin.get_functions():
         functions.append("{command_prefix}{plugin_prefix}.{ftn}"
                          .format(command_prefix=self.config.get_config('core.command_prefix'),
                                  plugin_prefix=prefix,
                                  ftn=ftn))
-        self.logger.log(functions[-1],
-                        parent="core.debug.load_function_success",
-                        type=LogLevel.debug,
-                        send_to_chat=False)
+        logger.log(functions[-1],
+                   parent="core.debug.load_function_success",
+                   type=LogLevel.debug,
+                   send_to_chat=False)
       functions.append(plugin.get_functions())
 
     return functions

@@ -1,9 +1,9 @@
 import argparse
 
+import openbot.logger as logger
 from openbot.client import BotClient
 from openbot.permissions import BotPerms
 from openbot.config import ConfigStream
-from openbot.logger import Logger, LogLevel
 from openbot.loader import Loader
 
 
@@ -28,7 +28,7 @@ class BotCore:
     logger.setup(locale, BotCore.CORE_VERSION, BotCore.CORE_RELEASE_TYPE)
     logger.self_test()
 
-    self.config = ConfigStream(self, self.logger, config_file=config_file)
+    self.config = ConfigStream(self, config_file=config_file)
 
     # Logger is reloaded if loaded in 'en_us' mode and config has a differing locale
     if locale == 'en_us' and self.config.get_config('core.locale') != 'en_us':
@@ -39,7 +39,7 @@ class BotCore:
     # TODO: Make permissions movable
     self.permissions = BotPerms()
 
-    loader = Loader(self.logger, self.config)
+    loader = Loader(self.config)
     loader.self_test()
 
     self.store, self.plugins = loader.load_plugins()
@@ -49,11 +49,12 @@ class BotCore:
     # Provides each plugin with the
     self._register_postinit()
 
-    self.server = BotClient(self, self.logger)
+    self.server = None
 
 
   def run(self):
     # Client token: '***REMOVED***'
+    self.server = BotClient(self)
     self.server.run(self.config.get_config("core.token"))
 
 

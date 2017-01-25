@@ -4,9 +4,8 @@ import json
 # TODO: Async things
 class ConfigStream:
 
-  def __init__(self, core, logger, config_file):
+  def __init__(self, core, config_file):
     self.core = core
-    self.logger = logger
     self.config = self._load()
     self.config_file = config_file
 

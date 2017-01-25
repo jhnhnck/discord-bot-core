@@ -1,15 +1,16 @@
 import discord
 import asyncio
 
+import openbot.logger as logger
+
 
 class BotClient(discord.Client):
-  def __init__(self, core, logger):
+  def __init__(self, core):
     super().__init__()
     self.core = core
-    self.logger = logger
 
   async def on_ready(self):
-    self.logger.log("{} [{}]".format(self.user.name, self.user.id), parent='core.info.bot_logged')
+    logger.log("{} [{}]".format(self.user.name, self.user.id), parent='core.info.bot_logged')
 
   async def on_message(self, message):
     # Saved for later: self.core.config.get_config('core', 'command_prefix')
