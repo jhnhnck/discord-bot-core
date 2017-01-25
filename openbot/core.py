@@ -70,7 +70,10 @@ if __name__ == "__main__":
                       help='location of config file')
   parser.add_argument('-l', '--locale', nargs=1, default='en_us',
                       help='language')
+  parser.add_argument('--testing', default=False, action="store_true",
+                      help='disables server connection')
   args = parser.parse_args()
 
   core = BotCore(args.config, args.locale)
-  core.run()
+  if not args.testing:
+    core.run()
