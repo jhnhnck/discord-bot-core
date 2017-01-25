@@ -25,16 +25,16 @@ class BotCore:
     4. Plugins, Functions, Tasks: These are loaded into separate dictionaries via the Loader class
   """
   def __init__(self, config_file, locale):
-    self.logger = Logger(BotCore.CORE_VERSION, BotCore.CORE_RELEASE_TYPE, locale)
-    self.logger.self_test()
+    logger.setup(locale, BotCore.CORE_VERSION, BotCore.CORE_RELEASE_TYPE)
+    logger.self_test()
 
     self.config = ConfigStream(self, self.logger, config_file=config_file)
 
     # Logger is reloaded if loaded in 'en_us' mode and config has a differing locale
     if locale == 'en_us' and self.config.get_config('core.locale') != 'en_us':
-      self.logger = Logger(BotCore.CORE_VERSION,
-                           BotCore.CORE_RELEASE_TYPE,
-                           self.config.get_config('core.locale'))
+      logger.setup(self.config.get_config('core.locale'),
+                   BotCore.CORE_VERSION,
+                   BotCore.CORE_RELEASE_TYPE)
 
     # TODO: Make permissions movable
     self.permissions = BotPerms()
