@@ -47,6 +47,14 @@ class Loader:
 
     # TODO: This doesn't actually load with the proper form correctly
     for plugin in os.listdir('plugins/'):
+      if not os.path.isdir('plugins/{}'.format(plugin)):
+        logger.log(plugin,
+                   parent='core.error.plugin_loading',
+                   type=LogLevel.error,
+                   error_point='invalid plugin',
+                   send_to_chat=False)
+        continue
+
       try:
         # Splits fully-qualified plugin name into plugin domain/group name and plugin name.
         if plugin.find('_') != -1:
