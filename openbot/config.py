@@ -26,6 +26,7 @@ class ConfigStream:
       # TODO: Something with logger here
       config = self.gen_new_config()
 
+    """
     for name, plugin in self.core.plugins.items():
       try:
         if config.get(name).get('version') != plugin.plugin_version:
@@ -39,6 +40,7 @@ class ConfigStream:
 
     if changed:
       self._unload()
+    """
 
     return config
 
