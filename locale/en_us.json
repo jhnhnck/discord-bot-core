@@ -3,7 +3,8 @@
     "name": "openbot-discord",
     "info": {
       "plaintext": "{message}",
-      "bot_logged": "Bot connected to Discord as \"{message}\""
+      "bot_logged": "Bot connected to Discord as \"{message}\"",
+      "gen_new_config": "Generating new config at \"{message}\""
     },
     "error": {
       "locale_missing": "Message {message} could not be associated to parent \"{error_point}\"",
@@ -16,6 +17,9 @@
     },
     "warn": {
       "plugin_domain_malformed": "Plugin \"{message}\" has malformed name; Substituting dummy domain \"{error_point}\""
+    },
+    "fatal": {
+      "unload_config_error": "Config could not be unloaded at \"{message}\"; Dumping config here instead:\n\n### CONFIG START ###\n{error_point}\n### CONFIG END ###\n"
     }
   },
   "base": {

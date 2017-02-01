@@ -2,6 +2,9 @@ import json
 import os
 
 import openbot.core as core
+import openbot.logger as logger
+
+from openbot.logger import LogLevel
 
 
 # TODO: Async things
@@ -23,8 +26,10 @@ class ConfigStream:
         config['core']['version'] = core.CORE_VERSION
         self.changed = True
 
-    except Exception as e:
-      # TODO: Something with logger here
+    except:
+      logger.log(self.config_file,
+                 parent='core.info.gen_new_config',
+                 type=LogLevel.info)
       config = self.gen_new_config()
       self.changed = True
 
@@ -55,6 +60,10 @@ class ConfigStream:
           json.dump(self.config, file, sort_keys=True, indent=2)
       except FileNotFoundError:
         os.makedirs(os.path.dirname(self.config_file))
+    logger.log(self.config_file,
+               parent='core.fatal.unload_config_error',
+               error_point=self.config,
+               type=LogLevel.fatal)
 
 
   def _match_keys(self, old, new):
