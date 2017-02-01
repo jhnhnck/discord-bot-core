@@ -9,12 +9,11 @@ class ConfigStream:
 
   def __init__(self, config_file):
     self.config_file = config_file
+    self.changed = False
     self.config = self._load()
 
 
   def _load(self):
-    changed = False
-
     try:
       with open(self.config_file, "r") as file:
         config = json.loads(file.read())
@@ -27,6 +26,7 @@ class ConfigStream:
     except Exception as e:
       # TODO: Something with logger here
       config = self.gen_new_config()
+      self.changed = True
 
     """
     for name, plugin in self.core.plugins.items():
@@ -39,15 +39,16 @@ class ConfigStream:
         # TODO: Logger error here
         config[name] = plugin.get_default_config()
         changed = True
-
-    if changed:
-      self._unload()
     """
 
+    self._unload()
     return config
 
 
   def _unload(self):
+    if not self.changed:
+      return
+
     for i in range(0, 10):
       try:
         with open(self.config_file, 'w+') as file:
