@@ -1,4 +1,6 @@
 import json
+import os
+
 import openbot.core as core
 
 
@@ -46,8 +48,12 @@ class ConfigStream:
 
 
   def _unload(self):
-    with open(self.config_file, 'w') as file:
-      json.dump(self.config, file)
+    for i in range(0, 10):
+      try:
+        with open(self.config_file, 'w+') as file:
+          json.dump(self.config, file, sort_keys=True, indent=2)
+      except FileNotFoundError:
+        os.makedirs(os.path.dirname(self.config_file))
 
 
   def _match_keys(self, old, new):
