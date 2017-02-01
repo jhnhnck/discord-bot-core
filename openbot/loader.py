@@ -77,7 +77,7 @@ class Loader:
                    error_point=e,
                    send_to_chat=False)
 
-    return store, plugins
+    return plugins
 
 
   """

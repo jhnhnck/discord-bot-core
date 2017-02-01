@@ -1,13 +1,13 @@
 import json
+import openbot.core as core
 
 
 # TODO: Async things
 class ConfigStream:
 
-  def __init__(self, core, config_file):
-    self.core = core
-    self.config = self._load()
+  def __init__(self, config_file):
     self.config_file = config_file
+    self.config = self._load()
 
 
   def _load(self):
@@ -17,10 +17,10 @@ class ConfigStream:
       with open(self.config_file, "r") as file:
         config = json.loads(file.read())
 
-      if self.core.CORE_VERSION != config.get('core').get('version'):
+      if core.CORE_VERSION != config.get('core').get('version'):
         config = self._match_keys(config, self.gen_new_config())
-        config['core']['version'] = self.core.CORE_VERSION
-        changed = True
+        config['core']['version'] = core.CORE_VERSION
+        self.changed = True
 
     except Exception as e:
       # TODO: Something with logger here
@@ -96,7 +96,7 @@ class ConfigStream:
         'owner_id': None,
         'command_prefix': '//',
         'debug_mode': 'False',
-        'version': self.core.CORE_VERSION,
+        'version': core.CORE_VERSION,
         'locale': 'en_us',
       },
       'chat': {

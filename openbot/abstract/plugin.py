@@ -5,10 +5,6 @@ from abc import ABC, abstractmethod
 
 class BotPlugin(ABC):
 
-  def __init__(self, core):
-    self.core = core
-
-
   """
   Compares version strings.
 

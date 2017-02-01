@@ -5,9 +5,8 @@ import openbot.logger as logger
 
 
 class BotClient(discord.Client):
-  def __init__(self, core):
+  def __init__(self):
     super().__init__()
-    self.core = core
 
   async def on_ready(self):
     logger.log("{} [{}]".format(self.user.name, self.user.id), parent='core.info.bot_logged')
