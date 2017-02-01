@@ -22,19 +22,11 @@ class LogLevel(Enum):
 
 
 locale = None
-core_version = 'unknown'
-core_level = None
 
 
-def setup(locale_name, version, level):
+def setup(locale_name):
   global locale
   locale = _load_locale(locale_name)
-
-  global core_version
-  core_version = version
-
-  global core_level
-  core_level = level
 
 
 def _load_locale(locale_name):
@@ -90,7 +82,7 @@ def _print(message):
 
 def get_locale_string(parent):
   if locale is None:
-    setup('en_us', 'unknown', None)
+    setup('en_us')
 
   store = locale
 
