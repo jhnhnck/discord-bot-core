@@ -71,8 +71,8 @@ class ConfigStream:
 
     for key, value in new:
       if key in old:
-        if type(value) is type(old[key]):
-          if isinstance(key, dict):
+        if value.isinstance(type(old[key])):
+          if key.isinstance(dict):
             matched_set[key] = self._match_keys(old[key], value)
           else:
             # TODO: Match string keys
