@@ -27,13 +27,13 @@
                                                    first load or update
       "functions": {                            -> SECTION: Each function definition
         "example": {                             -> internal name of function
-          "help_test": "provides an example",     -> provided to the end user via the help function
-          "function_name": "example",               -> name of function as it will be called
-          "allowed_args_length": "[0,>7,<9]",       -> number of space-delimited or comma-delimited arguments to allow;
-                                                       available symbols are "[]()<>=!,*"
-          "allowed_modifiers": {                    -> modifiers that do not count toward arguments; key should contain
-            "-a=": "file to use",                      actual modifier (trailing equals allows for '-a=myfile.txt' or
-            "--list": "list available files"           '-a myfile.txt') and value should be a brief description
+          "help_text": "provides an example",     -> provided to the end user via the help function
+          "function_name": "example",             -> name of function as it will be called
+          "allowed_args_length": "[0,>7,<9]",     -> number of space-delimited or comma-delimited arguments to allow;
+                                                     available symbols are "[]()<>=!,*"
+          "allowed_modifiers": {                  -> modifiers that do not count toward arguments; key should contain
+            "-a=": "file to use",                    actual modifier (trailing equals allows for '-a=myfile.txt' or
+            "--list": "list available files"         '-a myfile.txt') and value should be a brief description
           }
         }
       }
