@@ -19,8 +19,8 @@
   "config_template": {},
   "functions": {
     "example": {
-      "help_test": "",
       "function_name": "",
+      "help_text": "",
       "allowed_args_length": "[*]",
       "allowed_modifiers": {}
     }
