@@ -1,10 +1,13 @@
 import argparse
+import platform
 
 import openbot.logger as logger
 import openbot.config as config
 import openbot.client
 import openbot.permissions
 import openbot.loader
+
+from openbot.logger import LogLevel
 
 # Global Variables
 permissions = None
@@ -24,6 +27,7 @@ Loading Order.
 """
 def startup(config_file, locale):
   logger.setup(locale)
+  _log_system_info()
   logger.self_test()
 
   config.setup(config_path=config_file)
@@ -53,6 +57,27 @@ def run():
   # Client token: '***REMOVED***'
   server = openbot.client.BotClient()
   server.run(config.get_config("core.token"))
+
+
+def _log_system_info():
+  logger.log("Printing Version Info:",
+             log_type=LogLevel.blank)
+  logger.log("machine-type: {}".format(platform.machine()),
+             log_type=LogLevel.blank)
+  logger.log("machine-processor: {}".format(platform.processor()),
+             log_type=LogLevel.blank)
+  logger.log("machine-platform: {}".format(platform.platform()),
+             log_type=LogLevel.blank)
+  logger.log("python-version: {}".format(platform.python_version()),
+             log_type=LogLevel.blank)
+  logger.log("python-implementation: {}".format(platform.python_implementation()),
+             log_type=LogLevel.blank)
+  logger.log("python-version: {}".format(platform.python_version()),
+             log_type=LogLevel.blank)
+  logger.log("bot-core-version: {}-{}".format(openbot.CORE_VERSION, openbot.CORE_RELEASE_TYPE),
+             log_type=LogLevel.blank)
+
+  logger.newline()
 
 
 if __name__ == "__main__":
