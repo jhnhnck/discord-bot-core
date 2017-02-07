@@ -24,6 +24,7 @@
   },
   "base": {
     "cli": {
+      "blank_base": "> {message}",
       "trace_base": "{green}> trace. {message}{reset}",
       "debug_base": "{blue}> debug. {message}{reset}",
       "info_base": "> info.  {message}",
@@ -32,6 +33,7 @@
       "fatal_base": "{dark_red}> fatal. {message}{reset}"
     },
     "chat": {
+      "blank_base": "{message}",
       "trace_base": "```\nTrace.\n{message}\n```",
       "debug_base": "```\nDebug.\n{message}\n```",
       "info_base": "{message}",
