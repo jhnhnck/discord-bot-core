@@ -6,12 +6,6 @@ import openbot.permissions
 import openbot.config
 import openbot.loader
 
-# Global Definitions
-CORE_VERSION = "0.0.1"
-CORE_RELEASE_TYPE = "alpha"
-CORE_DESCRIPTION = "A simple, easily expandable, and well documented framework to add custom commands and \
-                    interactions to Discord"
-
 # Global Variables
 config = None
 permissions = None
@@ -64,7 +58,7 @@ def run():
 
 
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser(description=CORE_DESCRIPTION)
+  parser = argparse.ArgumentParser(description=openbot.CORE_DESCRIPTION)
   parser.add_argument('-c', '--config', nargs=1, default='config/openbot.json',
                       help='location of config file')
   parser.add_argument('-l', '--locale', nargs=1, default='en_us',
