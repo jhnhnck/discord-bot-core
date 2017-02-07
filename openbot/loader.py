@@ -41,10 +41,6 @@ def load_plugins():
 
   for plugin in os.listdir('plugins/'):
     if not os.path.isdir('plugins/{}'.format(plugin)):
-      logger.log(plugin,
-                 parent='core.error.plugin_loading',
-                 error_point='invalid plugin',
-                 send_to_chat=False)
       continue
 
     try:
@@ -61,6 +57,14 @@ def load_plugins():
       # Loads the json plugin specifier
       with open('plugins/{}/{}.json'.format(plugin, plugin_name), "r") as file:
         plugins[plugin_name] = json.loads(file.read())
+
+      # Test if disabled
+      if not plugins[plugin_name].get('user').get('enabled'):
+        logger.log(plugin,
+                   parent="core.warn.disabled_plugin",
+                   send_to_chat=False)
+        del plugins[plugin_name]
+        continue
 
       # Load python file dynamically
       spec = importlib.util.spec_from_file_location(plugin, "plugins/{}/{}.py".format(plugin, plugin_name))

@@ -17,7 +17,8 @@
     },
     "warn": {
       "plugin_domain_malformed": "Plugin \"{message}\" has malformed name; Substituting dummy domain \"{error_point}\"",
-      "conflict_function_name": "Function \"{message}\" has multiple targets; Specify which using {error_point}"
+      "conflict_function_name": "Function \"{message}\" has multiple targets; Specify which using {error_point}",
+      "disabled_plugin": "Plugin \"{message}\" is disabled and will not be loaded"
     },
     "fatal": {
       "unload_config_error": "Config could not be unloaded at \"{message}\"; Dumping config here instead:\n\n### CONFIG START ###\n{error_point}\n### CONFIG END ###\n"
@@ -29,7 +30,7 @@
       "trace_base": "{green}> trace. {message}{reset}",
       "debug_base": "{blue}> debug. {message}{reset}",
       "info_base": "> info.  {message}",
-      "warn_base": "{yellow}> warn.  {message}{reset}",
+      "warn_base": "{dark_yellow}> warn.  {message}{reset}",
       "error_base": "{red}> error. {message}{reset}",
       "fatal_base": "{dark_red}> fatal. {message}{reset}"
     },
