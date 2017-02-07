@@ -1,13 +1,12 @@
 import argparse
 
 import openbot.logger as logger
+import openbot.config as config
 import openbot.client
 import openbot.permissions
-import openbot.config
 import openbot.loader
 
 # Global Variables
-config = None
 permissions = None
 plugins = None
 functions = None
@@ -27,8 +26,7 @@ def startup(config_file, locale):
   logger.setup(locale)
   logger.self_test()
 
-  global config
-  config = openbot.config.ConfigStream(config_file=config_file)
+  config.setup(config_path=config_file)
 
   # Logger is reloaded if loaded in 'en_us' mode and config has a differing locale
   if locale == 'en_us' and config.get_config('core.locale') != 'en_us':
