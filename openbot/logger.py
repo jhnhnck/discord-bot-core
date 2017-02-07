@@ -79,6 +79,9 @@ def log(message, parent='core.info.plaintext', log_type=None, error_point=None, 
     log("Error")
 
 
+def newline():
+  _print('')
+
 def _print(message):
   sys.stdout.write(message + '\n')
 
@@ -124,4 +127,4 @@ def self_test():
   log("This is a test warning message", log_type=LogLevel.warn, send_to_chat=True)
   log("This is a test error message", log_type=LogLevel.error, send_to_chat=True)
   log("This is a test fatal message", log_type=LogLevel.fatal, send_to_chat=True)
-  _print('')
+  newline()
