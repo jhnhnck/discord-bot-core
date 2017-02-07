@@ -38,14 +38,14 @@ def startup(config_file, locale):
   global permissions
   permissions = openbot.permissions.BotPerms()
 
-  loader = openbot.loader.Loader(config)
-  loader.self_test()
+  # loader = openbot.loader.Loader(config)
+  openbot.loader.self_test()
 
   global plugins
-  plugins = loader.load_plugins()
+  plugins = openbot.loader.load_plugins()
 
   global functions
-  functions = loader.load_functions(plugins)
+  functions = openbot.loader.load_functions(plugins)
 
   # global tasks
   # tasks = loader.load_tasks()

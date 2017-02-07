@@ -13,10 +13,11 @@
     },
     "debug": {
       "load_function_plugin_title": "Enumerating functions for [{message}]",
-      "load_function_success": " Added function \"{message}\""
+      "load_function_success": " Added function \"{message}\" with qualified name \"{error_point}\""
     },
     "warn": {
-      "plugin_domain_malformed": "Plugin \"{message}\" has malformed name; Substituting dummy domain \"{error_point}\""
+      "plugin_domain_malformed": "Plugin \"{message}\" has malformed name; Substituting dummy domain \"{error_point}\"",
+      "conflict_function_name": "Function \"{message}\" has multiple targets; Specify which using {error_point}"
     },
     "fatal": {
       "unload_config_error": "Config could not be unloaded at \"{message}\"; Dumping config here instead:\n\n### CONFIG START ###\n{error_point}\n### CONFIG END ###\n"
