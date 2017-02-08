@@ -1,32 +1,31 @@
 import itertools
 
-from abc import ABC, abstractmethod
+from abc import ABC
 
 
 class BotPlugin(ABC):
-
-  """
-  Loading Self Test.
-
-  The plugin will only load if this returns true. Override this method to allow for more vigorous control over loading
-  requirements.
-
-  NOTE: BotCore will already check for dependencies and version incompatibilities from pluginname.json. This is for
-  other checks that are more fine tuned for your plugin  and functions
-  """
   def load_test(self):
+    """
+    Loading Self Test.
+
+    The plugin will only load if this returns true. Override this method to allow for more vigorous control over loading
+    requirements.
+
+    NOTE: BotCore will already check for dependencies and version incompatibilities from pluginname.json. This is for
+    other checks that are more fine tuned for your plugin  and functions
+    """
     return True
 
 
-  """
-  Compares version strings.
-
-  Returns 0 if same version
-          1 if other is greater
-         -1 if existing is greater
-  """
   @staticmethod
   def compare_versions(existing, other):
+    """
+    Compares version strings.
+
+    Returns 0 if same version
+            1 if other is greater
+           -1 if existing is greater
+    """
     if existing == other:
       return 0
 

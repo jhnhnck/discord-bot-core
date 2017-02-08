@@ -1,25 +1,26 @@
-import os
 import importlib.util
 import json
+import os
 
-import openbot.logger as logger
 import openbot.config as config
+import openbot.logger as logger
 
 
 def self_test():
   pass
 
 
-"""
-Basic Plugin Structure.
+def load_plugins():
+  """
+  Basic Plugin Structure.
 
-Naming.
+  Naming.
   The plugin should be contained within a directory in the 'plugins/' directory named in the form 'domain_plugin'.
   The domain should be an identifier for the specific developer and/or developing group and the plugin be a somewhat
   unique plugin name. Domain name is only used if both plugin names and plugin prefixes conflict which "probably won't
   ever happen"^(tm).
 
-Plugin Structure.
+  Plugin Structure.
   Plugins are defined based upon a json file located in the root of the plugin directory (see Naming. above). You can
   make a copy of the 'coreftns.json' file within the 'resources/' directory commented example as a starting point. Note
   that this format and its fields may change with development without notice. The file may not always be up to date.
@@ -31,11 +32,10 @@ Plugin Structure.
   simply put 'pass' in the body) but can override the other methods present in the abstract class for more
   customization such as changing the default versioning scheme or (see 'openbot/abstract/plugin.py' for more details).
 
-Internal Plugin Structure.
+  Internal Plugin Structure.
   Each plugin is loaded into a dictionary with the above keys and values with an additional key of 'store' for the
   loaded for the initialized plugin.
-"""
-def load_plugins():
+  """
   store = {}
   plugins = {}
 
@@ -80,13 +80,12 @@ def load_plugins():
   return plugins
 
 
-"""
-Basic Function Structure.
-TODO: Create a structure for functions to be loaded
-"""
 def load_functions(plugins):
+  """
+  Basic Function Structure.
+  TODO: Create a structure for functions to be loaded
+  """
   functions = {}
-
 
   for name, plugin in plugins.items():
     logger.log(name,
@@ -118,9 +117,9 @@ def load_functions(plugins):
   return functions
 
 
-"""
-Basic Task Structure.
-TODO: Create a structure for tasks to be loaded
-"""
 def load_tasks():
+  """
+  Basic Task Structure.
+  TODO: Create a structure for tasks to be loaded
+  """
   pass

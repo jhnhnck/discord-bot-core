@@ -1,6 +1,5 @@
-import sys
 import json
-
+import sys
 from enum import Enum
 
 
@@ -25,6 +24,7 @@ class LogLevel(Enum):
 locale = None
 log_types = ['trace', 'debug', 'info', 'warn', 'error', 'fatal']
 
+
 def setup(locale_name):
   global locale
   locale = _load_locale(locale_name)
@@ -47,16 +47,16 @@ def log(message, parent='core.info.plaintext', log_type=None, error_point=None, 
   log_type = _type_from_parent(parent, log_type)
 
   try:
-    parent_string = get_locale_string(parent)\
+    parent_string = get_locale_string(parent) \
       .format(message=message, error_point=error_point)
-    cli_base_string = get_locale_string("base.cli.{}_base".format(log_type.name))\
+    cli_base_string = get_locale_string("base.cli.{}_base".format(log_type.name)) \
       .format(message=parent_string, **locale['colors'], **locale['format'])
     # TODO: Fix something here
 
     _print(cli_base_string)
 
     if send_to_chat:
-      chat_base_string = get_locale_string("base.chat.{}_base".format(log_type.name))\
+      chat_base_string = get_locale_string("base.chat.{}_base".format(log_type.name)) \
         .format(message=parent_string)
       # TODO: Handle chat messages
       pass
@@ -82,6 +82,7 @@ def log(message, parent='core.info.plaintext', log_type=None, error_point=None, 
 def newline():
   _print('')
 
+
 def _print(message):
   sys.stdout.write(message + '\n')
 
@@ -101,6 +102,7 @@ def get_locale_string(parent):
     raise ParentNotFoundException
 
   return store
+
 
 def _type_from_parent(parent, log_type):
   if isinstance(log_type, LogLevel):

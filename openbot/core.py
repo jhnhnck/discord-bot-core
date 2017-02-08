@@ -1,12 +1,11 @@
 import argparse
 import platform
 
-import openbot.logger as logger
-import openbot.config as config
 import openbot.client
-import openbot.permissions
+import openbot.config as config
 import openbot.loader
-
+import openbot.logger as logger
+import openbot.permissions
 from openbot.logger import LogLevel
 
 # Global Variables
@@ -15,17 +14,16 @@ plugins = None
 functions = None
 tasks = None
 
-"""
-Init.
 
-Loading Order.
-  1. Logger: In loaded in 'en_us' mode or provided locale mode first and reloaded if changed via config
-  2. Config: The configuration is loaded from 'config/openbot.json' or the provided path
-    - Logger is reloaded if loaded in 'en_us' mode and config has a differing locale
-  3. Permissions: The permissions are loaded from 'config/perms.json'
-  4. Plugins, Functions, Tasks: These are loaded into separate dictionaries via the Loader class
-"""
 def startup(config_file, perm_file, locale):
+  """ Init.
+  Loading Order.
+    1. Logger: In loaded in 'en_us' mode or provided locale mode first and reloaded if changed via config
+    2. Config: The configuration is loaded from 'config/openbot.json' or the provided path
+      - Logger is reloaded if loaded in 'en_us' mode and config has a differing locale
+    3. Permissions: The permissions are loaded from 'config/perms.json' or the provided path
+    4. Plugins, Functions, Tasks: These are loaded into separate dictionaries via the Loader class
+  """
   logger.setup(locale)
   _log_system_info()
   logger.self_test()
