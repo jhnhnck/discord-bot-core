@@ -25,7 +25,7 @@ Loading Order.
   3. Permissions: The permissions are loaded from 'config/perms.json'
   4. Plugins, Functions, Tasks: These are loaded into separate dictionaries via the Loader class
 """
-def startup(config_file, locale):
+def startup(config_file, perm_file, locale):
   logger.setup(locale)
   _log_system_info()
   logger.self_test()
@@ -36,7 +36,6 @@ def startup(config_file, locale):
   if locale == 'en_us' and config.get_config('core.locale') != 'en_us':
     logger.setup(config.get_config('core.locale'))
 
-  # TODO: Make permissions movable
   global permissions
   permissions = openbot.permissions.BotPerms()
 
@@ -86,10 +85,12 @@ if __name__ == "__main__":
                       help='location of config file')
   parser.add_argument('-l', '--locale', nargs=1, default='en_us',
                       help='language')
+  parser.add_argument('-p', '--perms', nargs=1, default='config/permissions.json',
+                      help='location of permissions file')
   parser.add_argument('--testing', default=False, action="store_true",
                       help='disables server connection')
   args = parser.parse_args()
 
-  startup(args.config, args.locale)
+  startup(args.config, args.perms, args.locale)
   if not args.testing:
     run()
