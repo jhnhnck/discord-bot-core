@@ -18,7 +18,8 @@
     "warn": {
       "plugin_domain_malformed": "Plugin \"{message}\" has malformed name; Substituting dummy domain \"{error_point}\"",
       "conflict_function_name": "Function \"{message}\" has multiple targets; Specify which using {error_point}",
-      "disabled_plugin": "Plugin \"{message}\" is disabled and will not be loaded"
+      "disabled_plugin": "Plugin \"{message}\" is disabled and will not be loaded",
+      "config_loading_exception": "Config not able to be loaded from \"{message}\" due to {error_point}; Generating new config"
     },
     "fatal": {
       "unload_config_error": "Config could not be unloaded at \"{message}\"; Dumping config here instead:\n\n### CONFIG START ###\n{error_point}\n### CONFIG END ###\n"

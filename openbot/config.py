@@ -26,9 +26,15 @@ def setup(config_path):
       config['core']['version'] = openbot.CORE_VERSION
       changed = True
 
-  except:
+  except FileNotFoundError:
     logger.log(config_file,
                parent='core.info.gen_new_config')
+    config = gen_new_config()
+    changed = True
+  except Exception as e:
+    logger.log(config_file,
+               parent='core.warn.config_loading_exception',
+               error_point=e)
     config = gen_new_config()
     changed = True
 
@@ -119,8 +125,8 @@ def gen_new_config():
       },
       'delete_messages_delay': {
         'enabled': True,
-        'timeout_short': 30,      # Messages under 250 characters
-        'timeout_long': 60,       # Messages over 250 characters
+        'timeout_short': 30,  # Messages under 250 characters
+        'timeout_long': 60,  # Messages over 250 characters
       },
       'delete_commands': {
         'enabled': True,
