@@ -26,11 +26,30 @@ log_types = ['trace', 'debug', 'info', 'warn', 'error', 'fatal']
 
 
 def setup(locale_name):
+  """
+  Setup.
+  Loads the correct info for the logger; This is handled by the core and not needed for plugins and other classes that
+  use the logger after core has finished the startup
+
+  Args:
+    locale_name: Name of locale
+  """
   global locale
   locale = _load_locale(locale_name)
 
 
 def log(message, parent='core.info.plaintext', log_type=None, error_point=None, send_to_chat=True):
+  """
+  Logger.
+  Prints a log message to the command-line output and to the server chat
+
+  Args:
+    message: String to fill {message} section of parent string
+    parent: Parent Locale Identifier
+    log_type: Alert level of message of type enum LogLevel (openbot.logger.LogLevel)
+    error_point: String to fill {error_point} section of parent string
+    send_to_chat: False if the message should only print to command line output
+  """
   log_type = _type_from_parent(parent, log_type)
 
   try:
@@ -67,6 +86,10 @@ def log(message, parent='core.info.plaintext', log_type=None, error_point=None, 
 
 
 def self_test():
+  """
+  Self Test.
+  Prints a all the LogLevels with a test message
+  """
   log("This is a test blank message; Don't use this", log_type=LogLevel.blank, send_to_chat=True)
   log("This is a test trace message", log_type=LogLevel.trace, send_to_chat=True)
   log("This is a test debug message", log_type=LogLevel.debug, send_to_chat=True)
@@ -78,6 +101,16 @@ def self_test():
 
 
 def get_locale_string(parent):
+  """
+  Get Locale String.
+  Gets the value of the parent locale identifier
+
+  Args:
+    parent: Parent locale identifier
+
+  Returns:
+    Value of parent string
+  """
   if locale is None:
     setup('en_us')
 
@@ -95,10 +128,24 @@ def get_locale_string(parent):
 
 
 def newline():
-  _print('')
+  """
+  Newline.
+  Outputs a new line to the command line output
+  """
 
 
 def _load_locale(locale_name):
+  """
+  Locale Loading.
+  Loads the locale from the locale directory within the current directory and within the locale directory for each
+  enabled plugin
+
+  Args:
+    locale_name: Name of the Locale
+
+  Returns:
+    Dictionary of all locale parent strings
+  """
   try:
     with open('locale/{}.json'.format(locale_name), "r") as file:
       return json.loads(file.read())
@@ -112,6 +159,19 @@ def _load_locale(locale_name):
 
 
 def _type_from_parent(parent, log_type):
+  """
+  LogLevel from Parent String.
+
+  Args:
+    parent: Parent locale identifier
+    log_type: Provided LogLevel or None
+
+  Returns:
+    If LogLevel is a valid LogLevel (i.e. not None) then it is returned;
+    Otherwise, determine the LogLevel from a matching segment of the parent and LogLevel name;
+    Else, return an info LogLevel
+
+  """
   if isinstance(log_type, LogLevel):
     return log_type
 
