@@ -137,6 +137,7 @@ def newline():
   Newline.
   Outputs a new line to the command line output
   """
+  _print('')
 
 
 def _load_locale(locale_name):
