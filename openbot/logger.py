@@ -1,4 +1,5 @@
 import json
+import re
 import sys
 from enum import Enum
 
@@ -22,7 +23,8 @@ class LogLevel(Enum):
 
 
 locale = None
-log_types = ['trace', 'debug', 'info', 'warn', 'error', 'fatal']
+# ['blank', 'trace', 'debug', 'info', 'warn', 'error', 'fatal']
+log_base_lengths = None
 
 
 def setup(locale_name):
@@ -36,6 +38,9 @@ def setup(locale_name):
   """
   global locale
   locale = _load_locale(locale_name)
+
+  global log_base_lengths
+  log_base_lengths = _count_base_lengths()
 
 
 def log(message, parent='core.info.plaintext', log_type=None, error_point=None, send_to_chat=True):
@@ -170,23 +175,46 @@ def _type_from_parent(parent, log_type):
     If LogLevel is a valid LogLevel (i.e. not None) then it is returned;
     Otherwise, determine the LogLevel from a matching segment of the parent and LogLevel name;
     Else, return an info LogLevel
-
   """
   if isinstance(log_type, LogLevel):
     return log_type
 
   elif log_type is None:
     split = parent.split('.')
-    if split[1] in log_types:
+    if split[1] in log_base_lengths:
       return LogLevel[split[1]]
     else:
       for part in split[2:]:
-        if part in log_types:
+        if part in log_base_lengths:
           return LogLevel[part]
 
   else:
     return LogLevel.info
 
 
+def _count_base_lengths():
+  """
+  Count Base Lengths.
+  Counts the length of the base strings without formatting for command line output for use with new line wrapping
+
+  Returns:
+    Dictionary with matched base and length key pairs
+
+  """
+  lengths = {}
+
+  for base, value in locale.get('base').get('cli').items():
+    lengths[base.replace('_base', '')] = len(re.sub('{.*?}', '', value))
+
+  return lengths
+
+
 def _print(message):
+  """
+  Print.
+  Prints the message to the command line output in a thread safe manner
+
+  Args:
+    message: String to be printed
+  """
   sys.stdout.write(message + '\n')
