@@ -30,19 +30,6 @@ def setup(locale_name):
   locale = _load_locale(locale_name)
 
 
-def _load_locale(locale_name):
-  try:
-    with open('locale/{}.json'.format(locale_name), "r") as file:
-      return json.loads(file.read())
-  except FileNotFoundError:
-    if locale_name != 'en_us':
-      _print('\u001B[92mError loading locale "{}", trying "en_us"\u001B[0m'.format(locale_name))
-      return _load_locale('en_us')
-    else:
-      _print('\u001B[92mError loading locale "{}", exiting\u001B[0m'.format(locale_name))
-      exit(66)
-
-
 def log(message, parent='core.info.plaintext', log_type=None, error_point=None, send_to_chat=True):
   log_type = _type_from_parent(parent, log_type)
 
@@ -79,12 +66,15 @@ def log(message, parent='core.info.plaintext', log_type=None, error_point=None, 
     log("Error")
 
 
-def newline():
-  _print('')
-
-
-def _print(message):
-  sys.stdout.write(message + '\n')
+def self_test():
+  log("This is a test blank message; Don't use this", log_type=LogLevel.blank, send_to_chat=True)
+  log("This is a test trace message", log_type=LogLevel.trace, send_to_chat=True)
+  log("This is a test debug message", log_type=LogLevel.debug, send_to_chat=True)
+  log("This is a test info message", log_type=LogLevel.info, send_to_chat=True)
+  log("This is a test warning message", log_type=LogLevel.warn, send_to_chat=True)
+  log("This is a test error message", log_type=LogLevel.error, send_to_chat=True)
+  log("This is a test fatal message", log_type=LogLevel.fatal, send_to_chat=True)
+  newline()
 
 
 def get_locale_string(parent):
@@ -104,6 +94,23 @@ def get_locale_string(parent):
   return store
 
 
+def newline():
+  _print('')
+
+
+def _load_locale(locale_name):
+  try:
+    with open('locale/{}.json'.format(locale_name), "r") as file:
+      return json.loads(file.read())
+  except FileNotFoundError:
+    if locale_name != 'en_us':
+      _print('\u001B[92mError loading locale "{}", trying "en_us"\u001B[0m'.format(locale_name))
+      return _load_locale('en_us')
+    else:
+      _print('\u001B[92mError loading locale "{}", exiting\u001B[0m'.format(locale_name))
+      exit(66)
+
+
 def _type_from_parent(parent, log_type):
   if isinstance(log_type, LogLevel):
     return log_type
@@ -121,12 +128,5 @@ def _type_from_parent(parent, log_type):
     return LogLevel.info
 
 
-def self_test():
-  log("This is a test blank message; Don't use this", log_type=LogLevel.blank, send_to_chat=True)
-  log("This is a test trace message", log_type=LogLevel.trace, send_to_chat=True)
-  log("This is a test debug message", log_type=LogLevel.debug, send_to_chat=True)
-  log("This is a test info message", log_type=LogLevel.info, send_to_chat=True)
-  log("This is a test warning message", log_type=LogLevel.warn, send_to_chat=True)
-  log("This is a test error message", log_type=LogLevel.error, send_to_chat=True)
-  log("This is a test fatal message", log_type=LogLevel.fatal, send_to_chat=True)
-  newline()
+def _print(message):
+  sys.stdout.write(message + '\n')
