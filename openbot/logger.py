@@ -63,29 +63,27 @@ def log(message, parent='core.info.plaintext', log_type=None, error_point=None, 
 
   try:
     parent_string = get_locale_string(parent) \
-      .format(message=message, error_point=error_point)
+        .format(message=message, error_point=error_point)
     cli_base_string = get_locale_string("base.cli.{}_base".format(log_type.name)) \
-      .format(message=parent_string, **locale['colors'], **locale['format'])
+        .format(message=parent_string, **locale['colors'], **locale['format'])
     # TODO: Fix something here
 
     _print(cli_base_string)
 
     if send_to_chat:
       chat_base_string = get_locale_string("base.chat.{}_base".format(log_type.name)) \
-        .format(message=parent_string)
+          .format(message=parent_string)
       # TODO: Handle chat messages
       pass
 
   except ParentNotFoundException:
-    # TODO: Fix this, don't to this ever -jhnhnck
-    log("\"{}\" with level \"{}\"".format(message, log_type),
+    log(get_locale_string('core.segments.with_level').format(message, log_type),
         parent="core.error.locale_missing",
         log_type=LogLevel.error,
         error_point=parent,
         send_to_chat=send_to_chat)
   except ParentScopeException:
-    # TODO: Fix this, don't to this ever -jhnhnck
-    log("\"{}\" with level \"{}\"".format(message, log_type),
+    log(get_locale_string('core.segments.with_level').format(message, log_type),
         parent="core.error.locale_early_termination",
         log_type=LogLevel.error,
         error_point=parent,

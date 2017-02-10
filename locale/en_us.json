@@ -23,6 +23,12 @@
     },
     "fatal": {
       "unload_config_error": "Config could not be unloaded at \"{message}\"; Dumping config here instead:\n\n### CONFIG START ###\n{error_point}\n### CONFIG END ###\n"
+    },
+    "segments": {
+      "sys_info": "=== Printing Version Info ===\nmachine-type: {machine_type}\nmachine-processor: {processor}\nmachine-platform: platform\npython-version: {python_version}\npython-implementation: {python_implementation}\npython-version: {python_version}\nbot-core-version: {core_version}-{core_release_type}",
+      "two_length_or": "\"{}\" or \"{}\"",
+      "two_length_and": "\"{}\" and \"{}\"",
+      "with_level": "\"{}\" with level \"{}\""
     }
   },
   "base": {

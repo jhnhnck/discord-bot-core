@@ -57,23 +57,16 @@ def run():
 
 
 def _log_system_info():
-  logger.log("Printing Version Info:",
-             log_type=LogLevel.blank)
-  logger.log("machine-type: {}".format(platform.machine()),
-             log_type=LogLevel.blank)
-  logger.log("machine-processor: {}".format(platform.processor()),
-             log_type=LogLevel.blank)
-  logger.log("machine-platform: {}".format(platform.platform()),
-             log_type=LogLevel.blank)
-  logger.log("python-version: {}".format(platform.python_version()),
-             log_type=LogLevel.blank)
-  logger.log("python-implementation: {}".format(platform.python_implementation()),
-             log_type=LogLevel.blank)
-  logger.log("python-version: {}".format(platform.python_version()),
-             log_type=LogLevel.blank)
-  logger.log("bot-core-version: {}-{}".format(openbot.CORE_VERSION, openbot.CORE_RELEASE_TYPE),
-             log_type=LogLevel.blank)
+  sys_info = logger.get_locale_string('core.segments.sys_info').format(
+    machine_type=platform.machine(),
+    processor=platform.processor(),
+    platform=platform.platform(),
+    python_version=platform.python_version(),
+    python_implementation=platform.python_implementation(),
+    core_version=openbot.CORE_VERSION,
+    core_release_type=openbot.CORE_RELEASE_TYPE)
 
+  logger.log(sys_info, log_type=LogLevel.blank)
   logger.newline()
 
 

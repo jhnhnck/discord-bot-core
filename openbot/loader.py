@@ -105,8 +105,8 @@ def load_functions(plugins):
         functions[conflict] = conflict
         logger.log(simple_string,
                    parent='core.warn.conflict_function_name',
-                   # TODO: Fix this later...
-                   error_point='"{}" or "{}"'.format(qualified_string, conflict),
+                   error_point=logger.get_locale_string('core.segments.two_length_or')
+                   .format(qualified_string, conflict),
                    send_to_chat=False)
 
       logger.log(simple_string,
