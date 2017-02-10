@@ -47,8 +47,8 @@
       "debug_base": "```\nDebug.\n{message}\n```",
       "info_base": "{message}",
       "warn_base": "```\nWarning.\n{message}\n```",
-      "error_base": "```\nAn error occured.\n{message}\n```",
-      "fatal_base": "```\nA fatal error occured.\n{message}\n```"
+      "error_base": "```\nAn error occurred.\n{message}\n```",
+      "fatal_base": "```\nA fatal error occurred.\n{message}\n```"
     }
   },
   "colors": {
