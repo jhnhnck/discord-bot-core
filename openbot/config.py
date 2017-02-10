@@ -60,13 +60,15 @@ def _unload():
 
   for i in range(0, 10):
     try:
+      # noinspection PyTypeChecker
       with open(config_file, 'w+') as file:
         json.dump(config, file, sort_keys=True, indent=2)
     except FileNotFoundError:
       os.makedirs(os.path.dirname(config_file))
   logger.log(config_file,
              parent='core.fatal.unload_config_error',
-             error_point=config)
+             error_point=config,
+             pad_newlines=False)
 
 
 def _match_keys(old, new):

@@ -43,7 +43,7 @@ def setup(locale_name):
   log_base_lengths = _count_base_lengths()
 
 
-def log(message, parent='core.info.plaintext', log_type=None, error_point=None, send_to_chat=True):
+def log(message, parent='core.info.plaintext', log_type=None, error_point=None, send_to_chat=True, pad_newlines=True):
   """
   Logger.
   Prints a log message to the command-line output and to the server chat
@@ -54,8 +54,12 @@ def log(message, parent='core.info.plaintext', log_type=None, error_point=None, 
     log_type: Alert level of message of type enum LogLevel (openbot.logger.LogLevel)
     error_point: String to fill {error_point} section of parent string
     send_to_chat: False if the message should only print to command line output
+    pad_newlines: Add spacing to multi-line messages so that it aligns to the base length
   """
   log_type = _type_from_parent(parent, log_type)
+
+  if pad_newlines:
+    message = _pad_message(message, log_type)
 
   try:
     parent_string = get_locale_string(parent) \
@@ -208,6 +212,29 @@ def _count_base_lengths():
     lengths[base.replace('_base', '')] = len(re.sub('{.*?}', '', value))
 
   return lengths
+
+
+def _pad_message(message, log_type):
+  """
+  Pad Message.
+  Add spacing to multi-line messages so that it aligns to the base length
+
+  Args:
+    message: String to fill {message} section of parent string
+    log_type: LogLevel for base length
+
+  Returns:
+    Space padded message
+  """
+  # TODO: Handle console length overlap (http://stackoverflow.com/a/943921)
+  split = message.splitlines(keepends=True)
+  pad_part = ' ' * log_base_lengths[log_type.name]
+  pad_message = split[0]
+
+  for i in range(1, len(split)):
+    pad_message = pad_message + pad_part + split[i]
+
+  return pad_message
 
 
 def _print(message):
