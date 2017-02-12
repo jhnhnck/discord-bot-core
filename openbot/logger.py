@@ -43,7 +43,12 @@ def setup(locale_name):
   log_base_lengths = _count_base_lengths()
 
 
-def log(message, parent='core.info.plaintext', log_type=None, error_point=None, send_to_chat=True, pad_newlines=True):
+def log(message,
+        parent='core.info.plaintext',
+        log_type=None,
+        error_point=None,
+        send_to_chat=True,
+        pad_newlines=True):
   """
   Logger.
   Prints a log message to the command-line output and to the server chat
@@ -64,32 +69,32 @@ def log(message, parent='core.info.plaintext', log_type=None, error_point=None, 
   try:
     parent_string = get_locale_string(parent) \
         .format(message=message, error_point=error_point)
-    cli_base_string = get_locale_string("base.cli.{}_base".format(log_type.name)) \
+    cli_base_string = get_locale_string('base.cli.{}_base'.format(log_type.name)) \
         .format(message=parent_string, **locale['colors'], **locale['format'])
     # TODO: Fix something here
 
     _print(cli_base_string)
 
     if send_to_chat:
-      chat_base_string = get_locale_string("base.chat.{}_base".format(log_type.name)) \
+      chat_base_string = get_locale_string('base.chat.{}_base'.format(log_type.name)) \
           .format(message=parent_string)
       # TODO: Handle chat messages
       pass
 
   except ParentNotFoundException:
     log(get_locale_string('core.segments.with_level').format(message, log_type),
-        parent="core.error.locale_missing",
+        parent='core.error.locale_missing',
         log_type=LogLevel.error,
         error_point=parent,
         send_to_chat=send_to_chat)
   except ParentScopeException:
     log(get_locale_string('core.segments.with_level').format(message, log_type),
-        parent="core.error.locale_early_termination",
+        parent='core.error.locale_early_termination',
         log_type=LogLevel.error,
         error_point=parent,
         send_to_chat=send_to_chat)
   except IndexError:
-    log("Error")
+    log('Error')
 
 
 def self_test():
@@ -98,12 +103,12 @@ def self_test():
   Prints a all the LogLevels with a test message
   """
   log("This is a test blank message; Don't use this", log_type=LogLevel.blank, send_to_chat=True)
-  log("This is a test trace message", log_type=LogLevel.trace, send_to_chat=True)
-  log("This is a test debug message", log_type=LogLevel.debug, send_to_chat=True)
-  log("This is a test info message", log_type=LogLevel.info, send_to_chat=True)
-  log("This is a test warning message", log_type=LogLevel.warn, send_to_chat=True)
-  log("This is a test error message", log_type=LogLevel.error, send_to_chat=True)
-  log("This is a test fatal message", log_type=LogLevel.fatal, send_to_chat=True)
+  log('This is a test trace message', log_type=LogLevel.trace, send_to_chat=True)
+  log('This is a test debug message', log_type=LogLevel.debug, send_to_chat=True)
+  log('This is a test info message', log_type=LogLevel.info, send_to_chat=True)
+  log('This is a test warning message', log_type=LogLevel.warn, send_to_chat=True)
+  log('This is a test error message', log_type=LogLevel.error, send_to_chat=True)
+  log('This is a test fatal message', log_type=LogLevel.fatal, send_to_chat=True)
   newline()
 
 
@@ -155,14 +160,16 @@ def _load_locale(locale_name):
     Dictionary of all locale parent strings
   """
   try:
-    with open('locale/{}.json'.format(locale_name), "r") as file:
+    with open('locale/{}.json'.format(locale_name), 'r') as file:
       return json.loads(file.read())
   except FileNotFoundError:
     if locale_name != 'en_us':
-      _print('\u001B[92mError loading locale "{}", trying "en_us"\u001B[0m'.format(locale_name))
+      _print('\u001B[92mError loading locale "{}", trying "en_us"\u001B[0m'.
+             format(locale_name))
       return _load_locale('en_us')
     else:
-      _print('\u001B[92mError loading locale "{}", exiting\u001B[0m'.format(locale_name))
+      _print('\u001B[92mError loading locale "{}", exiting\u001B[0m'.format(
+          locale_name))
       exit(66)
 
 

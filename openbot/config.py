@@ -18,7 +18,7 @@ def setup(config_path):
   config_file = config_path
 
   try:
-    with open(config_file, "r") as file:
+    with open(config_file, 'r') as file:
       config = json.loads(file.read())
 
     if openbot.CORE_VERSION != config.get('core').get('version'):
@@ -27,8 +27,7 @@ def setup(config_path):
       changed = True
 
   except FileNotFoundError:
-    logger.log(config_file,
-               parent='core.info.gen_new_config')
+    logger.log(config_file, parent='core.info.gen_new_config')
     config = gen_new_config()
     changed = True
   except Exception as e:

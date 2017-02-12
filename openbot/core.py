@@ -16,7 +16,8 @@ tasks = None
 
 
 def startup(config_file, perm_file, locale):
-  """ Init.
+  """
+  Init.
   Loading Order.
     1. Logger: In loaded in 'en_us' mode or provided locale mode first and reloaded if changed via config
     2. Config: The configuration is loaded from 'config/openbot.json' or the provided path
@@ -53,7 +54,7 @@ def startup(config_file, perm_file, locale):
 def run():
   # Client token: '***REMOVED***'
   server = openbot.client.BotClient()
-  server.run(config.get_config("core.token"))
+  server.run(config.get_config('core.token'))
 
 
 def _log_system_info():
@@ -70,7 +71,7 @@ def _log_system_info():
   logger.newline()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
   parser = argparse.ArgumentParser(description=openbot.CORE_DESCRIPTION)
   parser.add_argument('-c', '--config', nargs=1, default='config/openbot.json',
                       help='location of config file')
@@ -78,7 +79,7 @@ if __name__ == "__main__":
                       help='language')
   parser.add_argument('-p', '--perms', nargs=1, default='config/permissions.json',
                       help='location of permissions file')
-  parser.add_argument('--testing', default=False, action="store_true",
+  parser.add_argument('--testing', default=False, action='store_true',
                       help='disables server connection')
   args = parser.parse_args()
 

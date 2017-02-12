@@ -55,25 +55,25 @@ def load_plugins():
         plugin_name = plugin
 
       # Loads the json plugin specifier
-      with open('plugins/{}/{}.json'.format(plugin, plugin_name), "r") as file:
+      with open('plugins/{}/{}.json'.format(plugin, plugin_name), 'r') as file:
         plugins[plugin_name] = json.loads(file.read())
 
       # Test if disabled
       if not plugins[plugin_name].get('user').get('enabled'):
         logger.log(plugin,
-                   parent="core.warn.disabled_plugin",
+                   parent='core.warn.disabled_plugin',
                    send_to_chat=False)
         del plugins[plugin_name]
         continue
 
       # Load python file dynamically
-      spec = importlib.util.spec_from_file_location(plugin, "plugins/{}/{}.py".format(plugin, plugin_name))
+      spec = importlib.util.spec_from_file_location(plugin, 'plugins/{}/{}.py'.format(plugin, plugin_name))
       store[plugin_name] = importlib.util.module_from_spec(spec)
       spec.loader.exec_module(store[plugin_name])
       plugins.get(plugin_name)['store'] = store[plugin_name].PluginBase()
     except Exception as e:
       logger.log(plugin,
-                 parent="core.error.plugin_loading",
+                 parent='core.error.plugin_loading',
                  error_point=e,
                  send_to_chat=False)
 
@@ -110,7 +110,7 @@ def load_functions(plugins):
                    send_to_chat=False)
 
       logger.log(simple_string,
-                 parent="core.debug.load_function_success",
+                 parent='core.debug.load_function_success',
                  error_point=ftn_name,
                  send_to_chat=False)
 
