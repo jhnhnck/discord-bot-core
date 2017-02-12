@@ -1,0 +1,31 @@
+-   repo: https://github.com/pre-commit/pre-commit
+    sha: a81de1ebb3b4b98f9a02bb0257d54c7ec9d21578
+    hooks:
+    -   id: validate_config
+-   repo: git@github.com:pre-commit/pre-commit-hooks
+    sha: e626cd57090d8df0be21e4df0f4e55cc3511d6ab
+    hooks:
+    -   id: check-case-conflict
+    -   id: check-json
+    -   id: check-merge-conflict
+    -   id: check-symlinks
+    -   id: end-of-file-fixer
+    -   id: double-quote-string-fixer
+    -   id: check-added-large-files
+    -   id: pretty-format-json
+        args:
+        - --autofix
+    -   id: trailing-whitespace
+    -   id: requirements-txt-fixer
+-   repo: git@github.com:asottile/reorder_python_imports
+    sha: v0.3.1
+    hooks:
+    -   id: reorder-python-imports
+-   repo: git@github.com:Lucas-C/pre-commit-hooks.git
+    sha: v1.0.1
+    hooks:
+    -   id: remove-crlf
+    -   id: remove-tabs
+        args:
+        - --whitespaces-count
+        - '2'
