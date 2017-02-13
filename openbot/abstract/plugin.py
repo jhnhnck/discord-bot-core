@@ -1,5 +1,4 @@
 import itertools
-
 from abc import ABC
 
 
@@ -57,8 +56,8 @@ class PluginBase(ABC):
     if abs(num) == 1: return num
 
     # Alpha-numeric compare
-    existing_split = ["".join(x) for _, x in itertools.groupby(existing, key=str.isdigit)]
-    other_split = ["".join(x) for _, x in itertools.groupby(other, key=str.isdigit)]
+    existing_split = [''.join(x) for _, x in itertools.groupby(existing, key=str.isdigit)]
+    other_split = [''.join(x) for _, x in itertools.groupby(other, key=str.isdigit)]
     # print("EX: {} OTH: {}".format(existing_split, other_split))
 
     num = BotPlugin._safe_compare_numbers(existing_split[0], other_split[0])
