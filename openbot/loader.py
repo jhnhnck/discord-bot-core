@@ -1,10 +1,14 @@
-import importlib.util
+import importlib
 import json
 import os
-
+import sys
 from datetime import datetime
+
 import openbot.config as config
 import openbot.logger as logger
+
+# Add plugin directory to path
+sys.path.insert(0, os.path.abspath('plugins'))
 
 
 def self_test():
@@ -38,7 +42,6 @@ def load_plugins():
   Each plugin is loaded into a dictionary with the above keys and values with an additional key of 'store' for the
   loaded for the initialized plugin.
   """
-  store = {}
   plugins = {}
 
   for plugin in os.listdir('plugins/'):
@@ -69,10 +72,8 @@ def load_plugins():
         continue
 
       # Load python file dynamically
-      spec = importlib.util.spec_from_file_location(plugin, 'plugins/{}/{}.py'.format(plugin, plugin_name))
-      store[plugin_name] = importlib.util.module_from_spec(spec)
-      spec.loader.exec_module(store[plugin_name])
-      plugins.get(plugin_name)['store'] = store[plugin_name].PluginBase()
+      plugins.get(plugin)['store'] = getattr(importlib.import_module('{}.{}'.format(plugin, plugin_name)), 'BotPlugin')()
+
     except Exception as e:
       logger.log(plugin,
                  parent='core.error.plugin_loading',
@@ -90,27 +91,68 @@ def load_functions(plugins):
   """
   functions = {}
 
-  for name, plugin in plugins.items():
-    logger.log(name,
+  for plugin_name, plugin in plugins.items():
+    logger.log(plugin_name,
                parent='core.debug.load_function_plugin_title',
                send_to_chat=False)
+
+    # Stores prefix for easy lookup later
     prefix = plugin.get('description')['plugin_prefix']
+
     for ftn_name, ftn in plugin.get('functions').items():
+      ftn_path = 'plugins/{}/functions/{}.py'.format(plugin_name, ftn_name)
+
+      if not _test_function_valid(plugin_name, ftn_name, ftn_path):
+        continue
+
+      # Name without prefix (can be called if no conflicts)
       simple_string = config.get_config('core.command_prefix') + ftn.get('function_name')
+
+      # Name with prefix (can always be called, but must be used in case of name conflicts)
       qualified_string = '{}{}.{}'.format(config.get_config('core.command_prefix'), prefix, ftn.get('function_name'))
 
+      try:
+        function = {
+          'store': getattr(importlib.import_module('{}.functions.{}'.format(plugin_name, ftn_name)), 'BotFunction')(),
+          'simple_string': simple_string,
+          'qualified_string': qualified_string,
+        }
+      except Exception as e:
+        logger.log(logger.get_locale_string('core.segments.from').format(ftn_name, plugin_name),
+                   parent='core.error.function_loading',
+                   error_point=e)
+
+      # Run load_test()
+      load_test, load_test_reason = function.get('store').load_test()
+      if not load_test:
+        if type(load_test_reason) is not str:
+          load_test_reason = 'Load Test Failed (NoErrorReturned)'
+        logger.log(logger.get_locale_string('core.segments.from').format(ftn_name, plugin_name),
+                   parent='core.error.function_loading',
+                   error_point=load_test_reason)
+        continue
+
+      # Checks for simple name conflicts
       if simple_string not in functions:
-        functions[simple_string] = qualified_string
+        functions[simple_string] = function
       else:
-        functions[qualified_string] = qualified_string
-        conflict = functions[simple_string]
-        del functions[simple_string]
-        functions[conflict] = conflict
+        functions[qualified_string] = function
+        if type(functions[simple_string]) is dict:
+          conflict = functions[simple_string]
+          functions[simple_string] = [conflict.get('qualified_string'), qualified_string]
+        elif type(functions[simple_string]) is list:
+          functions.get(simple_string).append(qualified_string)
+
+        # Assign to qualified_string instead of simple_string
+        functions[conflict.get('qualified_string')] = conflict
+        functions[qualified_string] = function
+
         logger.log(simple_string,
                    parent='core.warn.conflict_function_name',
                    error_point=logger.get_locale_string('core.segments.two_length_or')
                    .format(qualified_string, conflict),
                    send_to_chat=False)
+        continue
 
       logger.log(simple_string,
                  parent='core.debug.load_function_success',
