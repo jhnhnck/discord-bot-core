@@ -1,12 +1,7 @@
 from abc import ABC, abstractmethod
 
-class BotFunction(ABC):
 
-  fnc_help_test = None
-  fnc_name = None
-  fnc_allowed_args_length = "0"
-  fnc_allowed_modifiers = None
-
+class FunctionBase(ABC):
 
   def load_test(self):
     """
@@ -19,10 +14,6 @@ class BotFunction(ABC):
     other checks that are more fine tuned for your plugin and functions
     """
     return True
-
-
-  def __init__(self, core):
-    self.core = core
 
 
   @abstractmethod

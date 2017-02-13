@@ -3,7 +3,7 @@ import itertools
 from abc import ABC
 
 
-class BotPlugin(ABC):
+class PluginBase(ABC):
   def load_test(self):
     """
     Loading Self Test.
