@@ -57,14 +57,14 @@ def load_plugins():
 
       # Loads the json plugin specifier
       with open('plugins/{}/{}.json'.format(plugin, plugin_name), 'r') as file:
-        plugins[plugin_name] = json.loads(file.read())
+        plugins[plugin] = json.loads(file.read())
 
       # Test if disabled
-      if not plugins[plugin_name].get('user').get('enabled'):
+      if not plugins[plugin].get('user').get('enabled'):
         logger.log(plugin,
                    parent='core.warn.disabled_plugin',
                    send_to_chat=False)
-        del plugins[plugin_name]
+        del plugins[plugin]
         continue
 
       # Load python file dynamically
@@ -77,6 +77,7 @@ def load_plugins():
                  parent='core.error.plugin_loading',
                  error_point=e,
                  send_to_chat=False)
+      del plugins[plugin]
 
   return plugins
 
