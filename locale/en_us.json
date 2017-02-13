@@ -1,42 +1,4 @@
 {
-  "base": {
-    "chat": {
-      "blank_base": "{message}",
-      "debug_base": "```\nDebug.\n{message}\n```",
-      "error_base": "```\nAn error occurred.\n{message}\n```",
-      "fatal_base": "```\nA fatal error occurred.\n{message}\n```",
-      "info_base": "{message}",
-      "trace_base": "```\nTrace.\n{message}\n```",
-      "warn_base": "```\nWarning.\n{message}\n```"
-    },
-    "cli": {
-      "blank_base": "> {message}",
-      "debug_base": "{blue}> debug. {message}{reset}",
-      "error_base": "{red}> error. {message}{reset}",
-      "fatal_base": "{dark_red}> fatal. {message}{reset}",
-      "info_base": "> info.  {message}",
-      "trace_base": "{green}> trace. {message}{reset}",
-      "warn_base": "{dark_yellow}> warn.  {message}{reset}"
-    }
-  },
-  "colors": {
-    "black": "\u001b[30m",
-    "blue": "\u001b[94m",
-    "cyan": "\u001b[96m",
-    "dark_blue": "\u001b[34m",
-    "dark_cyan": "\u001b[36m",
-    "dark_gray": "\u001b[90m",
-    "dark_red": "\u001b[31m",
-    "dark_yellow": "\u001b[33m",
-    "gray": "\u001b[37m",
-    "green": "\u001b[32m",
-    "lime": "\u001b[92m",
-    "magenta": "\u001b[35m",
-    "purple": "\u001b[95m",
-    "red": "\u001b[91m",
-    "white": "\u001b[97m",
-    "yellow": "\u001b[93m"
-  },
   "core": {
     "debug": {
       "gen_stub_function": "Function \"{message}\" not found; Generating stub function",
@@ -78,5 +40,43 @@
     "italic": "\u001b[1m",
     "reset": "\u001b[0m",
     "underline": "\u001b[4m"
+  },
+  "base": {
+    "chat": {
+      "blank_base": "{message}",
+      "debug_base": "```\nDebug.\n{message}\n```",
+      "error_base": "```\nAn error occurred.\n{message}\n```",
+      "fatal_base": "```\nA fatal error occurred.\n{message}\n```",
+      "info_base": "{message}",
+      "trace_base": "```\nTrace.\n{message}\n```",
+      "warn_base": "```\nWarning.\n{message}\n```"
+    },
+    "cli": {
+      "blank_base": "> {message}",
+      "debug_base": "{blue}> debug. {message}{reset}",
+      "error_base": "{red}> error. {message}{reset}",
+      "fatal_base": "{dark_red}> fatal. {message}{reset}",
+      "info_base": "> info.  {message}",
+      "trace_base": "{green}> trace. {message}{reset}",
+      "warn_base": "{dark_yellow}> warn.  {message}{reset}"
+    }
+  },
+  "colors": {
+    "black": "\u001b[30m",
+    "blue": "\u001b[94m",
+    "cyan": "\u001b[96m",
+    "dark_blue": "\u001b[34m",
+    "dark_cyan": "\u001b[36m",
+    "dark_gray": "\u001b[90m",
+    "dark_red": "\u001b[31m",
+    "dark_yellow": "\u001b[33m",
+    "gray": "\u001b[37m",
+    "green": "\u001b[32m",
+    "lime": "\u001b[92m",
+    "magenta": "\u001b[35m",
+    "purple": "\u001b[95m",
+    "red": "\u001b[91m",
+    "white": "\u001b[97m",
+    "yellow": "\u001b[93m"
   }
 }
