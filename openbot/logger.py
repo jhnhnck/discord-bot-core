@@ -48,7 +48,8 @@ def log(message,
         log_type=None,
         error_point=None,
         send_to_chat=True,
-        pad_newlines=True):
+        pad_newlines=True,
+        send_newline=True):
   """
   Logger.
   Prints a log message to the command-line output and to the server chat
@@ -60,6 +61,7 @@ def log(message,
     error_point: String to fill {error_point} section of parent string
     send_to_chat: False if the message should only print to command line output
     pad_newlines: Add spacing to multi-line messages so that it aligns to the base length
+    send_newline: Append '/n' to the end of message
   """
   log_type = _type_from_parent(parent, log_type)
 
@@ -73,13 +75,15 @@ def log(message,
         .format(message=parent_string, **locale['colors'], **locale['format'])
     # TODO: Fix something here
 
+    if send_newline:
+      cli_base_string += '\n'
+
     _print(cli_base_string)
 
     if send_to_chat:
       chat_base_string = get_locale_string('base.chat.{}_base'.format(log_type.name)) \
           .format(message=parent_string)
       # TODO: Handle chat messages
-      pass
 
   except ParentNotFoundException:
     log(get_locale_string('core.segments.with_level').format(message, log_type),
@@ -94,6 +98,7 @@ def log(message,
         error_point=parent,
         send_to_chat=send_to_chat)
   except IndexError:
+    # TODO: Error?
     log('Error')
 
 
@@ -144,7 +149,7 @@ def newline():
   Newline.
   Outputs a new line to the command line output
   """
-  _print('')
+  _print('\n')
 
 
 def _load_locale(locale_name):
@@ -164,11 +169,11 @@ def _load_locale(locale_name):
       return json.loads(file.read())
   except FileNotFoundError:
     if locale_name != 'en_us':
-      _print('\u001B[92mError loading locale "{}", trying "en_us"\u001B[0m'.
+      _print('\u001B[92mError loading locale "{}", trying "en_us"\u001B[0m\n'.
              format(locale_name))
       return _load_locale('en_us')
     else:
-      _print('\u001B[92mError loading locale "{}", exiting\u001B[0m'.format(
+      _print('\u001B[92mError loading locale "{}", exiting\u001B[0m\n'.format(
           locale_name))
       exit(66)
 
@@ -250,4 +255,4 @@ def _print(message):
   Args:
     message: String to be printed
   """
-  sys.stdout.write(message + '\n')
+  sys.stdout.write(message)
