@@ -66,7 +66,7 @@ def log(message,
   log_type = _type_from_parent(parent, log_type)
 
   if pad_newlines:
-    message = _pad_message(message, log_type)
+    message = _pad_message(str(message), log_type)
 
   try:
     parent_string = get_locale_string(parent) \
