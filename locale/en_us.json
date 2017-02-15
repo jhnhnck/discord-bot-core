@@ -1,7 +1,7 @@
 {
   "core": {
     "debug": {
-      "gen_stub_function": "Function \"{message}\" not found; Generating stub function",
+      "gen_stub_function": " Function \"{message}\" not found; Generating stub function",
       "load_function_plugin_title": "Enumerating functions for [{message}]",
       "load_function_success": " Added function \"{message}\" with qualified name \"{error_point}\""
     },
