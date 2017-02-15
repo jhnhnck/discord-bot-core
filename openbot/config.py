@@ -4,6 +4,7 @@ import os
 import openbot
 import openbot.logger as logger
 
+
 config_file = None
 config = None
 changed = False
@@ -21,9 +22,9 @@ def setup(config_path):
     with open(config_file, 'r') as file:
       config = json.loads(file.read())
 
-    if openbot.CORE_VERSION != config.get('core').get('version'):
+    if openbot.VERSION != config.get('core').get('version'):
       config = _match_keys(config, gen_new_config())
-      config['core']['version'] = openbot.CORE_VERSION
+      config['core']['version'] = openbot.VERSION
       changed = True
 
   except FileNotFoundError:
@@ -57,17 +58,18 @@ def _unload():
   if not changed:
     return
 
-  for i in range(0, 10):
-    try:
-      # noinspection PyTypeChecker
-      with open(config_file, 'w+') as file:
-        json.dump(config, file, sort_keys=True, indent=2)
-    except FileNotFoundError:
+  try:
+    if not os.path.exists(os.path.dirname(config_file)):
       os.makedirs(os.path.dirname(config_file))
-  logger.log(config_file,
-             parent='core.fatal.unload_config_error',
-             error_point=config,
-             pad_newlines=False)
+
+    # noinspection PyTypeChecker
+    with open(config_file, 'w+') as file:
+      json.dump(config, file, sort_keys=True, indent=2)
+  except:
+    logger.log(config_file,
+               parent='core.fatal.unload_config_error',
+               error_point=config,
+               pad_newlines=False)
 
 
 def _match_keys(old, new):
@@ -116,7 +118,7 @@ def gen_new_config():
       'owner_id': None,
       'command_prefix': '//',
       'debug_mode': 'False',
-      'version': openbot.CORE_VERSION,
+      'version': openbot.VERSION,
       'locale': 'en_us',
     },
     'chat': {

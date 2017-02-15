@@ -91,15 +91,14 @@ def _log_system_info():
     platform=platform.platform(),
     python_version=platform.python_version(),
     python_implementation=platform.python_implementation(),
-    core_version=openbot.CORE_VERSION,
-    core_release_type=openbot.CORE_RELEASE_TYPE)
+    core_full_version=openbot.FULL_VERSION)
 
   logger.log(sys_info, log_type=LogLevel.blank)
   logger.newline()
 
 
 if __name__ == '__main__':
-  parser = argparse.ArgumentParser(description=openbot.CORE_DESCRIPTION)
+  parser = argparse.ArgumentParser(description=openbot.DESCRIPTION)
   parser.add_argument('-c', '--config', nargs=1, default='config/openbot.json',
                       help='location of config file')
   parser.add_argument('-l', '--locale', nargs=1, default='en_us',
