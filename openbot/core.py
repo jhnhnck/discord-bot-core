@@ -8,6 +8,7 @@ import openbot.logger as logger
 import openbot.permissions
 from openbot.logger import LogLevel
 
+
 # Global Variables
 permissions = None
 plugins = None
@@ -57,6 +58,32 @@ def run():
   server.run(config.get_config('core.token'))
 
 
+def call_function(function, params):
+  # Test if function exists
+  if function not in functions:
+    return []
+
+  ftn = functions.get(function)
+
+  if type(ftn) is list:
+    return ftn
+
+  elif type(ftn) is dict:
+    # Test for linked function
+    if 'link' in ftn:
+      return call_function(ftn.get('link'), params)
+    else:
+      args, mod = _parse_args(params, function)
+      ftn.get('store').call(args, mod)
+      return [ftn.get('qualified_string')]
+
+
+def _parse_args(params, funct):
+  args = []
+  mod = {}
+
+  return args, mod
+
 def _log_system_info():
   sys_info = logger.get_locale_string('core.segments.sys_info').format(
     machine_type=platform.machine(),
@@ -81,8 +108,7 @@ if __name__ == '__main__':
                       help='location of permissions file')
   parser.add_argument('--testing', default=False, action='store_true',
                       help='disables server connection')
-  args = parser.parse_args()
+  core_args = parser.parse_args()
 
-  startup(args.config, args.perms, args.locale)
-  if not args.testing:
+  if not core_args.testing:
     run()
