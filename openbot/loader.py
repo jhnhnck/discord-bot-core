@@ -132,20 +132,24 @@ def load_functions(plugins):
                    error_point=load_test.get('msg'))
         continue
 
+      # Adds function to dictionary
+      functions[qualified_string] = function
+
       # Checks for simple name conflicts
       if simple_string not in functions:
-        functions[simple_string] = function
+        functions[simple_string] = {'link': qualified_string}
       else:
         functions[qualified_string] = function
+        conflict = functions[simple_string.get('link')]
+
+        # See if already conflicting
         if type(functions[simple_string]) is dict:
-          conflict = functions[simple_string]
           functions[simple_string] = [conflict.get('qualified_string'), qualified_string]
         elif type(functions[simple_string]) is list:
           functions.get(simple_string).append(qualified_string)
 
         # Assign to qualified_string instead of simple_string
-        functions[conflict.get('qualified_string')] = conflict
-        functions[qualified_string] = function
+        # functions[conflict.get('qualified_string')] = conflict
 
         logger.log(simple_string,
                    parent='core.warn.conflict_function_name',
