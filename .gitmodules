@@ -1,6 +1,0 @@
-[submodule "plugins/jhnhnck_coreftns"]
-	path = plugins/jhnhnck_coreftns
-	url = git@github.com:jhnhnck/discord-bot-coreftns.git
-[submodule "plugins/stphn_musicbot"]
-	path = plugins/stphn_musicbot
-	url = git@github.com:stphnduvall/discord-musicbot.git

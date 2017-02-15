@@ -50,6 +50,12 @@ WIP: simple, easily expandable, and well documented framework to add custom comm
 ### Development Setup ###
 Run the following command to setup the plugins directory:
 ```git
-git submodule init
-git submodule update
+cd plugins
+git clone git@github.com:jhnhnck/discord-bot-coreftns.git jhnhnck_coreftns
+cd jhnhnck_coreftns && git checkout -b develop
+
+# Optional
+cd ..
+git clone git@github.com:stphnduvall/discord-musicbot.git stphn_musicbot
+cd stphn_musicbot && git checkout -b develop
 ```
