@@ -6,7 +6,7 @@
       "load_function_success": " Added function \"{message}\" with qualified name \"{error_point}\""
     },
     "error": {
-      "function_loading": "Function {message} could not be loaded. [{error_point}]",
+      "function_loading": " Function {message} could not be loaded. [{error_point}]",
       "locale_early_termination": "Message {message} provided with trucated parent \"{error_point}\"",
       "locale_missing": "Message {message} could not be associated to parent \"{error_point}\"",
       "plugin_loading": "Plugin \"{message}\" could not be loaded. [{error_point}]"
