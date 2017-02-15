@@ -17,7 +17,8 @@
     "info": {
       "bot_logged": "Bot connected to Discord as \"{message}\"",
       "gen_new_config": "Generating new config at \"{message}\"",
-      "plaintext": "{message}"
+      "plaintext": "{message}",
+      "settle": "Waiting {message} second(s) for things to settle\r"
     },
     "name": "openbot-discord",
     "segments": {

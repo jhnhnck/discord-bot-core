@@ -110,5 +110,15 @@ if __name__ == '__main__':
                       help='disables server connection')
   core_args = parser.parse_args()
 
+  startup(core_args.config, core_args.perms, core_args.locale)
+
+  """
+  TODO: Figure out why this doesn't work...
+  for i in range(0, 5):
+    logger.log(5 - i, parent='core.info.settle', send_newline=False)
+    time.sleep(1000)
+  logger.newline()
+  """
+
   if not core_args.testing:
     run()
