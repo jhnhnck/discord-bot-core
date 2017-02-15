@@ -4,6 +4,7 @@ import os
 import sys
 from datetime import datetime
 
+import openbot
 import openbot.config as config
 import openbot.logger as logger
 
@@ -80,7 +81,10 @@ def load_plugins():
                  parent='core.error.plugin_loading',
                  error_point=e,
                  send_to_chat=False)
-      del plugins[plugin]
+      try:
+        del plugins[plugin]
+      except:
+        pass
 
   return plugins
 
@@ -179,8 +183,20 @@ def load_tasks():
 def _test_function_valid(plugin_name, ftn_name, path):
   if os.path.isfile(path):
     return True
-  else:
-    logger.log(ftn_name, parent='core.debug.gen_stub_function', send_to_chat=False)
+  elif openbot.VERSION == 0:
+    logger.log(ftn_name,
+               parent='core.debug.gen_stub_function',
+               send_to_chat=False)
+
+    if not os.path.exists(os.path.dirname(path)):
+      os.makedirs(os.path.dirname(path))
+
     with open('plugins/{}/functions/{}.py'.format(plugin_name, ftn_name), 'w+') as f:
-      f.write(logger.get_locale_string('core.segments.stub_function').format(plugin=plugin_name, function=ftn_name, date=datetime.now()))
+      f.write(logger.get_locale_string('core.segments.stub_function')
+              .format(plugin=plugin_name, function=ftn_name, date=datetime.now()))
     return False
+  else:
+    logger.log(ftn_name,
+               parent='core.error.function_loading',
+               send_to_chat=False,
+               error_point='FileNotExistsError')
