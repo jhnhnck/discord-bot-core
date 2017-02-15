@@ -33,11 +33,11 @@ WIP: simple, easily expandable, and well documented framework to add custom comm
   -	**Shutdown**: Completely stops the program
   - **Restart**: Completely stops the program and [flushes](https://blog.petrzemek.net/2014/03/23/restarting-a-python-script-within-itself/) all files before starting again
   - **Reload**: Reloads config and plugins from file; Faster but will not notice changes with code
-  - **Update**: Looks for changes to plugins and core from Github url in plugin json file
+  - **Update**: Looks for changes to plugins and core from GitHub url in plugin json file
   - **Help**: provide a list of commands and detailed info if a specific command is provided
   - **Config**: Change certain values in the config file
   - **Sleep**: Ignore commands for a certain amount of time
-  - **Stats**: Print useful information such as uptime and loaded plugins
+  - **Stats**: Print useful information such as up-time and loaded plugins
 
 
 ### Additional Core Functions ###
@@ -51,11 +51,8 @@ WIP: simple, easily expandable, and well documented framework to add custom comm
 Run the following command to setup the plugins directory:
 ```git
 cd plugins
-git clone git@github.com:jhnhnck/discord-bot-coreftns.git jhnhnck_coreftns
-cd jhnhnck_coreftns && git checkout -b develop
+git clone -b develop git@github.com:jhnhnck/discord-bot-coreftns.git jhnhnck_coreftns
 
 # Optional
-cd ..
-git clone git@github.com:stphnduvall/discord-musicbot.git stphn_musicbot
-cd stphn_musicbot && git checkout -b develop
+git clone -b develop git@github.com:stphnduvall/discord-musicbot.git stphn_musicbot
 ```
