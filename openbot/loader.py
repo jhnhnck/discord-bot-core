@@ -7,6 +7,7 @@ from datetime import datetime
 import openbot.config as config
 import openbot.logger as logger
 
+
 # Add plugin directory to path
 sys.path.insert(0, os.path.abspath('plugins'))
 
@@ -116,6 +117,7 @@ def load_functions(plugins):
           'store': getattr(importlib.import_module('{}.functions.{}'.format(plugin_name, ftn_name)), 'BotFunction')(),
           'simple_string': simple_string,
           'qualified_string': qualified_string,
+          **ftn
         }
       except Exception as e:
         logger.log(logger.get_locale_string('core.segments.from').format(ftn_name, plugin_name),
