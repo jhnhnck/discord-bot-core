@@ -123,13 +123,13 @@ def load_functions(plugins):
                    error_point=e)
 
       # Run load_test()
-      load_test, load_test_reason = function.get('store').load_test()
-      if not load_test:
-        if type(load_test_reason) is not str:
-          load_test_reason = 'Load Test Failed (NoErrorReturned)'
+      load_test = function.get('store').load_test()
+      if not load_test.get('state'):
+        if 'msg' not in load_test:
+          load_test['msg'] = 'Load Test Failed (NoErrorReturned)'
         logger.log(logger.get_locale_string('core.segments.from').format(ftn_name, plugin_name),
                    parent='core.error.function_loading',
-                   error_point=load_test_reason)
+                   error_point=load_test.get('msg'))
         continue
 
       # Checks for simple name conflicts
