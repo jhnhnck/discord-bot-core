@@ -120,9 +120,6 @@ def load_functions(plugins):
                parent='core.debug.load_function_plugin_title',
                send_to_chat=False)
 
-    # Stores prefix for easy lookup later
-    prefix = plugin.get('description')['plugin_prefix']
-
     for ftn_name, ftn in plugin.get('functions').items():
       ftn_path = 'plugins/{}/functions/{}.py'.format(plugin_name, ftn_name)
 
@@ -130,10 +127,13 @@ def load_functions(plugins):
         continue
 
       # Name without prefix (can be called if no conflicts)
-      simple_string = config.get_config('core.command_prefix') + ftn.get('function_name')
+      simple_string = '{}{}'.format(config.get_config('core.command_prefix'),
+                                    ftn.get('function_name'))
 
       # Name with prefix (can always be called, but must be used in case of name conflicts)
-      qualified_string = '{}{}.{}'.format(config.get_config('core.command_prefix'), prefix, ftn.get('function_name'))
+      qualified_string = '{}{}.{}'.format(config.get_config('core.command_prefix'),
+                                          plugin.get('description')['plugin_prefix'],
+                                          ftn.get('function_name'))
 
       try:
         function = {
@@ -165,11 +165,11 @@ def load_functions(plugins):
         functions[simple_string] = {'link': qualified_string}
       else:
         functions[qualified_string] = function
-        conflict = functions[simple_string.get('link')]
+        qualified_conflict = functions[functions.get(simple_string).get('link')].get('qualified_string')
 
         # See if already conflicting
         if type(functions[simple_string]) is dict:
-          functions[simple_string] = [conflict.get('qualified_string'), qualified_string]
+          functions[simple_string] = [qualified_conflict, qualified_string]
         elif type(functions[simple_string]) is list:
           functions.get(simple_string).append(qualified_string)
 
@@ -179,7 +179,7 @@ def load_functions(plugins):
         logger.log(simple_string,
                    parent='core.warn.conflict_function_name',
                    error_point=logger.get_locale_string('core.segments.two_length_or')
-                   .format(qualified_string, conflict),
+                   .format(qualified_string, qualified_conflict),
                    send_to_chat=False)
         continue
 
