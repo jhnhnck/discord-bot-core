@@ -121,9 +121,9 @@ def load_functions(plugins):
                send_to_chat=False)
 
     for ftn_name, ftn in plugin.get('functions').items():
-      ftn_path = 'plugins/{}/functions/{}.py'.format(plugin_name, ftn_name)
+      # ftn_path = 'plugins/{}/functions/{}.py'.format(plugin_name, ftn_name)
 
-      if not _test_function_valid(plugin_name, ftn_name, ftn_path):
+      if not _test_function_valid(plugin_name, ftn_name):
         continue
 
       # Name without prefix (can be called if no conflicts)
@@ -183,6 +183,8 @@ def load_functions(plugins):
                    send_to_chat=False)
         continue
 
+      # TODO: Check for qualified name conflicts
+
       logger.log(simple_string,
                  parent='core.debug.load_function_success',
                  error_point=ftn_name,
@@ -199,10 +201,25 @@ def load_tasks():
   pass
 
 
-def _test_function_valid(plugin_name, ftn_name, path):
+def _test_function_valid(plugin_name, ftn_name):
+  """
+  Test Function Valid.
+  Tests if the function is a valid file; If discord-bot-core is ran on a develop release it will generate stub files
+  for all functions that are not found
+
+  Args:
+    plugin_name: Full plugin name with domain included
+    ftn_name: Name of function python file
+
+  Returns:
+    True if the function is valid, false otherwise
+  """
+  path = 'plugins/{}/functions/{}.py'.format(plugin_name, ftn_name)
+
   if os.path.isfile(path):
     return True
-  elif openbot.VERSION == 0:
+
+  elif openbot.RELEASE_TYPE == 0:
     logger.log(ftn_name,
                parent='core.debug.gen_stub_function',
                send_to_chat=False)
@@ -210,7 +227,7 @@ def _test_function_valid(plugin_name, ftn_name, path):
     if not os.path.exists(os.path.dirname(path)):
       os.makedirs(os.path.dirname(path))
 
-    with open('plugins/{}/functions/{}.py'.format(plugin_name, ftn_name), 'w+') as f:
+    with open(path, 'w+') as f:
       f.write(logger.get_locale_string('core.segments.stub_function')
               .format(plugin=plugin_name, function=ftn_name, date=datetime.now()))
     return False
