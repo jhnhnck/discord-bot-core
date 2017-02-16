@@ -4,6 +4,7 @@ config/*
 .idea/dictionaries
 .idea/discord-bot-core.iml
 plugins/*
+!plugins/plugins.txt
 
 
 # Created by https://www.gitignore.io/api/pycharm,python,linux,windows,macos
