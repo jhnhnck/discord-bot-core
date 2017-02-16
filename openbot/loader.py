@@ -13,10 +13,6 @@ import openbot.logger as logger
 sys.path.insert(0, os.path.abspath('plugins'))
 
 
-def self_test():
-  pass
-
-
 def load_plugins():
   """
   Basic Plugin Structure.

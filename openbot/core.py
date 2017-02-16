@@ -39,9 +39,6 @@ def startup(config_file, perm_file, locale):
   global permissions
   permissions = openbot.permissions.BotPerms()
 
-  # loader = openbot.loader.Loader(config)
-  openbot.loader.self_test()
-
   global plugins
   plugins = openbot.loader.load_plugins()
 
