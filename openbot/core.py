@@ -27,7 +27,9 @@ def startup(config_file, perm_file, locale):
   """
   openbot.logger.setup(locale)
   _log_system_info()
-  logger.self_test()
+
+  if openbot.RELEASE_TYPE == 0:
+    openbot.logger.self_test()
 
   openbot.config.setup(config_path=config_file)
 

@@ -102,18 +102,32 @@ def log(message,
     log('Error')
 
 
-def self_test():
+def self_test(send_to_chat=False):
   """
   Self Test.
   Prints a all the LogLevels with a test message
   """
-  log("This is a test blank message; Don't use this", log_type=LogLevel.blank, send_to_chat=True)
-  log('This is a test trace message', log_type=LogLevel.trace, send_to_chat=True)
-  log('This is a test debug message', log_type=LogLevel.debug, send_to_chat=True)
-  log('This is a test info message', log_type=LogLevel.info, send_to_chat=True)
-  log('This is a test warning message', log_type=LogLevel.warn, send_to_chat=True)
-  log('This is a test error message', log_type=LogLevel.error, send_to_chat=True)
-  log('This is a test fatal message', log_type=LogLevel.fatal, send_to_chat=True)
+  log("This is a test blank message; Don't use this",
+      log_type=LogLevel.blank,
+      send_to_chat=send_to_chat)
+  log('This is a test trace message',
+      log_type=LogLevel.trace,
+      send_to_chat=send_to_chat)
+  log('This is a test debug message',
+      log_type=LogLevel.debug,
+      send_to_chat=send_to_chat)
+  log('This is a test info message',
+      log_type=LogLevel.info,
+      send_to_chat=send_to_chat)
+  log('This is a test warning message',
+      log_type=LogLevel.warn,
+      send_to_chat=send_to_chat)
+  log('This is a test error message',
+      log_type=LogLevel.error,
+      send_to_chat=send_to_chat)
+  log('This is a test fatal message',
+      log_type=LogLevel.fatal,
+      send_to_chat=send_to_chat)
   newline()
 
 

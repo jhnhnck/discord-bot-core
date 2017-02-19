@@ -13,6 +13,9 @@ class BotClient(discord.Client):
   async def on_ready(self):
     openbot.logger.log('{} [{}]'.format(self.user.name, self.user.id), parent='core.info.bot_logged')
 
+    if openbot.RELEASE_TYPE == 0:
+      openbot.logger.self_test(send_to_chat=True)
+
   async def on_message(self, message):
     # Saved for later: self.core.config.get_config('core', 'command_prefix')
     if message.content.startswith('!stop'):
