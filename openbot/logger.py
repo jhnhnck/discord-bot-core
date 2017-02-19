@@ -3,6 +3,8 @@ import re
 import sys
 from enum import Enum
 
+import openbot.core
+
 
 class ParentNotFoundException(Exception):
   pass
@@ -81,9 +83,15 @@ def log(message,
     _print(cli_base_string)
 
     if send_to_chat:
-      chat_base_string = get_locale_string('base.chat.{}_base'.format(log_type.name)) \
-          .format(message=parent_string)
-      # TODO: Handle chat messages
+      if openbot.core.server is not None:
+        chat_base_string = get_locale_string('base.chat.{}_base'.format(log_type.name)) \
+            .format(message=parent_string)
+        openbot.core.server.send_message()
+        # TODO: Handle chat messages
+      else:
+        log(parent,
+            parent='core.warn.chat_message_no_init',
+            send_to_chat=False)
 
   except ParentNotFoundException:
     log(get_locale_string('core.segments.with_level').format(message, log_type),
