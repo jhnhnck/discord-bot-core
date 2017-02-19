@@ -13,6 +13,7 @@ permissions = None
 plugins = None
 functions = None
 tasks = None
+server = None
 
 
 def startup(config_file, perm_file, locale):
@@ -52,8 +53,9 @@ def startup(config_file, perm_file, locale):
 
 def run():
   # Client token: '***REMOVED***'
+  global server
   server = openbot.client.BotClient()
-  server.run(config.get_config('core.token'))
+  server.run(openbot.config.get_config('core.token'))
 
 
 def call_function(function, params):
