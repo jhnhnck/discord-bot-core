@@ -11,7 +11,9 @@ class BotClient(discord.Client):
     super().__init__()
 
   async def on_ready(self):
-    openbot.logger.log('{} [{}]'.format(self.user.name, self.user.id), parent='core.info.bot_logged')
+    openbot.logger.log('{} [{}]'.format(self.user.name, self.user.id),
+                       parent='core.info.bot_logged',
+                       send_to_chat=False)
 
     if openbot.RELEASE_TYPE == 0:
       openbot.logger.self_test(send_to_chat=True)
