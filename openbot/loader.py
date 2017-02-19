@@ -5,8 +5,8 @@ import sys
 from datetime import datetime
 
 import openbot
-import openbot.config as config
-import openbot.logger as logger
+import openbot.config
+import openbot.logger
 
 
 # Add plugin directory to path
@@ -53,7 +53,9 @@ def load_plugins():
         plugin_name = split[-1]
         domain_name = split[0]
       else:
-        logger.log(plugin, error_point='nodomain', parent='core.warn.plugin_domain_malformed')
+        openbot.logger.log(plugin,
+                           error_point='nodomain',
+                           parent='core.warn.plugin_domain_malformed')
         domain_name = 'nodomain'
         plugin_name = plugin
 
@@ -63,9 +65,9 @@ def load_plugins():
 
       # Test if disabled
       if not plugins[plugin].get('user').get('enabled'):
-        logger.log(plugin,
-                   parent='core.warn.disabled_plugin',
-                   send_to_chat=False)
+        openbot.logger.log(plugin,
+                           parent='core.warn.disabled_plugin',
+                           send_to_chat=False)
         del plugins[plugin]
         continue
 
@@ -73,10 +75,10 @@ def load_plugins():
       plugins.get(plugin)['store'] = getattr(importlib.import_module('{}.{}'.format(plugin, plugin_name)), 'BotPlugin')()
 
     except Exception as e:
-      logger.log(plugin,
-                 parent='core.error.plugin_loading',
-                 error_point=e,
-                 send_to_chat=False)
+      openbot.logger.log(plugin,
+                         parent='core.error.plugin_loading',
+                         error_point=e,
+                         send_to_chat=False)
       try:
         del plugins[plugin]
       except:
@@ -112,9 +114,9 @@ def load_functions(plugins):
   functions = {}
 
   for plugin_name, plugin in plugins.items():
-    logger.log(plugin_name,
-               parent='core.debug.load_function_plugin_title',
-               send_to_chat=False)
+    openbot.logger.log(plugin_name,
+                       parent='core.debug.load_function_plugin_title',
+                       send_to_chat=False)
 
     for ftn_name, ftn in plugin.get('functions').items():
       # ftn_path = 'plugins/{}/functions/{}.py'.format(plugin_name, ftn_name)
@@ -123,11 +125,11 @@ def load_functions(plugins):
         continue
 
       # Name without prefix (can be called if no conflicts)
-      simple_string = '{}{}'.format(config.get_config('core.command_prefix'),
+      simple_string = '{}{}'.format(openbot.config.get_config('core.command_prefix'),
                                     ftn.get('function_name'))
 
       # Name with prefix (can always be called, but must be used in case of name conflicts)
-      qualified_string = '{}{}.{}'.format(config.get_config('core.command_prefix'),
+      qualified_string = '{}{}.{}'.format(openbot.config.get_config('core.command_prefix'),
                                           plugin.get('description')['plugin_prefix'],
                                           ftn.get('function_name'))
 
@@ -139,18 +141,18 @@ def load_functions(plugins):
           **ftn
         }
       except Exception as e:
-        logger.log(logger.get_locale_string('core.segments.from').format(ftn_name, plugin_name),
-                   parent='core.error.function_loading',
-                   error_point=e)
+        openbot.logger.log(openbot.logger.get_locale_string('core.segments.from').format(ftn_name, plugin_name),
+                           parent='core.error.function_loading',
+                           error_point=e)
 
       # Run load_test()
       load_test = function.get('store').load_test()
       if not load_test.get('state'):
         if 'msg' not in load_test:
           load_test['msg'] = 'Load Test Failed (NoErrorReturned)'
-        logger.log(logger.get_locale_string('core.segments.from').format(ftn_name, plugin_name),
-                   parent='core.error.function_loading',
-                   error_point=load_test.get('msg'))
+          openbot.logger.log(openbot.logger.get_locale_string('core.segments.from').format(ftn_name, plugin_name),
+                             parent='core.error.function_loading',
+                             error_point=load_test.get('msg'))
         continue
 
       # Adds function to dictionary
@@ -172,19 +174,19 @@ def load_functions(plugins):
         # Assign to qualified_string instead of simple_string
         # functions[conflict.get('qualified_string')] = conflict
 
-        logger.log(simple_string,
-                   parent='core.warn.conflict_function_name',
-                   error_point=logger.get_locale_string('core.segments.two_length_or')
-                   .format(qualified_string, qualified_conflict),
-                   send_to_chat=False)
+          openbot.logger.log(simple_string,
+                             parent='core.warn.conflict_function_name',
+                             error_point=openbot.logger.get_locale_string('core.segments.two_length_or')
+                             .format(qualified_string, qualified_conflict),
+                             send_to_chat=False)
         continue
 
       # TODO: Check for qualified name conflicts
 
-      logger.log(simple_string,
-                 parent='core.debug.load_function_success',
-                 error_point=ftn_name,
-                 send_to_chat=False)
+      openbot.logger.log(simple_string,
+                         parent='core.debug.load_function_success',
+                         error_point=ftn_name,
+                         send_to_chat=False)
 
   return functions
 
@@ -216,19 +218,19 @@ def _test_function_valid(plugin_name, ftn_name):
     return True
 
   elif openbot.RELEASE_TYPE == 0:
-    logger.log(ftn_name,
-               parent='core.debug.gen_stub_function',
-               send_to_chat=False)
+    openbot.logger.log(ftn_name,
+                       parent='core.debug.gen_stub_function',
+                       send_to_chat=False)
 
     if not os.path.exists(os.path.dirname(path)):
       os.makedirs(os.path.dirname(path))
 
     with open(path, 'w+') as f:
-      f.write(logger.get_locale_string('core.segments.stub_function')
+      f.write(openbot.logger.get_locale_string('core.segments.stub_function')
               .format(plugin=plugin_name, function=ftn_name, date=datetime.now()))
     return False
   else:
-    logger.log(ftn_name,
-               parent='core.error.function_loading',
-               send_to_chat=False,
-               error_point='FileNotExistsError')
+    openbot.logger.log(ftn_name,
+                       parent='core.error.function_loading',
+                       send_to_chat=False,
+                       error_point='FileNotExistsError')

@@ -2,11 +2,10 @@ import argparse
 import platform
 
 import openbot.client
-import openbot.config as config
+import openbot.config
 import openbot.loader
-import openbot.logger as logger
+import openbot.logger
 import openbot.permissions
-from openbot.logger import LogLevel
 
 
 # Global Variables
@@ -26,15 +25,15 @@ def startup(config_file, perm_file, locale):
     3. Permissions: The permissions are loaded from 'config/perms.json' or the provided path
     4. Plugins, Functions, Tasks: These are loaded into separate dictionaries via the Loader class
   """
-  logger.setup(locale)
+  openbot.logger.setup(locale)
   _log_system_info()
   logger.self_test()
 
-  config.setup(config_path=config_file)
+  openbot.config.setup(config_path=config_file)
 
   # Logger is reloaded if loaded in 'en_us' mode and config has a differing locale
-  if locale == 'en_us' and config.get_config('core.locale') != 'en_us':
-    logger.setup(config.get_config('core.locale'))
+  if locale == 'en_us' and openbot.config.get_config('core.locale') != 'en_us':
+    openbot.logger.setup(openbot.config.get_config('core.locale'))
 
   global permissions
   permissions = openbot.permissions.BotPerms()
@@ -81,8 +80,9 @@ def _parse_args(params, funct):
 
   return args, mod
 
+
 def _log_system_info():
-  sys_info = logger.get_locale_string('core.segments.sys_info').format(
+  sys_info = openbot.logger.get_locale_string('core.segments.sys_info').format(
     machine_type=platform.machine(),
     processor=platform.processor(),
     platform=platform.platform(),
@@ -90,8 +90,8 @@ def _log_system_info():
     python_implementation=platform.python_implementation(),
     core_full_version=openbot.FULL_VERSION)
 
-  logger.log(sys_info, log_type=LogLevel.blank)
-  logger.newline()
+  openbot.logger.log(sys_info, log_type=openbot.logger.LogLevel.blank, send_to_chat=False)
+  openbot.logger.newline()
 
 
 if __name__ == '__main__':

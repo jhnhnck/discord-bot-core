@@ -2,7 +2,7 @@ import json
 import os
 
 import openbot
-import openbot.logger as logger
+import openbot.logger
 
 
 config_file = None
@@ -28,13 +28,13 @@ def setup(config_path):
       changed = True
 
   except FileNotFoundError:
-    logger.log(config_file, parent='core.info.gen_new_config')
+    openbot.logger.log(config_file, parent='core.info.gen_new_config')
     config = gen_new_config()
     changed = True
   except Exception as e:
-    logger.log(config_file,
-               parent='core.warn.config_loading_exception',
-               error_point=e)
+    openbot.logger.log(config_file,
+                       parent='core.warn.config_loading_exception',
+                       error_point=e)
     config = gen_new_config()
     changed = True
 
@@ -66,10 +66,10 @@ def _unload():
     with open(config_file, 'w+') as file:
       json.dump(config, file, sort_keys=True, indent=2)
   except:
-    logger.log(config_file,
-               parent='core.fatal.unload_config_error',
-               error_point=config,
-               pad_newlines=False)
+    openbot.logger.log(config_file,
+                       parent='core.fatal.unload_config_error',
+                       error_point=config,
+                       pad_newlines=False)
 
 
 def _match_keys(old, new):
