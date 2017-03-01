@@ -220,3 +220,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/pycharm,python,linux,windows,macos
+\.idea/deployment\.xml
+\.idea/webServers\.xml
