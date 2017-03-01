@@ -1,16 +1,11 @@
 import importlib
 import json
 import os
-import sys
 from datetime import datetime
 
 import openbot
 import openbot.config
 import openbot.logger
-
-
-# Add plugin directory to path
-sys.path.insert(0, os.path.abspath('plugins'))
 
 
 def load_plugins():

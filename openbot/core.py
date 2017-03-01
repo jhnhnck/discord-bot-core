@@ -1,4 +1,3 @@
-import argparse
 import platform
 
 import openbot.client
@@ -18,7 +17,7 @@ server = None
 
 def startup(config_file, perm_file, locale):
   """
-  Init.
+  Startup.
   Loading Order.
     1. Logger: In loaded in 'en_us' mode or provided locale mode first and reloaded if changed via config
     2. Config: The configuration is loaded from 'config/openbot.json' or the provided path
@@ -96,29 +95,3 @@ def _log_system_info():
 
   openbot.logger.log(sys_info, log_type=openbot.logger.LogLevel.blank, send_to_chat=False)
   openbot.logger.newline()
-
-
-if __name__ == '__main__':
-  parser = argparse.ArgumentParser(description=openbot.DESCRIPTION)
-  parser.add_argument('-c', '--config', nargs=1, default='config/openbot.json',
-                      help='location of config file')
-  parser.add_argument('-l', '--locale', nargs=1, default='en_us',
-                      help='language')
-  parser.add_argument('-p', '--perms', nargs=1, default='config/permissions.json',
-                      help='location of permissions file')
-  parser.add_argument('--testing', default=False, action='store_true',
-                      help='disables server connection')
-  core_args = parser.parse_args()
-
-  startup(core_args.config, core_args.perms, core_args.locale)
-
-  """
-  TODO: Figure out why this doesn't work...
-  for i in range(0, 5):
-    logger.log(5 - i, parent='core.info.settle', send_newline=False)
-    time.sleep(1000)
-  logger.newline()
-  """
-
-  if not core_args.testing:
-    run()

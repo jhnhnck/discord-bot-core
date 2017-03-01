@@ -1,3 +1,6 @@
+import sys
+import os
+
 # Global Definitions
 RELEASE_TYPES = ['develop', 'alpha', 'beta', 'preview', 'release']
 RELEASE_TYPE = 0
@@ -8,3 +11,7 @@ FULL_VERSION = '{}-{}'.format(VERSION, RELEASE_TYPE_NAME)
 
 DESCRIPTION = 'A simple, easily expandable, and well documented framework to add custom commands and \
                interactions to Discord'
+
+# Add plugin directory to path
+sys.path.insert(0, os.path.abspath('plugins'))
+
