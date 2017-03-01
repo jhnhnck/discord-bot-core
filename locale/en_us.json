@@ -6,6 +6,7 @@
       "load_function_success": " Added function \"{message}\" with qualified name \"{error_point}\""
     },
     "error": {
+      "bound_channel": "An error occurred while binding to channel \"{message}\": {error_point}",
       "function_loading": " Function {message} could not be loaded. [{error_point}]",
       "locale_early_termination": "Message {message} provided with truncated parent \"{error_point}\"",
       "locale_missing": "Message {message} could not be associated to parent \"{error_point}\"",
@@ -16,6 +17,7 @@
     },
     "info": {
       "bot_logged": "Bot connected to Discord as \"{message}\"",
+      "bound_channel": "Bot successfully bound to channel \"{message}\"",
       "gen_new_config": "Generating new config at \"{message}\"",
       "plaintext": "{message}",
       "settle": "Waiting {message} second(s) for things to settle\r"
@@ -30,6 +32,7 @@
       "with_level": "\"{}\" with level \"{}\""
     },
     "warn": {
+      "bound_channel": "Bot could not be bound to channel \"{message}\"",
       "config_loading_exception": "Config not able to be loaded from \"{message}\" due to {error_point}; Generating new config",
       "conflict_function_name": "Function \"{message}\" has multiple targets; Specify which using {error_point}",
       "disabled_plugin": "Plugin \"{message}\" is disabled and will not be loaded",
@@ -60,7 +63,8 @@
       "fatal_base": "{dark_red}> fatal. {message}{reset}",
       "info_base": "> info.  {message}",
       "trace_base": "{green}> trace. {message}{reset}",
-      "warn_base": "{dark_yellow}> warn.  {message}{reset}"
+      "warn_base": "{dark_yellow}> warn.  {message}{reset}",
+      "chat_message": "> chat. {cli_base}"
     }
   },
   "colors": {

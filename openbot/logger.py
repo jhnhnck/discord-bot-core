@@ -3,6 +3,8 @@ import re
 import sys
 from enum import Enum
 
+import asyncio
+
 import openbot.core
 
 
@@ -67,31 +69,39 @@ def log(message,
   """
   log_type = _type_from_parent(parent, log_type)
 
+  # Adds spaces so that wrapped lines line up
   if pad_newlines:
     message = _pad_message(str(message), log_type)
 
   try:
-    parent_string = get_locale_string(parent) \
+    # Gets the locale string from the json file
+    parent_string = get_locale_string(parent)\
         .format(message=message, error_point=error_point)
-    cli_base_string = get_locale_string('base.cli.{}_base'.format(log_type.name)) \
-        .format(message=parent_string, **locale['colors'], **locale['format'])
-    # TODO: Fix something here
 
-    if send_newline:
-      cli_base_string += '\n'
-
-    _print(cli_base_string)
-
+    # Handles sending to discord and prepending the chat message
     if send_to_chat:
-      if openbot.core.server is not None:
-        chat_base_string = get_locale_string('base.chat.{}_base'.format(log_type.name)) \
-            .format(message=parent_string)
-        openbot.core.server.send_message()
-        # TODO: Handle chat messages
+      if openbot.core.server is not None and openbot.core.server:
+        # Gets formatting of that particular chat message type
+        chat_base_string = get_locale_string('base.chat.{}_base'.format(log_type.name))
+        chat_message = chat_base_string.format(message=parent_string)
+
+        # TODO: Modify to use wrapper
+        openbot.core.server.print_message(chat_message)
+
+        # Modify message to include chat descriptor
+        parent_string = get_locale_string('base.cli.chat_message').format(cli_base=parent_string)
       else:
+        # Sends warning if message was sent to chat before client was connected
         log(parent,
             parent='core.warn.chat_message_no_init',
             send_to_chat=False)
+
+    # Gets formatting of that particular terminal message type
+    cli_base_string = get_locale_string('base.cli.{}_base'.format(log_type.name))
+    cli_message = cli_base_string.format(message=parent_string, **locale['colors'], **locale['format'])
+
+    if send_newline: cli_message += '\n'
+    _print(cli_message)
 
   except ParentNotFoundException:
     log(get_locale_string('core.segments.with_level').format(message, log_type),
@@ -107,7 +117,7 @@ def log(message,
         send_to_chat=send_to_chat)
   except IndexError:
     # TODO: Error?
-    log('Error')
+    _print('Does this error actually occur? Sorry -jhnhnck\n')
 
 
 def self_test(send_to_chat=False):

@@ -122,7 +122,7 @@ def gen_new_config():
       'locale': 'en_us',
     },
     'chat': {
-      'restrict_text_channels': {
+      'bind_text_channels': {
         'enabled': False,
         'channels': [],
       },
