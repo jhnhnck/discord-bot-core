@@ -145,9 +145,10 @@ def load_functions(plugins):
       if not load_test.get('state'):
         if 'msg' not in load_test:
           load_test['msg'] = 'Load Test Failed (NoErrorReturned)'
-          openbot.logger.log(openbot.logger.get_locale_string('core.segments.from').format(ftn_name, plugin_name),
-                             parent='core.error.function_loading',
-                             error_point=load_test.get('msg'))
+        openbot.logger.log(openbot.logger.get_locale_string('core.segments.from').format(ftn_name, plugin_name),
+                           parent='core.error.function_loading',
+                           error_point=load_test.get('msg'),
+                           send_to_chat=False)
         continue
 
       # Adds function to dictionary
