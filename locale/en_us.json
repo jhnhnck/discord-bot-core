@@ -7,6 +7,7 @@
     },
     "error": {
       "bound_channel": "An error occurred while binding to channel \"{message}\": {error_point}",
+      "channel_none": "The previous message starting with \"{message}\" could not be send",
       "function_loading": " Function {message} could not be loaded. [{error_point}]",
       "locale_early_termination": "Message {message} provided with truncated parent \"{error_point}\"",
       "locale_missing": "Message {message} could not be associated to parent \"{error_point}\"",

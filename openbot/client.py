@@ -70,7 +70,7 @@ class BotClient(discord.Client):
       yield from asyncio.sleep(3)
       message = yield from self.send_message(channel, content)
     else:
-      print('Nope')
+      openbot.logger.log(content[:20], parent='core.error.channel_none', send_to_chat=False)
       return
 
     # Delete after timeout
