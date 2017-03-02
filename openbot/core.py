@@ -53,7 +53,7 @@ def startup(config_file, perm_file, locale):
 def run():
   # Client token: '***REMOVED***'
   global server
-  server = openbot.client.BotClient()
+  server = openbot.client.BotSyncedWrapper()
   server.run(openbot.config.get_config('core.token'))
 
 

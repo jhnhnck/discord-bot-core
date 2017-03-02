@@ -5,6 +5,34 @@ import openbot.config
 import openbot.logger
 
 
+class BotSyncedWrapper:
+
+  def __init__(self):
+    # Does this cause a error?
+    self.client = BotClient()
+
+
+  def run(self, *args, **kwargs):
+    """
+    Run.
+    Pass-through for BotClient.run()
+    """
+    self.client.run(*args, **kwargs)
+
+
+  def print_message(self, content, channel=None, delete_after=None):
+    """
+    Print Message.
+    Ensures that a message will be sent to the server
+
+    Args:
+      content: String value of the message
+      channel: (Optional) Channel to send the message to
+      delete_after: (Optional) Seconds to delete message after; -1 to disable; defaults to config value
+    """
+    asyncio.ensure_future(self.client.print_message(content, channel, delete_after))
+
+
 class BotClient(discord.Client):
 
   bound_channel = None
@@ -31,12 +59,8 @@ class BotClient(discord.Client):
       await self.logout()
 
 
-  def print_message(self, content, channel=None, delete_after=None):
-    asyncio.ensure_future(self._print_message(content, channel, delete_after))
-
-
   @asyncio.coroutine
-  def _print_message(self, content, channel=None, delete_after=None):
+  def print_message(self, content, channel=None, delete_after=None):
 
     if channel is None and self.bound_channel is not None:
       channel = self.bound_channel
