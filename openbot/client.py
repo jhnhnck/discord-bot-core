@@ -74,8 +74,7 @@ class BotClient(discord.Client):
       channel = self.bound_channel
 
     if channel is not None:
-      self.send_typing(channel)
-      yield from asyncio.sleep(3)
+      yield from self.send_typing(channel)
       message = yield from self.send_message(channel, content)
     else:
       openbot.logger.log(content[:20], parent='core.error.channel_none', send_to_chat=False)
