@@ -81,10 +81,12 @@ class BotClient(discord.Client):
       return
 
     # Delete after timeout
-    if openbot.config.get_config('chat.delete_messages_delay.enabled'):
-      asyncio.ensure_future(self._delay_delete(message))
+    if delete_after == -1:
+      return
     elif type(delete_after) is int:
       asyncio.ensure_future(self._delay_delete(message, delete_after))
+    elif openbot.config.get_config('chat.delete_messages_delay.enabled'):
+      asyncio.ensure_future(self._delay_delete(message))
 
 
   async def _find_binding_channel(self):
