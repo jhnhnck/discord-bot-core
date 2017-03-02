@@ -61,7 +61,15 @@ class BotClient(discord.Client):
 
   @asyncio.coroutine
   def print_message(self, content, channel=None, delete_after=None):
+    """
+    Print Message.
+    Ensures that a message will be sent to the server
 
+    Args:
+      content: String value of the message
+      channel: (Optional) Channel to send the message to
+      delete_after: (Optional) Seconds to delete message after; -1 to disable; defaults to config value
+    """
     if channel is None and self.bound_channel is not None:
       channel = self.bound_channel
 
@@ -81,6 +89,13 @@ class BotClient(discord.Client):
 
 
   async def _find_binding_channel(self):
+    """
+    Find Binding Channel.
+    Finds the chat channel that messages should default to
+
+    Returns:
+      A discord.Channel object of the binded channel
+    """
     if openbot.config.get_config('chat.bind_text_channels.enabled'):
       for channel in openbot.config.get_config('chat.bind_text_channels.channels'):
         try:
@@ -119,6 +134,13 @@ class BotClient(discord.Client):
         
 
   async def _delay_delete(self, message, wait_duration=None):
+    """
+    Delayed Delete.
+    Async task to delete messages after a delay
+    Args:
+      message: message object to delete
+      wait_duration: delay in seconds
+    """
     if wait_duration is None:
       if len(message.content) > 250:
         wait_duration = openbot.config.get_config('chat.delete_messages_delay.timeout_long')
