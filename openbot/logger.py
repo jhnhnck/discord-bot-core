@@ -3,8 +3,6 @@ import re
 import sys
 from enum import Enum
 
-import asyncio
-
 import openbot.core
 
 
