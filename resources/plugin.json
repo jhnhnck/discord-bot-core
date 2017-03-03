@@ -21,7 +21,7 @@
     "example": {
       "function_name": "",
       "help_text": "",
-      "allowed_args_length": "[*]",
+      "allowed_args_length": "*",
       "allowed_modifiers": {}
     }
   }
