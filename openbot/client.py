@@ -1,6 +1,7 @@
 import discord
 import asyncio
 
+import openbot.core
 import openbot.config
 import openbot.logger
 
@@ -151,3 +152,126 @@ class BotClient(discord.Client):
     await asyncio.sleep(wait_duration)
     await self.delete_message(message)
 
+
+  async def call_function(self, message):
+    call = message.content.split(' ')
+
+    ftn = await self._get_function(call[0])
+
+    # Function is not found
+    if ftn is None:
+      await self.delete_message(message)
+      openbot.logger.log(call[0], parent='core.error.command_not_found')
+      return
+      # TODO: Suggest Commands
+      # openbot.logger.log('suggestion', error_point=call[0], parent='core.error.command_error_suggest')
+
+    # Function is not specific enough
+    elif type(ftn) is list:
+
+
+    # Valid Function
+    elif type(ftn) is dict:
+      args = await self._make_call_args(message, call, ftn)
+
+      # Handle invalid length
+      if 'invalid_length' in args:
+        # TODO: Not in locale
+        openbot.logger.log(args.get('invalid_length'),
+                           error_point=ftn.get(),
+                           parent='core.error.args_length',
+                           delete_after=120)
+        asyncio.ensure_future(self._delay_delete(message, wait_duration=120))
+        return
+
+      ftn.get('store').call(**args)
+
+
+  def _get_function(self, name):
+    # Test if function exists
+    if name not in openbot.core.functions:
+      return None
+
+    ftn = openbot.core.functions.get(name)
+
+    # Name not specific enough
+    if type(ftn) is list:
+      return ftn
+
+    elif type(ftn) is dict:
+      # Test for linked function
+      if 'link' in ftn:
+        return self._get_function(ftn.get('link'))
+      else:
+        return ftn
+
+
+  async def _make_call_args(self, message, call, ftn):
+    args = {
+      'client': openbot.core.server.client,
+      'message': message
+      ** await self._parse_args(call, ftn)
+    }
+    return args
+
+
+  @staticmethod
+  async def _parse_args(call, ftn):
+    args = []
+    mod = {}
+
+    for i in range(1, len(call)):
+      # Tests if modifier
+      if call[i].startswith('-'):
+        # Tests if in expected modifiers
+        if call[i] in ftn.get('allowed_modifiers'):
+          # Tests if provides a value
+          if call[i].endswith('='):
+            new_mod = call[i].split('=')
+            mod[new_mod[0]] = new_mod[1]
+          else:
+            mod[call[i]] = True
+
+        # Tests for split between calls
+        elif call[i] + '=' in ftn.get('allowed_modifiers'):
+          mod[call[i]] = call[i+1]
+          i += 1
+      else:
+        args.append(call[i])
+
+    # Valid args length
+    valids = ftn.get('allowed_args_length').split(',')
+    is_valid = False
+
+    for valid in valids:
+      if valid == '*':
+        is_valid = True
+        break
+      elif valid.startswith('>'):
+        if len(args) > int(valid[1:]):
+          is_valid = True
+          break
+      elif valid.startswith('<'):
+        if len(args) < int(valid[1:]):
+          is_valid = True
+          break
+      elif valid.startswith('!'):
+        if not len(args) == int(valid[1:]):
+          is_valid = True
+      elif len(args) < int(valid):
+          is_valid = True
+          break
+
+    # Handle invalid args length
+    if not is_valid:
+      return {'invalid_length': len(args)}
+
+    # Set false for missing mods
+    for amod in ftn.get('allowed_modifiers'):
+      if '=' not in amod and amod not in mod:
+        mod[amod] = False
+
+    return {
+      'args': args,
+      'mod': mod
+      }

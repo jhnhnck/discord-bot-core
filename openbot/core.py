@@ -57,33 +57,6 @@ def run():
   server.run(openbot.config.get_config('core.token'))
 
 
-def call_function(function, params):
-  # Test if function exists
-  if function not in functions:
-    return []
-
-  ftn = functions.get(function)
-
-  if type(ftn) is list:
-    return ftn
-
-  elif type(ftn) is dict:
-    # Test for linked function
-    if 'link' in ftn:
-      return call_function(ftn.get('link'), params)
-    else:
-      args, mod = _parse_args(params, function)
-      ftn.get('store').call(args, mod)
-      return [ftn.get('qualified_string')]
-
-
-def _parse_args(params, funct):
-  args = []
-  mod = {}
-
-  return args, mod
-
-
 def _log_system_info():
   sys_info = openbot.logger.get_locale_string('core.segments.sys_info').format(
     machine_type=platform.machine(),
