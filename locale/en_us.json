@@ -52,12 +52,12 @@
   "base": {
     "chat": {
       "blank_base": "{message}",
-      "debug_base": "```\nDebug.\n{message}\n```",
-      "error_base": "```\nAn error occurred.\n{message}\n```",
-      "fatal_base": "```\nA fatal error occurred.\n{message}\n```",
+      "debug_base": "Debug.\n```\n{message}\n```",
+      "error_base": "An error occurred.\n```\n{message}\n```",
+      "fatal_base": "A fatal error occurred.\n```\n{message}\n```",
       "info_base": "{message}",
-      "trace_base": "```\nTrace.\n{message}\n```",
-      "warn_base": "```\nWarning.\n{message}\n```"
+      "trace_base": "Trace.\n```\n{message}\n```",
+      "warn_base": "Warning.\n```\n{message}\n```"
     },
     "cli": {
       "blank_base": "> {message}",
