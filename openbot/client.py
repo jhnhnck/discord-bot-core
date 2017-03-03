@@ -1,5 +1,6 @@
 import discord
 import asyncio
+import inspect
 
 import openbot.core
 import openbot.config
@@ -50,14 +51,17 @@ class BotClient(discord.Client):
     self.bound_channel = await self._find_binding_channel()
     # openbot.core.server = self
 
-    if openbot.RELEASE_TYPE == 0:
-      openbot.logger.self_test(send_to_chat=True)
+    # if openbot.RELEASE_TYPE == 0:
+    #   openbot.logger.self_test(send_to_chat=True)
 
 
   async def on_message(self, message):
-    # Saved for later: core.config.get_config('core', 'command_prefix')
-    if message.content.startswith('!stop'):
-      await self.logout()
+    await self.wait_until_ready()
+
+    content = message.content.strip()
+
+    if content.startswith(openbot.config.get_config('core.command_prefix')):
+      asyncio.ensure_future(self.call_function(message))
 
 
   @asyncio.coroutine
@@ -153,26 +157,33 @@ class BotClient(discord.Client):
     await self.delete_message(message)
 
 
-  async def call_function(self, message):
+  @asyncio.coroutine
+  def call_function(self, message):
     call = message.content.split(' ')
 
-    ftn = await self._get_function(call[0])
+    ftn = self._get_function(call[0])
 
     # Function is not found
     if ftn is None:
-      await self.delete_message(message)
-      openbot.logger.log(call[0], parent='core.error.command_not_found')
+      asyncio.ensure_future(self._delay_delete(message, wait_duration=120))
+      openbot.logger.log(call[0],
+                         parent='core.error.command_not_found',
+                         delete_after=120)
       return
       # TODO: Suggest Commands
       # openbot.logger.log('suggestion', error_point=call[0], parent='core.error.command_error_suggest')
 
     # Function is not specific enough
     elif type(ftn) is list:
-
+      openbot.logger.log(ftn.join('\n'),
+                         parent='core.error.command_specifics',
+                         delete_after=120)
+      asyncio.ensure_future(self._delay_delete(message, wait_duration=120))
+      return
 
     # Valid Function
     elif type(ftn) is dict:
-      args = await self._make_call_args(message, call, ftn)
+      args = self._make_call_args(message, call, ftn)
 
       # Handle invalid length
       if 'invalid_length' in args:
@@ -206,17 +217,22 @@ class BotClient(discord.Client):
         return ftn
 
 
-  async def _make_call_args(self, message, call, ftn):
+  def _make_call_args(self, message, call, ftn):
     args = {
       'client': openbot.core.server.client,
-      'message': message
-      ** await self._parse_args(call, ftn)
+      'message': message,
+      **self._parse_args(call, ftn)
     }
+
+    req = inspect.signature(ftn.get('store').call).parameters.keys()
+    for key in list(args):
+      if key not in req:
+        del args[key]
     return args
 
 
   @staticmethod
-  async def _parse_args(call, ftn):
+  def _parse_args(call, ftn):
     args = []
     mod = {}
 
