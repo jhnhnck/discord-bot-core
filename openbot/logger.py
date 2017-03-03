@@ -51,7 +51,8 @@ def log(message,
         error_point=None,
         send_to_chat=True,
         pad_newlines=True,
-        send_newline=True):
+        send_newline=True,
+        delete_after=None):
   """
   Logger.
   Prints a log message to the command-line output and to the server chat
@@ -64,6 +65,7 @@ def log(message,
     send_to_chat: False if the message should only print to command line output
     pad_newlines: Add spacing to multi-line messages so that it aligns to the base length
     send_newline: Append '/n' to the end of message
+    delete_after: Duration to delete send_to_chat messages after in seconds
   """
   log_type = _type_from_parent(parent, log_type)
 
@@ -83,8 +85,10 @@ def log(message,
         chat_base_string = get_locale_string('base.chat.{}_base'.format(log_type.name))
         chat_message = chat_base_string.format(message=parent_string)
 
-        # TODO: Modify to use wrapper
-        openbot.core.server.print_message(chat_message)
+        if type(delete_after) is int:
+          openbot.core.server.print_message(chat_message, delete_after=delete_after)
+        else:
+          openbot.core.server.print_message(chat_message)
 
         # Modify message to include chat descriptor
         parent_string = get_locale_string('base.cli.chat_message').format(cli_base=parent_string)
