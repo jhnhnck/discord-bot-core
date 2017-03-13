@@ -166,16 +166,24 @@ class BotClient(discord.Client):
     # Function is not found
     if ftn is None:
       asyncio.ensure_future(self._delay_delete(message, wait_duration=120))
-      openbot.logger.log(call[0],
-                         parent='core.error.command_not_found',
-                         delete_after=120)
+
+      # Check for close commands
+      import difflib
+      close_matches = difflib.get_close_matches(call, ftn)
+
+      if len(close_matches) > 0:
+        openbot.logger.log('\n - ' + '\n - '.join(close_matches),
+                           error_point=call[0],
+                           parent='core.error.command_error_suggest')
+      else:
+        openbot.logger.log(call[0],
+                           parent='core.error.command_not_found',
+                           delete_after=120)
       return
-      # TODO: Suggest Commands
-      # openbot.logger.log('suggestion', error_point=call[0], parent='core.error.command_error_suggest')
 
     # Function is not specific enough
     elif type(ftn) is list:
-      openbot.logger.log(ftn.join('\n'),
+      openbot.logger.log('\n - ' + '\n - '.join(ftn),
                          parent='core.error.command_specifics',
                          delete_after=120)
       asyncio.ensure_future(self._delay_delete(message, wait_duration=120))
@@ -188,7 +196,7 @@ class BotClient(discord.Client):
       # Handle invalid length
       if 'invalid_length' in args:
         # TODO: Not in locale
-        openbot.logger.log(args.get('invalid_length'),
+        openbot.logger.log(ftn.get('store').help_message(),
                            error_point=ftn.get(),
                            parent='core.error.args_length',
                            delete_after=120)
