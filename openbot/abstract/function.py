@@ -1,6 +1,7 @@
 from abc import ABC
 from abc import abstractmethod
 
+import openbot.config
 
 class FunctionBase(ABC):
 
@@ -28,3 +29,23 @@ class FunctionBase(ABC):
   @abstractmethod
   def call(self, **kwargs):
     pass
+
+
+  def help_message(self):
+    head = '{}. {}\n'.format(self.function_name, self.help_text)
+    usage = 'Usage:\n  {}{} '.format(openbot.config.get_config('core.command_prefix'), self.function_name)
+
+    if len(self.args_description) > 1:
+      args = '[...]' + '\n ... '.join(self.args_description) + '\n\n'
+    else:
+      args = self.args_description[0] + '\n\n'
+
+    if len(self.allowed_modifiers) > 0:
+      mod = 'Modifiers:\n'
+
+      for k, v in self.allowed_modifiers:
+        mod += '  - {} {}\n'.format(k, v)
+    else:
+      mod = ''
+
+    return head + usage + args + mod
