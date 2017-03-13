@@ -4,6 +4,14 @@ from abc import abstractmethod
 
 class FunctionBase(ABC):
 
+  def __init__(self, function_name, help_text, allowed_args_length, args_description, allowed_modifiers):
+    self.function_name = function_name
+    self.help_text = help_text
+    self.allowed_args_length = allowed_args_length
+    self.args_description = args_description
+    self.allowed_modifiers = allowed_modifiers
+
+
   def load_test(self):
     """
     Loading Self Test.

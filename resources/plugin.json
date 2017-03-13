@@ -22,6 +22,7 @@
       "function_name": "",
       "help_text": "",
       "allowed_args_length": "*",
+      "args_description": "",
       "allowed_modifiers": {}
     }
   }

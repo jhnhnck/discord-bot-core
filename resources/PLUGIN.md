@@ -31,6 +31,10 @@
           "function_name": "example",             -> name of function as it will be called
           "allowed_args_length": "0,>7,<9",       -> number of comma-delimited arguments to allow; available symbols are 
                                                      "<>=!,*"; If any evaluate to true then it will be allowed
+          "args_description": [                   -> Description of each valid syntax layout
+            "",
+            "[query]"
+          ],
           "allowed_modifiers": {                  -> modifiers that do not count toward arguments; key should contain
             "-a=": "file to use",                    actual modifier (trailing equals allows for '-a=myfile.txt' or
             "--list": "list available files"         '-a myfile.txt') and value should be a brief description
