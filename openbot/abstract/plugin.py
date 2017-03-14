@@ -42,7 +42,7 @@ class PluginBase(ABC):
       if x[0].isalpha(): y = '0' + y
       if y[0].isalpha(): y = '0' + y
 
-      compare = BotPlugin._compare_section(x, y)
+      compare = PluginBase._compare_section(x, y)
       # print("ZIP: {} {} Comparison: {}".format(x, y, compare))
       if compare != 0: return compare
 
@@ -52,7 +52,7 @@ class PluginBase(ABC):
   @staticmethod
   def _compare_section(existing, other):
     # Check if all numbers
-    num = BotPlugin._safe_compare_numbers(existing, other)
+    num = PluginBase._safe_compare_numbers(existing, other)
     if abs(num) == 1: return num
 
     # Alpha-numeric compare
@@ -60,7 +60,7 @@ class PluginBase(ABC):
     other_split = [''.join(x) for _, x in itertools.groupby(other, key=str.isdigit)]
     # print("EX: {} OTH: {}".format(existing_split, other_split))
 
-    num = BotPlugin._safe_compare_numbers(existing_split[0], other_split[0])
+    num = PluginBase._safe_compare_numbers(existing_split[0], other_split[0])
     if abs(num) == 1: return num
 
     for i in range(97, 123):
@@ -81,7 +81,7 @@ class PluginBase(ABC):
       except IndexError:
         letter_oth = 1
 
-      num = BotPlugin._safe_compare_numbers(letter_ext, letter_oth)
+      num = PluginBase._safe_compare_numbers(letter_ext, letter_oth)
       if abs(num) == 1: return num
 
     return 0
