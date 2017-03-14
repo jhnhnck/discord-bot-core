@@ -1,4 +1,7 @@
-class BotPerms():
+def startup():
+  pass
 
-  def __init__(self):
-    pass
+
+def has_permission(user, permission):
+  # TODO: Everything here
+  return True
