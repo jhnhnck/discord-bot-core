@@ -6,6 +6,7 @@ import openbot.core
 import openbot.config
 import openbot.logger
 
+from openbot.abstract.function import FunctionBase
 
 class BotSyncedWrapper:
 
@@ -190,20 +191,20 @@ class BotClient(discord.Client):
       return
 
     # Valid Function
-    elif type(ftn) is dict:
+    elif isinstance(ftn, FunctionBase):
       args = self._make_call_args(message, call, ftn)
 
       # Handle invalid length
       if 'invalid_length' in args:
         # TODO: Not in locale
-        openbot.logger.log(ftn.get('store').help_message(),
-                           error_point=ftn.get(),
+        openbot.logger.log(ftn.help_message(),
+                           error_point=ftn.function_name,
                            parent='core.error.args_length',
                            delete_after=120)
         asyncio.ensure_future(self._delay_delete(message, wait_duration=120))
         return
 
-      ftn.get('store').call(**args)
+      ftn.call(**args)
 
 
   def _get_function(self, name):
@@ -213,16 +214,13 @@ class BotClient(discord.Client):
 
     ftn = openbot.core.functions.get(name)
 
-    # Name not specific enough
-    if type(ftn) is list:
-      return ftn
+    # Recurse on link
+    if type(ftn) is dict:
+      return self._get_function(ftn.get('link'))
 
-    elif type(ftn) is dict:
-      # Test for linked function
-      if 'link' in ftn:
-        return self._get_function(ftn.get('link'))
-      else:
-        return ftn
+    # Either a list or actual ftn object
+    else:
+      return ftn
 
 
   def _make_call_args(self, message, call, ftn):
@@ -232,7 +230,7 @@ class BotClient(discord.Client):
       **self._parse_args(call, ftn)
     }
 
-    req = inspect.signature(ftn.get('store').call).parameters.keys()
+    req = inspect.signature(ftn.call).parameters.keys()
     for key in list(args):
       if key not in req:
         del args[key]
@@ -248,7 +246,7 @@ class BotClient(discord.Client):
       # Tests if modifier
       if call[i].startswith('-'):
         # Tests if in expected modifiers
-        if call[i] in ftn.get('allowed_modifiers'):
+        if call[i] in ftn.allowed_modifiers:
           # Tests if provides a value
           if call[i].endswith('='):
             new_mod = call[i].split('=')
@@ -257,14 +255,14 @@ class BotClient(discord.Client):
             mod[call[i]] = True
 
         # Tests for split between calls
-        elif call[i] + '=' in ftn.get('allowed_modifiers'):
+        elif call[i] + '=' in ftn.allowed_modifiers:
           mod[call[i]] = call[i+1]
           i += 1
       else:
         args.append(call[i])
 
     # Valid args length
-    valids = ftn.get('allowed_args_length').split(',')
+    valids = ftn.allowed_args_length.split(',')
     is_valid = False
 
     for valid in valids:
@@ -291,9 +289,9 @@ class BotClient(discord.Client):
       return {'invalid_length': len(args)}
 
     # Set false for missing mods
-    for amod in ftn.get('allowed_modifiers'):
-      if '=' not in amod and amod not in mod:
-        mod[amod] = False
+    for a_mod in ftn.allowed_modifiers:
+      if '=' not in a_mod and a_mod not in mod:
+        mod[a_mod] = False
 
     return {
       'args': args,

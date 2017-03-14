@@ -129,19 +129,17 @@ def load_functions(plugins):
                                           ftn.get('function_name'))
 
       try:
-        function = {
-          'store': getattr(importlib.import_module('{}.functions.{}'.format(plugin_name, ftn_name)), 'BotFunction')(),
-          'simple_string': simple_string,
-          'qualified_string': qualified_string,
-          **ftn
-        }
+        function_class = getattr(importlib.import_module('{}.functions.{}'.format(plugin_name, ftn_name)), 'BotFunction')
+        function = function_class(**{'simple_string': simple_string, 'qualified_string': qualified_string, **ftn})
       except Exception as e:
         openbot.logger.log(openbot.logger.get_locale_string('core.segments.from').format(ftn_name, plugin_name),
                            parent='core.error.function_loading',
-                           error_point=e)
+                           error_point=e,
+                           send_to_chat=False)
+        continue
 
       # Run load_test()
-      load_test = function.get('store').load_test()
+      load_test = function.load_test()
       if not load_test.get('state'):
         if 'msg' not in load_test:
           load_test['msg'] = 'Load Test Failed (NoErrorReturned)'
@@ -159,7 +157,7 @@ def load_functions(plugins):
         functions[simple_string] = {'link': qualified_string}
       else:
         functions[qualified_string] = function
-        qualified_conflict = functions[functions.get(simple_string).get('link')].get('qualified_string')
+        qualified_conflict = functions[functions.get(simple_string).get('link')].qualified_string
 
         # See if already conflicting
         if type(functions[simple_string]) is dict:
