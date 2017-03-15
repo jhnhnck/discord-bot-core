@@ -42,7 +42,7 @@
       "conflict_function_name": "Function \"{message}\" has multiple targets; Specify which using {error_point}",
       "disabled_plugin": "Plugin \"{message}\" is disabled and will not be loaded",
       "plugin_domain_malformed": "Plugin \"{message}\" has malformed name; Substituting dummy domain \"{error_point}\"",
-      "chat_message_no_init": "Message with parent \"{message}\" set to be sent to chat before client init step."
+      "chat_message_no_init": "Message with parent \"{message}\" set to be sent to chat before client init step",
     }
   },
   "format": {
