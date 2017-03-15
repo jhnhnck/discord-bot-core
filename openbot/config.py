@@ -105,33 +105,44 @@ def _match_keys(old, new):
 
 
 # Unpacks config value from '.' separated keys
-def get_config(key):
+def get_config(key, safe_mode=True):
   """
   Get Config.
   Gets the value of the key value in the config dictionary
   Args:
     key: (:type: dict) Dot-separated keys
+    safe_mode: (:type: bool) Prevent ending on dictionary values
 
   Returns:
     Value from the config
   """
+  # Checks for config loaded already
+  if len(config) == 0:
+    openbot.logger.log(key,
+                       parent='core.warn.config_before_load',
+                       send_to_chat=False)
+    return None
+
   # Make a copy of the config
   store = config
 
   try:
     for branch in key.split('.'):
       store = store[branch]
-    if isinstance(store, dict):
-      # TODO: Handle endpoint on dict (or don't)
-      pass
   except KeyError:
-    # TODO: Handle invalid keys
+    openbot.logger.log(key,
+                       parent='core.warn.config_key_error',
+                       send_to_chat=False)
+    return None
+
+  # TODO: Handle safe_mode
+  if safe_mode and type(store) is dict:
     pass
 
   return store
 
 
-def set_config(key, value):
+def set_config(key, value, safe_mode=True):
   """
   Set Config.
   Change a value within the config
@@ -139,6 +150,7 @@ def set_config(key, value):
   Args:
     key: (:type: str) Dot-separated keys
     value: Value to replace in config
+    safe_mode: Prevent dictionaries from being overridden
   """
   # TODO: Get config from package and key
   pass
