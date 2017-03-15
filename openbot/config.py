@@ -25,8 +25,8 @@ def setup(config_path):
   config_file = config_path
 
   try:
-    with open(config_file, 'r') as file:
-      config = json.loads(file.read())
+    with open(config_file) as file:
+      config = json.load(file)
 
     # Test if config should be upgraded
     if openbot.VERSION != config.get('core').get('version'):
