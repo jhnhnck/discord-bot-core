@@ -5,13 +5,19 @@ import openbot
 import openbot.logger
 
 
-config_file = None
-config = None
-changed = False
+config_file = ""            # Path to the config file
+config = {}                 # Dictionary of the config values TODO: Convert this to _config
+changed = False             # Should config be unloaded
 
 
-# TODO: Async things
 def setup(config_path):
+  """
+  Setup.
+  Preforms the actions to load and initialize the configuration options
+
+  Args:
+    config_path: (:type: str) Path to the config file
+  """
   global config_file
   global changed
   global config
@@ -22,15 +28,18 @@ def setup(config_path):
     with open(config_file, 'r') as file:
       config = json.loads(file.read())
 
+    # Test if config should be upgraded
     if openbot.VERSION != config.get('core').get('version'):
       config = _match_keys(config, gen_new_config())
       config['core']['version'] = openbot.VERSION
       changed = True
 
+  # Make a new config if doesn't exist
   except FileNotFoundError:
     openbot.logger.log(config_file, parent='core.info.gen_new_config')
     config = gen_new_config()
     changed = True
+  # Make a new config if another error occurs - Probably will fail later
   except Exception as e:
     openbot.logger.log(config_file,
                        parent='core.warn.config_loading_exception',
@@ -38,23 +47,14 @@ def setup(config_path):
     config = gen_new_config()
     changed = True
 
-  """
-  for name, plugin in self.core.plugins.items():
-    try:
-      if config.get(name).get('version') != plugin.plugin_version:
-        config[name] = self._match_keys(config.get(name), plugin.get_default_config())
-        config[name]['version'] = plugin.plugin_version
-        changed = True
-    except:
-      # TODO: Logger error here
-      config[name] = plugin.get_default_config()
-      changed = True
-  """
-
   _unload()
 
 
 def _unload():
+  """
+  Unload.
+  Unloads the config to the path indicated at config_path in json format if
+  """
   if not changed:
     return
 
@@ -62,7 +62,6 @@ def _unload():
     if not os.path.exists(os.path.dirname(config_file)):
       os.makedirs(os.path.dirname(config_file))
 
-    # noinspection PyTypeChecker
     with open(config_file, 'w+') as file:
       json.dump(config, file, sort_keys=True, indent=2)
   except:
@@ -73,6 +72,17 @@ def _unload():
 
 
 def _match_keys(old, new):
+  """
+  Match Keys.
+  Merges the changes from a new config with an old config with the new config taking priority
+
+  Args:
+    old: (:type: dict) Old config
+    new: (:type: dict) New config
+
+  Returns:
+    A new config dictionary
+  """
   matched_set = {}
 
   for key, value in new:
@@ -91,6 +101,16 @@ def _match_keys(old, new):
 
 # Unpacks config value from '.' separated keys
 def get_config(key):
+  """
+  Get Config.
+  Gets the value of the key value in the config dictionary
+  Args:
+    key: (:type: dict) Dot-separated keys
+
+  Returns:
+    Value from the config
+  """
+  # Make a copy of the config
   store = config
 
   try:
@@ -107,11 +127,26 @@ def get_config(key):
 
 
 def set_config(key, value):
+  """
+  Set Config.
+  Change a value within the config
+
+  Args:
+    key: (:type: str) Dot-separated keys
+    value: Value to replace in config
+  """
   # TODO: Get config from package and key
   pass
 
 
 def gen_new_config():
+  """
+  Generate New Config.
+  Generate a new configuration dictionary from the default values
+
+  Returns:
+    A new config
+  """
   config = {
     'core': {
       'token': None,
