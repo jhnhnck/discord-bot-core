@@ -11,8 +11,9 @@
       "command_not_found": "Command \"{message}\" is not found",
       "command_error_suggest": "Command \"{error_point}\" is not found; Did you mean \"{message}\"?",
       "command_specifics": "Which command Did you mean?\n{message}",
+      "config_key_error": "",
       "function_loading": " Function {message} could not be loaded. [{error_point}]",
-      "args_length": "Syntax Invalid. \n{error_point}",
+      "args_length": "Syntax Invalid on command \"{message}\". \n{error_point}",
       "locale_early_termination": "Message {message} provided with truncated parent \"{error_point}\"",
       "locale_missing": "Message {message} could not be associated to parent \"{error_point}\"",
       "plugin_loading": "Plugin \"{message}\" could not be loaded. [{error_point}]"
@@ -39,6 +40,7 @@
     "warn": {
       "bound_channel": "Bot could not be bound to channel \"{message}\"",
       "chat_message_no_init": "Message with parent \"{message}\" set to be sent to chat before client init step",
+      "config_before_load": "Config key \"{message}\" retrieved before config has been loaded",
       "config_loading_exception": "Config not able to be loaded from \"{message}\" due to {error_point}; Generating new config",
       "conflict_function_name": "Function \"{message}\" has multiple targets; Specify which using {error_point}",
       "disabled_plugin": "Plugin \"{message}\" is disabled and will not be loaded",

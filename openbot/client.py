@@ -160,7 +160,7 @@ class BotClient(discord.Client):
 
   @asyncio.coroutine
   def call_function(self, message):
-    call = message.content.split(' ')
+    call = message.content.split()
 
     ftn = self._get_function(call[0])
 
@@ -196,9 +196,8 @@ class BotClient(discord.Client):
 
       # Handle invalid length
       if 'invalid_length' in args:
-        # TODO: Not in locale
         openbot.logger.log(ftn.help_message(),
-                           error_point=ftn.function_name,
+                           error_point=call[0],
                            parent='core.error.args_length',
                            delete_after=120)
         asyncio.ensure_future(self._delay_delete(message, wait_duration=120))
