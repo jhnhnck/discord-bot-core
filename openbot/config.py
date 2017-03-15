@@ -47,15 +47,20 @@ def setup(config_path):
     config = gen_new_config()
     changed = True
 
+  # Save the file (This handles change detection)
   _unload()
 
 
-def _unload():
+def _unload(force=False):
   """
   Unload.
   Unloads the config to the path indicated at config_path in json format if
+
+  Args:
+    force: (:type: bool) Unload even without changes
   """
   if not changed:
+  if not changed and not force and len(config) > 0:
     return
 
   try:
