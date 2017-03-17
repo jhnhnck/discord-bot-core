@@ -1,10 +1,10 @@
 import json
+import os
 import re
 import sys
 from enum import Enum
 
 import openbot.core
-
 
 class ParentNotFoundException(Exception):
   pass
@@ -261,7 +261,7 @@ def _count_base_lengths():
 def _pad_message(message, log_type):
   """
   Pad Message.
-  Add spacing to multi-line messages so that it aligns to the base length
+  Add spacing to multi-line messages so that it aligns to the base length and terminal width
 
   Args:
     message: String to fill {message} section of parent string
@@ -270,13 +270,30 @@ def _pad_message(message, log_type):
   Returns:
     Space padded message
   """
-  # TODO: Handle console length overlap (http://stackoverflow.com/a/943921)
-  split = message.splitlines(keepends=True)
-  pad_part = ' ' * log_base_lengths[log_type.name]
-  pad_message = split[0]
+  try:
+    # Sometimes this isn't a thing (Actually maybe)
+    _, columns = os.popen('stty size', 'r').read().split()
+  except ValueError:
+    columns = 80
+    log(columns, parent='core.debug.col_value_error')
 
-  for i in range(1, len(split)):
-    pad_message = pad_message + pad_part + split[i]
+  split = message.splitlines(keepends=True)
+  split_length = columns - log_base_lengths[log_type.name]
+  lines = []
+
+  for line in range(len(split)):
+    if len(split[line]) > split_length:
+      # Splits each line on length
+      lines.append((split[line][0 + i:split_length + i] for i in range(0, len(split[line]), split_length)))
+    else:
+      lines.append(split[line])
+
+  pad_part = ' ' * log_base_lengths[log_type.name]
+  # Don't space first line
+  pad_message = lines[0]
+
+  for i in range(1, len(lines)):
+    pad_message += pad_part + lines[i]
 
   return pad_message
 
