@@ -6,7 +6,7 @@ import openbot.logger
 
 
 config_file = ""            # Path to the config file
-config = {}                 # Dictionary of the config values TODO: Convert this to _config
+_config = {}                 # Dictionary of the config values TODO: Convert this to _config
 changed = False             # Should config be unloaded
 
 
@@ -20,31 +20,31 @@ def setup(config_path):
   """
   global config_file
   global changed
-  global config
+  global _config
 
   config_file = config_path
 
   try:
     with open(config_file) as file:
-      config = json.load(file)
+      _config = json.load(file)
 
     # Test if config should be upgraded
-    if openbot.VERSION != config.get('core').get('version'):
-      config = _match_keys(config, gen_new_config())
-      config['core']['version'] = openbot.VERSION
+    if openbot.VERSION != _config.get('core').get('version'):
+      _config = _match_keys(_config, gen_new_config())
+      _config['core']['version'] = openbot.VERSION
       changed = True
 
   # Make a new config if doesn't exist
   except FileNotFoundError:
     openbot.logger.log(config_file, parent='core.info.gen_new_config')
-    config = gen_new_config()
+    _config = gen_new_config()
     changed = True
   # Make a new config if another error occurs - Probably will fail later
   except Exception as e:
     openbot.logger.log(config_file,
                        parent='core.warn.config_loading_exception',
                        error_point=e)
-    config = gen_new_config()
+    _config = gen_new_config()
     changed = True
 
   # Save the file (This handles change detection)
@@ -59,8 +59,7 @@ def _unload(force=False):
   Args:
     force: (:type: bool) Unload even without changes
   """
-  if not changed:
-  if not changed and not force and len(config) > 0:
+  if not changed and not force and len(_config) > 0:
     return
 
   try:
@@ -68,11 +67,11 @@ def _unload(force=False):
       os.makedirs(os.path.dirname(config_file))
 
     with open(config_file, 'w+') as file:
-      json.dump(config, file, sort_keys=True, indent=2)
+      json.dump(_config, file, sort_keys=True, indent=2)
   except:
     openbot.logger.log(config_file,
                        parent='core.fatal.unload_config_error',
-                       error_point=config,
+                       error_point=_config,
                        pad_newlines=False)
 
 
@@ -117,14 +116,14 @@ def get_config(key, safe_mode=True):
     Value from the config
   """
   # Checks for config loaded already
-  if len(config) == 0:
+  if len(_config) == 0:
     openbot.logger.log(key,
                        parent='core.warn.config_before_load',
                        send_to_chat=False)
     return None
 
   # Make a copy of the config
-  store = config
+  store = _config
 
   try:
     for branch in key.split('.'):
