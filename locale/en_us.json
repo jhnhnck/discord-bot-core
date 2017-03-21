@@ -20,12 +20,12 @@
       "plugin_loading": "Plugin \"{message}\" could not be loaded. [{error_point}]"
     },
     "fatal": {
-      "unload_config_error": "Config could not be unloaded at \"{message}\"; Dumping config here instead:\n\n### CONFIG START ###\n{error_point}\n### CONFIG END ###\n"
+      "unload_at_error": "File could not be unloaded at \"{message}\"; Dumping here instead:\n\n### FILE START ###\n{error_point}\n### FILE END ###\n"
     },
     "info": {
       "bot_logged": "Bot connected to Discord as \"{message}\"",
       "bound_channel": "Bot successfully bound to channel \"{message}\"",
-      "gen_new_config": "Generating new config at \"{message}\"",
+      "gen_new_config": "Generating new configuration file at \"{message}\"",
       "plaintext": "{message}",
       "settle": "Waiting {message} second(s) for things to settle\r"
     },
@@ -42,7 +42,7 @@
       "bound_channel": "Bot could not be bound to channel \"{message}\"",
       "chat_message_no_init": "Message with parent \"{message}\" set to be sent to chat before client init step",
       "config_before_load": "Config key \"{message}\" retrieved before config has been loaded",
-      "config_loading_exception": "Config not able to be loaded from \"{message}\" due to {error_point}; Generating new config",
+      "config_loading_exception": "File unable to be loaded from \"{message}\" due to {error_point}; Generating new version",
       "conflict_function_name": "Function \"{message}\" has multiple targets; Specify which using {error_point}",
       "disabled_plugin": "Plugin \"{message}\" is disabled and will not be loaded",
       "plugin_domain_malformed": "Plugin \"{message}\" has malformed name; Substituting dummy domain \"{error_point}\""

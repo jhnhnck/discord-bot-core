@@ -55,9 +55,9 @@ def _unload_at(data, location, force=False):
   Unloads the config to the path indicated at config_path in json format if the data has changed
 
   Args:
-    force: (:type: bool) Unload even without changes
     data: (:type: dict) The values to unload the the path
     location: (:type: str) Path to file
+    force: (:type: bool) Unload even without changes
   """
   if not state and not force and len(data) > 0:
     return
@@ -90,7 +90,9 @@ def _match_keys(old, new):
   matched_set = {}
 
   for key, value in new:
-    if key in old:
+    if key == 'user_perms':
+      continue
+    elif key in old:
       if value.isinstance(type(old[key])):
         if key.isinstance(dict):
           matched_set[key] = _match_keys(old[key], value)
@@ -103,7 +105,11 @@ def _match_keys(old, new):
   return matched_set
 
 
-# Unpacks config value from '.' separated keys
+def _trim_perms(perms):
+  # TODO: Stub function > Removes permissions that aren't relevant
+  return perms
+
+
 def get_config(key, safe_mode=True):
   """
   Get Config.
@@ -155,6 +161,21 @@ def set_config(key, value, safe_mode=True):
   pass
 
 
+def has_perm(user, key):
+  # TODO: Stub function > Tests if user has listed permission
+  return True
+
+
+def grant_perm(user, key):
+  # TODO: Stub function > Gives from user the permission if they do not already have it
+  pass
+
+
+def revoke_perm(user, key):
+  # TODO: Stub function > Removes from user the permission if they already have it
+  pass
+
+
 def get_default_config():
   """
   Get Default Config
@@ -186,7 +207,23 @@ def get_default_config():
         'enabled': True,
         'delay': 5,
       }
-    }
+    },
+    'user_perms': get_default_perms()
   }
 
   return config
+
+
+def get_default_perms():
+  """
+  Get Default Permissions.
+  Generate a new permissions dictionary from the default values and permissions found in discord
+
+  Returns:
+    Default permissions values
+  """
+  perms = {
+    # TODO: Default permission generation
+  }
+
+  return perms
