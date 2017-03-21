@@ -4,18 +4,16 @@ import openbot.client
 import openbot.config
 import openbot.loader
 import openbot.logger
-import openbot.permissions
 
 
 # Global Variables
-permissions = None
 plugins = None
 functions = None
 tasks = None
 server = None
 
 
-def startup(config_file, perm_file, locale):
+def startup(config_file, locale):
   """
   Startup.
   Loading Order.
@@ -36,9 +34,6 @@ def startup(config_file, perm_file, locale):
   # Logger is reloaded if loaded in 'en_us' mode and config has a differing locale
   if locale == 'en_us' and openbot.config.get_config('core.locale') != 'en_us':
     openbot.logger.setup(openbot.config.get_config('core.locale'))
-
-  global permissions
-  permissions = openbot.permissions.BotPerms()
 
   global plugins
   plugins = openbot.loader.load_plugins()
