@@ -1,3 +1,4 @@
+import yaml
 import json
 import os
 
@@ -46,13 +47,13 @@ def setup(config_path):
     state = True
 
   # Save the file (This handles change detection)
-  _unload_at(_config, config_file)
+  _unload_at(_config, 'config/openbot.yml', force=True)
 
 
 def _unload_at(data, location, force=False):
   """
   Unload.
-  Unloads the config to the path indicated at config_path in json format if the data has changed
+  Unloads the config to the path indicated at config_path in yaml format if the data has changed
 
   Args:
     data: (:type: dict) The values to unload the the path
@@ -67,12 +68,13 @@ def _unload_at(data, location, force=False):
       os.makedirs(os.path.dirname(location))
 
     with open(location, 'w+') as file:
-      json.dump(data, file, sort_keys=True, indent=2)
+      yaml.dump(data, file, default_flow_style=False, indent=2)
   except:
     openbot.logger.log(location,
                        parent='core.fatal.unload_at_error',
-                       error_point=data,
-                       pad_newlines=False)
+                       error_point=yaml.dump(data, default_flow_style=False, indent=2),
+                       pad_newlines=False,
+                       send_to_chat=False)
 
 
 def _match_keys(old, new):
