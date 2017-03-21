@@ -12,7 +12,7 @@
       "command_not_found": "Command \"{message}\" is not found",
       "command_error_suggest": "Command \"{error_point}\" is not found; Did you mean \"{message}\"?",
       "command_specifics": "Which command Did you mean?\n{message}",
-      "config_key_error": "",
+      "config_key_error": "An error occurred while finding the config value at key \"{message}\"",
       "function_loading": " Function {message} could not be loaded. [{error_point}]",
       "args_length": "Syntax Invalid on command \"{message}\". \n{error_point}",
       "locale_early_termination": "Message {message} provided with truncated parent \"{error_point}\"",
