@@ -18,9 +18,7 @@ def setup(config_path):
   Args:
     config_path: (:type: str) Path to the config file
   """
-  global config_file
-  global changed
-  global _config
+  global config_file, _config, state
 
   config_file = config_path
 
