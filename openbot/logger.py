@@ -278,7 +278,7 @@ def _pad_message(message, log_type):
     log(columns, parent='core.debug.col_value_error')
 
   split = message.splitlines(keepends=True)
-  split_length = columns - log_base_lengths[log_type.name]
+  split_length = int(columns) - log_base_lengths[log_type.name]
   lines = []
 
   for line in range(len(split)):
