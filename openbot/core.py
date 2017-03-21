@@ -29,7 +29,7 @@ def startup(config_file, locale):
   if openbot.RELEASE_TYPE == 0:
     openbot.logger.self_test()
 
-  openbot.config.setup(config_path=config_file)
+  openbot.config.setup(config_file)
 
   # Logger is reloaded if loaded in 'en_us' mode and config has a differing locale
   if locale == 'en_us' and openbot.config.get_config('core.locale') != 'en_us':

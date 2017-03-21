@@ -46,30 +46,32 @@ def setup(config_path):
     state = True
 
   # Save the file (This handles change detection)
-  _unload()
+  _unload_at(_config, config_file)
 
 
-def _unload(force=False):
+def _unload_at(data, location, force=False):
   """
   Unload.
-  Unloads the config to the path indicated at config_path in json format if
+  Unloads the config to the path indicated at config_path in json format if the data has changed
 
   Args:
     force: (:type: bool) Unload even without changes
+    data: (:type: dict) The values to unload the the path
+    location: (:type: str) Path to file
   """
-  if not changed and not force and len(_config) > 0:
+  if not state and not force and len(data) > 0:
     return
 
   try:
-    if not os.path.exists(os.path.dirname(config_file)):
-      os.makedirs(os.path.dirname(config_file))
+    if not os.path.exists(os.path.dirname(location)):
+      os.makedirs(os.path.dirname(location))
 
-    with open(config_file, 'w+') as file:
-      json.dump(_config, file, sort_keys=True, indent=2)
+    with open(location, 'w+') as file:
+      json.dump(data, file, sort_keys=True, indent=2)
   except:
-    openbot.logger.log(config_file,
-                       parent='core.fatal.unload_config_error',
-                       error_point=_config,
+    openbot.logger.log(location,
+                       parent='core.fatal.unload_at_error',
+                       error_point=data,
                        pad_newlines=False)
 
 
