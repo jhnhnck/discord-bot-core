@@ -7,7 +7,7 @@ import openbot.logger
 
 config_file = ""            # Path to the config file
 _config = {}                 # Dictionary of the config values TODO: Convert this to _config
-changed = False             # Should config be unloaded
+state = False               # Should config be unloaded
 
 
 def setup(config_path):
@@ -30,20 +30,20 @@ def setup(config_path):
     if openbot.VERSION != _config.get('core').get('version'):
       _config = _match_keys(_config, gen_new_config())
       _config['core']['version'] = openbot.VERSION
-      changed = True
+      state = True
 
   # Make a new config if doesn't exist
   except FileNotFoundError:
     openbot.logger.log(config_file, parent='core.info.gen_new_config')
     _config = gen_new_config()
-    changed = True
+    state = True
   # Make a new config if another error occurs - Probably will fail later
   except Exception as e:
     openbot.logger.log(config_file,
                        parent='core.warn.config_loading_exception',
                        error_point=e)
     _config = gen_new_config()
-    changed = True
+    state = True
 
   # Save the file (This handles change detection)
   _unload()
