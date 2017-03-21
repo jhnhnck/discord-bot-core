@@ -39,6 +39,7 @@ def startup(config_file, locale):
   plugins = openbot.loader.load_plugins()
 
   global functions
+  # TODO: Change front-end name to commands
   functions = openbot.loader.load_functions(plugins)
 
   # global tasks

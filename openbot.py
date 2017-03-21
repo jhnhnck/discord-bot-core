@@ -4,7 +4,7 @@ import openbot
 from openbot import core
 
 parser = argparse.ArgumentParser(description=openbot.DESCRIPTION)
-parser.add_argument('-c', '--config', nargs=1, default='config/openbot.json',
+parser.add_argument('-c', '--config', nargs=1, default='config/openbot.yml',
                     help='location of config file')
 parser.add_argument('-l', '--locale', nargs=1, default='en_us',
                     help='language')

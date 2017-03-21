@@ -1,5 +1,4 @@
 import yaml
-import json
 import os
 
 import openbot
@@ -25,7 +24,7 @@ def setup(config_path):
 
   try:
     with open(config_file) as file:
-      _config = json.load(file)
+      _config = yaml.load(file)
 
     # Test if config should be upgraded
     if openbot.VERSION != _config.get('core').get('version'):
@@ -47,7 +46,7 @@ def setup(config_path):
     state = True
 
   # Save the file (This handles change detection)
-  _unload_at(_config, 'config/openbot.yml', force=True)
+  _unload_at(_config, config_file)
 
 
 def _unload_at(data, location, force=False):
