@@ -28,21 +28,21 @@ def setup(config_path):
 
     # Test if config should be upgraded
     if openbot.VERSION != _config.get('core').get('version'):
-      _config = _match_keys(_config, gen_new_config())
+      _config = _match_keys(_config, get_default_config())
       _config['core']['version'] = openbot.VERSION
       state = True
 
   # Make a new config if doesn't exist
   except FileNotFoundError:
     openbot.logger.log(config_file, parent='core.info.gen_new_config')
-    _config = gen_new_config()
+    _config = get_default_config()
     state = True
   # Make a new config if another error occurs - Probably will fail later
   except Exception as e:
     openbot.logger.log(config_file,
                        parent='core.warn.config_loading_exception',
                        error_point=e)
-    _config = gen_new_config()
+    _config = get_default_config()
     state = True
 
   # Save the file (This handles change detection)
@@ -153,13 +153,13 @@ def set_config(key, value, safe_mode=True):
   pass
 
 
-def gen_new_config():
+def get_default_config():
   """
-  Generate New Config.
+  Get Default Config
   Generate a new configuration dictionary from the default values
 
   Returns:
-    A new config
+    Default configuration values
   """
   config = {
     'core': {
