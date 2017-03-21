@@ -6,7 +6,7 @@ import openbot.logger
 
 
 config_file = ""            # Path to the config file
-_config = {}                 # Dictionary of the config values TODO: Convert this to _config
+_config = {}                # Dictionary of the config values
 state = False               # Should config be unloaded
 
 
