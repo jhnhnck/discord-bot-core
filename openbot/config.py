@@ -34,7 +34,7 @@ def setup(config_path):
 
   # Make a new config if doesn't exist
   except FileNotFoundError:
-    openbot.logger.log(config_file, parent='core.info.gen_new_config')
+    openbot.logger.log(config_file, parent='core.info.gen_new_config', send_to_chat=False)
     _config = get_default_config()
     state = True
   # Make a new config if another error occurs - Probably will fail later
