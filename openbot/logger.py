@@ -3,6 +3,7 @@ import os
 import re
 import sys
 from enum import Enum
+import shutil
 
 import openbot.core
 
@@ -68,11 +69,6 @@ def log(message,
     delete_after: Duration to delete send_to_chat messages after in seconds
   """
   log_type = _type_from_parent(parent, log_type)
-
-  # Adds spaces so that wrapped lines line up
-  if pad_newlines:
-    message = _pad_message(str(message), log_type)
-
   try:
     # Gets the locale string from the json file
     parent_string = get_locale_string(parent)\
@@ -98,11 +94,16 @@ def log(message,
             parent='core.warn.chat_message_no_init',
             send_to_chat=False)
 
+    # Adds spaces so that wrapped lines line up
+    if pad_newlines:
+      parent_string = _pad_message(str(parent_string), log_type)
+
     # Gets formatting of that particular terminal message type
     cli_base_string = get_locale_string('base.cli.{}_base'.format(log_type.name))
     cli_message = cli_base_string.format(message=parent_string, **locale['colors'], **locale['format'])
 
     if send_newline: cli_message += '\n'
+
     _print(cli_message)
 
   except ParentNotFoundException:
@@ -117,9 +118,9 @@ def log(message,
         log_type=LogLevel.error,
         error_point=parent,
         send_to_chat=send_to_chat)
-  except IndexError:
+  except IndexError as e:
     # TODO: Error?
-    _print('Does this error actually occur? Sorry -jhnhnck\n')
+    _print('Does this error actually occur? Sorry for "{}". -jhnhnck\n'.format(e))
 
 
 def self_test(send_to_chat=False):
@@ -272,23 +273,33 @@ def _pad_message(message, log_type):
   """
   try:
     # Sometimes this isn't a thing (Actually maybe)
-    _, columns = os.popen('stty size', 'r').read().split()
+    columns = shutil.get_terminal_size((80, 20))[0]
   except ValueError:
     columns = 80
     log(columns, parent='core.debug.col_value_error')
 
   split = message.splitlines(keepends=True)
-  split_length = int(columns) - log_base_lengths[log_type.name]
+  pad_length = log_base_lengths[log_type.name] + (len(message) - len(message.lstrip(' ')))
+  split_length = int(columns) - pad_length
   lines = []
 
-  for line in range(len(split)):
-    if len(split[line]) > split_length:
-      # Splits each line on length
-      lines.append((split[line][0 + i:split_length + i] for i in range(0, len(split[line]), split_length)))
+  for line in split:
+    # Splits each line on length
+    if len(line) > split_length:
+      for word in line.split(' '):
+        if len(lines) == 0:
+          lines.append(word)
+        elif len(lines[-1]) + len(word) + 1 > split_length:
+          lines[-1] += '\n'
+          lines.append(word)
+        else:
+          lines[-1] += ' ' + word
     else:
-      lines.append(split[line])
+      lines.append(line)
 
-  pad_part = ' ' * log_base_lengths[log_type.name]
+    # print(lines)
+
+  pad_part = ' ' * pad_length
   # Don't space first line
   pad_message = lines[0]
 
