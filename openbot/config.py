@@ -1,4 +1,4 @@
-import yaml
+import ruamel.yaml as yaml
 import os
 
 import openbot
@@ -24,7 +24,7 @@ def setup(config_path):
 
   try:
     with open(config_file) as file:
-      _config = yaml.load(file)
+      _config = yaml.round_trip_load(file)
 
     # Test if config should be upgraded
     if openbot.VERSION != _config.get('core').get('version'):
@@ -67,7 +67,7 @@ def _unload_at(data, location, force=False):
       os.makedirs(os.path.dirname(location))
 
     with open(location, 'w+') as file:
-      yaml.dump(data, file, default_flow_style=False, indent=2)
+      yaml.round_trip_dump(data, file, default_flow_style=False, indent=2)
   except:
     openbot.logger.log(location,
                        parent='core.fatal.unload_at_error',
@@ -190,7 +190,7 @@ def get_default_config():
       'token': None,
       'owner_id': None,
       'command_prefix': '//',
-      'debug_mode': 'False',
+      'debug_mode': False,
       'version': openbot.VERSION,
       'locale': 'en_us',
     },

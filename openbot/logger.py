@@ -1,5 +1,4 @@
-import json
-import os
+import ruamel.yaml as yaml
 import re
 import sys
 from enum import Enum
@@ -200,8 +199,12 @@ def _load_locale(locale_name):
     Dictionary of all locale parent strings
   """
   try:
-    with open('locale/{}.json'.format(locale_name), 'r') as file:
-      return json.loads(file.read())
+    with open('locale/formatting.yml') as file:
+      format_load = yaml.safe_load(file)
+    with open('locale/{}.yml'.format(locale_name)) as file:
+      text_load = (yaml.safe_load(file))
+    return {**text_load, **format_load}
+
   except FileNotFoundError:
     if locale_name != 'en_us':
       _print('\u001B[92mError loading locale "{}", trying "en_us"\u001B[0m\n'.

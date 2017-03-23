@@ -1,7 +1,12 @@
 import argparse
+import sys
 
 import openbot
 from openbot import core
+
+if sys.version_info < (3, 6):
+  print('error > ' + openbot.NAME + ' requires python version 3.6 or greater')
+  exit()
 
 parser = argparse.ArgumentParser(description=openbot.DESCRIPTION)
 parser.add_argument('-c', '--config', nargs=1, default='config/openbot.yml',

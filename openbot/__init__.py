@@ -2,6 +2,7 @@ import sys
 import os
 
 # Global Definitions
+NAME = 'discord-bot-core'
 RELEASE_TYPES = ['develop', 'alpha', 'beta', 'preview', 'release']
 RELEASE_TYPE = 0
 RELEASE_TYPE_NAME = RELEASE_TYPES[RELEASE_TYPE]
