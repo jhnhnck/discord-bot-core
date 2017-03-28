@@ -18,7 +18,7 @@ def startup(config_file, locale):
   Startup.
   Loading Order.
     1. Logger: In loaded in 'en_us' mode or provided locale mode
-    2. Config: The configuration is loaded from 'config/openbot.json' or the provided path
+    2. Config: The configuration is loaded from 'config/openbot.yml' or the provided path
       - Logger is reloaded if loaded in 'en_us' mode and config has a differing locale
     3. Plugins, Functions, Tasks: These are loaded into separate dictionaries via the Loader class
   """
