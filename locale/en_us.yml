@@ -30,7 +30,7 @@ core:
     settle: Waiting {message} second(s) for things to settle\r
   name: openbot-discord
   segments:
-    from: \"{}" from "{}"
+    from: '"{}" from "{}"'
     stub_function: |
       from openbot.abstract.function import FunctionBase\n\n
       class BotFunction(FunctionBase):
@@ -66,9 +66,9 @@ core:
       python-version: {python_version}
       python-implementation: {python_implementation}
       bot-core-version: {core_full_version}
-    two_length_and: \"{}" and "{}"
-    two_length_or: \"{}" or "{}"
-    with_level: \"{}" with level "{}"
+    two_length_and: '"{}" and "{}"'
+    two_length_or: '"{}" or "{}"'
+    with_level: '"{}" with level "{}"'
   warn:
     bound_channel: Bot could not be bound to channel "{message}"
     chat_message_no_init: Message with parent "{message}" set to be sent to chat before client init step
