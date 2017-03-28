@@ -1,10 +1,12 @@
-import ruamel.yaml as yaml
 import re
+import shutil
 import sys
 from enum import Enum
-import shutil
+
+import ruamel.yaml as yaml
 
 import openbot.core
+
 
 class ParentNotFoundException(Exception):
   pass
@@ -27,6 +29,7 @@ class LogLevel(Enum):
 locale = None
 # ['blank', 'trace', 'debug', 'info', 'warn', 'error', 'fatal']
 log_base_lengths = None
+col_override = -1           # Don't refresh columns; Cannot be determined
 
 
 def setup(locale_name):
@@ -274,16 +277,25 @@ def _pad_message(message, log_type):
   Returns:
     Space padded message
   """
-  try:
-    # Sometimes this isn't a thing (Actually maybe)
-    columns = shutil.get_terminal_size((80, 20))[0]
-  except ValueError:
-    columns = 80
-    log(columns, parent='core.debug.col_value_error')
+  global col_override
+
+  if col_override < 0:
+    try:
+      # Sometimes this isn't a thing (Actually maybe)
+      columns = int(shutil.get_terminal_size()[0])
+      print('~' * columns)
+    except ValueError:
+      col_override = 80
+      log(col_override,
+          parent='core.debug.col_value_error',
+          send_to_chat=False)
+      columns = 80
+  else:
+    columns = col_override
 
   split = message.splitlines(keepends=True)
   pad_length = log_base_lengths[log_type.name] + (len(message) - len(message.lstrip(' ')))
-  split_length = int(columns) - pad_length
+  split_length = columns - pad_length
   lines = []
 
   for line in split:
