@@ -336,4 +336,4 @@ def _print(message):
   Args:
     message: String to be printed
   """
-  sys.stdout.write(message)
+  sys.stdout.write(str(message))
