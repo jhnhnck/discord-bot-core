@@ -1,0 +1,46 @@
+chat:
+  bind_text_channels: # Only allow chat in this channel
+    channels: ["1234567891011121314"]
+    enabled: true
+  delete_commands: # Should invoking messages be removed
+    timeout: 5
+    enabled: true
+  delete_messages_delay: # Should bot messages be removed
+    enabled: true
+    timeout_long: 60
+    timeout_short: 30
+core:
+  command_prefix: '~'
+  debug_mode: false
+  locale: en_us
+  token: *** PUT YOUR TOKEN HERE ***
+  version: 0.0.1
+user_perms:
+  owner:
+    grand_to: []
+    full_access: true
+    command_whitelist: []
+    command_blacklist: []
+    voice_auto_summon: true
+    permission_whitelist: []
+    permission_blacklist: []
+  admin:
+    grant_to: []
+    full_access: true
+    voice_auto_summon: false
+  trusted:
+    grant_to: []
+    full_access: false
+    access_upgradable:
+      - coreftns_chat_reload
+      - coreftns_chat_restart
+      - coreftns_voice_*
+    voice_auto_summon: false
+    command_blacklist:
+      - coreftns_chat_bind
+      - coreftns_chat_
+      - coreftns_chat_
+    command_whitelist: []
+    permissions:
+      - coreftns_clean_self
+
