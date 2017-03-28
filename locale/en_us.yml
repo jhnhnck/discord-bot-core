@@ -14,6 +14,7 @@ core:
     config_key_error: An error occurred while finding the config value at key "{message}"
     function_loading:  Function {message} could not be loaded. [{error_point}]
     locale_early_termination: Message {message} provided with truncated parent "{error_point}"
+    locale_mismatched_identity: Message {message} could not be inserted into parent "{error_point}" due to invalid formatting
     locale_missing: Message {message} could not be associated to parent "{error_point}"
     plugin_loading: Plugin "{message}" could not be loaded. [{error_point}]
   fatal:

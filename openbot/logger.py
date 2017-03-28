@@ -120,9 +120,13 @@ def log(message,
         log_type=LogLevel.error,
         error_point=parent,
         send_to_chat=send_to_chat)
-  except IndexError as e:
-    # TODO: Error?
-    _print('Does this error actually occur? Sorry for "{}". -jhnhnck\n'.format(e))
+  except IndexError:
+    # Occurs when parent string does not identify formatting
+    log(get_locale_string('core.segments.with_level').format(message, log_type),
+        parent='core.error.locale_mismatched_identity',
+        log_type=LogLevel.error,
+        error_point=parent,
+        send_to_chat=send_to_chat)
 
 
 def self_test(send_to_chat=False):
