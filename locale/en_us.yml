@@ -12,6 +12,7 @@ core:
       python-version: {python_version}
       python-implementation: {python_implementation}
       bot-core-version: {core_full_version}
+      bot-git-version: {core_git_version}
   error:
     args_length: Syntax Invalid on command \"{message}\". \n{error_point}
     bound_channel: An error occurred while binding to channel "{message}" [{error_point}]

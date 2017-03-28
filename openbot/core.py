@@ -60,6 +60,7 @@ def _log_system_info():
     'python_version': platform.python_version(),
     'python_implementation': platform.python_implementation(),
     'core_full_version': openbot.FULL_VERSION,
+    'core_git_version': openbot.GIT_VERSION
   }
 
   openbot.logger.log(sys_info,
