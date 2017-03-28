@@ -80,7 +80,7 @@ core:
     with_level: '"{}" with level "{}"'
   warn:
     bound_channel: Bot could not be bound to channel "{message}"
-    chat_message_no_init: Message with parent "{message}" set to be sent to chat before client init step
+    chat_message_no_init: Message with parent "{message}" set to be sent to chat before client init step; Canceling
     config_before_load: Config key "{message}" retrieved before config has been loaded
     config_loading_exception: File unable to be loaded from "{message}" due to {error_point}; Generating new version
     conflict_function_name: Command "{message}" has multiple targets; Specify which using {error_point}
