@@ -41,7 +41,8 @@ def setup(config_path):
   except Exception as e:
     openbot.logger.log(config_file,
                        parent='core.warn.config_loading_exception',
-                       error_point=e)
+                       error_point=e,
+                       send_to_chat=False)
     _config = get_default_config()
     state = True
 
