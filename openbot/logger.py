@@ -71,10 +71,14 @@ def log(message,
     delete_after: Duration to delete send_to_chat messages after in seconds
   """
   log_type = _type_from_parent(parent, log_type)
+
+  if not isinstance(message, dict):
+    message = {'message': message}
+
   try:
     # Gets the locale string from the json file
     parent_string = get_locale_string(parent)\
-        .format(message=message, error_point=error_point)
+        .format(**message, error_point=error_point)
 
     # Handles sending to discord and prepending the chat message
     if send_to_chat:
@@ -287,7 +291,7 @@ def _pad_message(message, log_type):
     try:
       # Sometimes this isn't a thing (Actually maybe)
       columns = int(shutil.get_terminal_size()[0])
-      print('~' * columns)
+      # print('~' * columns)
     except ValueError:
       col_override = 80
       log(col_override,

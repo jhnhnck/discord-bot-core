@@ -54,13 +54,17 @@ def run():
 
 
 def _log_system_info():
-  sys_info = openbot.logger.get_locale_string('core.segments.sys_info').format(
-    machine_type=platform.machine(),
-    processor=platform.processor(),
-    platform=platform.platform(),
-    python_version=platform.python_version(),
-    python_implementation=platform.python_implementation(),
-    core_full_version=openbot.FULL_VERSION)
+  sys_info = {
+    'machine_type': platform.machine(),
+    'processor': platform.processor(),
+    'platform': platform.platform(),
+    'python_version': platform.python_version(),
+    'python_implementation': platform.python_implementation(),
+    'core_full_version': openbot.FULL_VERSION,
+  }
 
-  openbot.logger.log(sys_info, log_type=openbot.logger.LogLevel.blank, send_to_chat=False)
+  openbot.logger.log(sys_info,
+                     parent='core.debug.sys_info',
+                     log_type=openbot.logger.LogLevel.blank,
+                     send_to_chat=False)
   openbot.logger.newline()

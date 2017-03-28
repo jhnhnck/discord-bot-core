@@ -4,6 +4,14 @@ core:
     gen_stub_function:  Function "{message}" not found; Generating stub function
     load_function_plugin_title: Enumerating functions for [{message}]
     load_function_success:  Added command "{message}" with qualified name "{error_point}"
+    sys_info: |
+      === Printing Version Info ===
+      machine-type: {machine_type}
+      machine-processor: {processor}
+      machine-platform: platform
+      python-version: {python_version}
+      python-implementation: {python_implementation}
+      bot-core-version: {core_full_version}
   error:
     args_length: Syntax Invalid on command \"{message}\". \n{error_point}
     bound_channel: An error occurred while binding to channel "{message}" [{error_point}]
@@ -59,14 +67,6 @@ core:
             extra modifiers are silently ignored
         """
         pass
-    sys_info: |
-      === Printing Version Info ===
-      machine-type: {machine_type}
-      machine-processor: {processor}
-      machine-platform: platform
-      python-version: {python_version}
-      python-implementation: {python_implementation}
-      bot-core-version: {core_full_version}
     two_length_and: '"{}" and "{}"'
     two_length_or: '"{}" or "{}"'
     with_level: '"{}" with level "{}"'
