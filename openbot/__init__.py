@@ -16,7 +16,7 @@ DESCRIPTION = 'A simple, easily expandable, and well documented framework to add
 
 # Try to find latest git commit
 try:
-  GIT_VERSION = subprocess.check_output(["git", "describe", "--always"])
+  GIT_VERSION = subprocess.check_output(["git", "describe", "--always"]).decode('utf-8')[:-1]
 except:
   GIT_VERSION = 'unknown'
 
