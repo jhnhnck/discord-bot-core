@@ -13,7 +13,7 @@ parser.add_argument('-c', '--config', nargs=1, default='config/openbot.yml',
                     help='location of config file')
 parser.add_argument('-l', '--locale', nargs=1, default='en_us',
                     help='language')
-parser.add_argument('--testing', default=False, action='store_true',
+parser.add_argument('--offline', default=False, action='store_true',
                     help='disables server connection')
 core_args = parser.parse_args()
 
@@ -27,5 +27,5 @@ for i in range(0, 5):
 logger.newline()
 """
 
-if not core_args.testing:
+if not core_args.offline:
   core.run()
