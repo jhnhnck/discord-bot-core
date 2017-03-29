@@ -20,7 +20,7 @@ def load_plugins():
 
   Plugin Structure.
   Plugins are defined based upon a json file located in the root of the plugin directory (see 'Naming.' above). You can
-  make a copy of the 'coreftns.yml' file within the 'resources/' directory commented example as a starting point. Note
+  make a copy of the 'plugin.yml' file within the 'resources/' directory commented example as a starting point. Note
   that this format and its fields may change with development without notice. The file may not always be up to date.
   As always the best example of plugin structure can be found in the 'jhnhnck_coreftns' plugin located at
   'https://github.com/jhnhnck/discord-bot-coreftns'
@@ -89,10 +89,10 @@ def load_functions(plugins):
   Naming.
   The function should be contained within a directory in the 'plugins/domain_plugin/functions/' directory. The file name
   is not in a specific format but the recommended format is 'section_function.py'. This must be defined in the
-  'pluginname.json' file (See 'Function Structure.' below)
+  'pluginname.yml' file (See 'Function Structure.' below)
 
   Function Structure.
-  Functions are defined based upon the 'functions' section in the json file located in the root of the plugin directory.
+  Functions are defined based upon the 'functions' section in the yml file located in the root of the plugin directory.
   For more information on this file see 'Basic Plugin Structure. -> Plugin Structure.' above.
 
   Additionally, the function must also have a python file that contains a class 'BotFunction' that inherits
