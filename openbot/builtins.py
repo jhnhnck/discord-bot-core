@@ -20,6 +20,7 @@ class Builtins(PluginBase):
     domain_name: jhnhnck
     plugin_prefix: core
     plugin_description: Core functions included with discord-bot-core
+    plugin_type: single-file
   functions:
     chat_bind:
       function_name: bind
