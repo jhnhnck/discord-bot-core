@@ -51,11 +51,11 @@ def setup(locale_name):
 def log(message,
         parent='core.info.plaintext',
         log_type=None,
-        error_point=None,
         send_to_chat=True,
         pad_newlines=True,
         send_newline=True,
-        delete_after=None):
+        delete_after=None,
+        **kwargs):
   """
   Logger.
   Prints a log message to the command-line output and to the server chat
@@ -64,21 +64,20 @@ def log(message,
     message: String to fill {message} section of parent string
     parent: Parent Locale Identifier
     log_type: Alert level of message of type enum LogLevel (openbot.logger.LogLevel)
-    error_point: String to fill {error_point} section of parent string
     send_to_chat: False if the message should only print to command line output
     pad_newlines: Add spacing to multi-line messages so that it aligns to the base length
     send_newline: Append '/n' to the end of message
     delete_after: Duration to delete send_to_chat messages after in seconds
+    **kwargs: Arbitrary locale formatting strings (i.e. error_point)
   """
   log_type = _type_from_parent(parent, log_type)
 
   if not isinstance(message, dict):
-    message = {'message': message}
+    message = {'message': message, **kwargs}
 
   try:
     # Gets the locale string from the json file
-    parent_string = get_locale_string(parent)\
-        .format(**message, error_point=error_point)
+    parent_string = get_locale_string(parent).format(**message)
 
     # Handles sending to discord and prepending the chat message
     if send_to_chat:
