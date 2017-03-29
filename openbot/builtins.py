@@ -42,3 +42,33 @@ class Builtins(PluginBase):
       args_description:
       - '[seconds]'
   """
+
+class CommandBind(FunctionBase):
+
+  def load_test(self):
+    """
+    Loading Self Test.
+    Implement this method to allow for more vigorous control over loading requirements.
+
+    Returns:
+      Dictionary with two keys:
+        state: True if the function should be loaded
+        msg: Detailed error message (Do not use logging here; It may not always work)
+    """
+    return {'state': True}
+
+
+  def call(self, client, message, mod):
+    """
+    Call.
+    Binds the discord bot to a specific channel
+    """
+    # has_permission will handle no permissions
+    if config.has_perm(message.owner, 'admin.set_channel_bindings'):
+      if mod.get('--append'):
+        channel_ids = config.get_config('chant.channels.bind_text_channels')
+        channel_ids = channel_ids.append(message.channel.id)
+      else:
+        channel_ids = [message.channel.id]
+
+      config.set_config('chat.channels.bind_text_channels', channel_ids)
