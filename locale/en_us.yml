@@ -1,7 +1,7 @@
 core:
   debug:
     col_value_error: Cannot determine column width; Using {message} columns instead
-    gen_stub_function:  Function "{message}" not found; Generating stub function
+    gen_stub_function:  Command "{message}" not found; Generating stub class
     load_function_plugin_title: Enumerating functions for [{message}]
     load_function_success:  Added command "{message}" with qualified name "{error_point}"
     sys_info: |
