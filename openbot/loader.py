@@ -35,6 +35,7 @@ def load_plugins():
   Each plugin is loaded into a dictionary with the above keys and values with an additional key of 'store' for the
   loaded for the initialized plugin.
   """
+  # TODO: Why is this so dumb and stupid?
   plugins = {}
 
   for plugin in os.listdir('plugins/'):
