@@ -9,5 +9,31 @@ Contents.
 """
 
 config = """\
-
+description:
+  plugin_name: builtins
+  domain_name: jhnhnck
+  plugin_prefix: core
+  plugin_description: Core functions included with discord-bot-core
+functions:
+  chat_bind:
+    function_name: bind
+    help_text: Use to specify a chat channel for commands and responses
+    allowed_modifiers:
+      --append: promote this channel to an approved channel
+  chat_reload:
+    function_name: reload
+    help_text: Reloads config and plugins from file
+  chat_shutdown:
+    function_name: shutdown
+    help_text: Completely stops the bot
+  chat_restart:
+    function_name: restart
+    help_text: Completely stops then starts the bot again
+  chat_sleep:
+    function_name: sleep
+    help_text: Ignore commands and mute output for a certain amount of time
+    allowed_args_length: '1'
+    args_description:
+    - '[seconds]'
 """
+
