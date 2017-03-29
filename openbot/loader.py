@@ -1,5 +1,5 @@
 import importlib
-import json
+import ruamel.yaml as yaml
 import os
 from datetime import datetime
 
@@ -20,7 +20,7 @@ def load_plugins():
 
   Plugin Structure.
   Plugins are defined based upon a json file located in the root of the plugin directory (see 'Naming.' above). You can
-  make a copy of the 'coreftns.json' file within the 'resources/' directory commented example as a starting point. Note
+  make a copy of the 'coreftns.yml' file within the 'resources/' directory commented example as a starting point. Note
   that this format and its fields may change with development without notice. The file may not always be up to date.
   As always the best example of plugin structure can be found in the 'jhnhnck_coreftns' plugin located at
   'https://github.com/jhnhnck/discord-bot-coreftns'
@@ -55,8 +55,8 @@ def load_plugins():
         plugin_name = plugin
 
       # Loads the json plugin specifier
-      with open('plugins/{}/{}.json'.format(plugin, plugin_name), 'r') as file:
-        plugins[plugin] = json.loads(file.read())
+      with open('plugins/{}/{}.yml'.format(plugin, plugin_name)) as file:
+        plugins[plugin] = yaml.safe_load(file)
 
       # Test if disabled
       if not plugins[plugin].get('user').get('enabled'):
