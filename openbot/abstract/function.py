@@ -1,18 +1,25 @@
-from abc import ABC
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 import openbot.config
+import openbot.logger
+
 
 class FunctionBase(ABC):
 
   def __init__(self,
                function_name,
-               help_text,
-               allowed_args_length,
-               args_description,
-               allowed_modifiers,
                simple_string,
-               qualified_string):
+               qualified_string,
+               help_text,
+               args_description=None,
+               allowed_modifiers=None,
+               allowed_args_length='0'):
+    if args_description is None:
+      args_description = []
+
+    if allowed_modifiers is None:
+      allowed_modifiers = {}
+
     self.function_name = function_name
     self.help_text = help_text
     self.allowed_args_length = allowed_args_length
