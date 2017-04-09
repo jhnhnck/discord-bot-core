@@ -1,11 +1,14 @@
 import importlib
-import ruamel.yaml as yaml
 import os
 from datetime import datetime
+
+import ruamel.yaml as yaml
 
 import openbot
 import openbot.config
 import openbot.logger
+import openbot.builtins
+from openbot.abstract.plugin import DisabledPluginError
 
 
 def load_plugins():
@@ -25,60 +28,65 @@ def load_plugins():
   As always the best example of plugin structure can be found in the 'jhnhnck_coreftns' plugin located at
   'https://github.com/jhnhnck/discord-bot-coreftns'
 
-  Additionally, the plugin must also have a python file named in the form 'plugin_name.py' that contains a class
-  'BotPlugin' that inherits 'PluginBase' from 'openbot.abstract.plugin'. This class does not have to implement any
-  methods (you may simply put 'pass' in the body) but can override the other methods present in the abstract class for
-  more customization such as changing the default versioning scheme or (see 'openbot/abstract/plugin.py' for more
-  details).
+  Additionally, the plugin must also have a python file named in the form 'plugin_name.py' that contains a class with
+  the same value as 'plugin_name' from the plugin config that inherits 'PluginBase' from 'openbot.abstract.plugin'. This
+  class does not have to implement any methods (you may simply put 'pass' in the body) but can override the other
+  methods present in the abstract class for more customization such as changing the default versioning scheme
+  (see 'openbot/abstract/plugin.py' for more details).
 
   Internal Plugin Structure.
   Each plugin is loaded into a dictionary with the above keys and values with an additional key of 'store' for the
   loaded for the initialized plugin.
   """
   # TODO: Why is this so dumb and stupid?
+  # Load built-in plugins
   plugins = {}
 
-  for plugin in os.listdir('plugins/'):
-    if not os.path.isdir('plugins/{}'.format(plugin)):
+  for plugin_dirname in os.listdir('plugins/'):
+    if not os.path.isdir('plugins/{}'.format(plugin_dirname)):
       continue
 
     try:
       # Splits fully-qualified plugin name into plugin domain/group name and plugin name.
-      if plugin.find('_') != -1:
-        split = plugin.split('_')
+      if plugin_dirname.find('_') != -1:
+        split = plugin_dirname.split('_')
         plugin_name = split[-1]
-        domain_name = split[0]
       else:
-        openbot.logger.log(plugin,
-                           error_point='nodomain',
-                           parent='core.warn.plugin_domain_malformed')
-        domain_name = 'nodomain'
-        plugin_name = plugin
+        plugin_name = plugin_dirname
 
-      # Loads the json plugin specifier
-      with open('plugins/{}/{}.yml'.format(plugin, plugin_name)) as file:
-        plugins[plugin] = yaml.safe_load(file)
+      # Loads the yaml plugin specifier
+      yaml_path = 'plugins/{}/{}.yml'.format(plugin_dirname, plugin_name)
+      yaml_alt_path = 'plugins/{}/plugin.yml'.format(plugin_dirname)
 
-      # Test if disabled
-      if not plugins[plugin].get('user').get('enabled'):
-        openbot.logger.log(plugin,
-                           parent='core.warn.disabled_plugin',
+      if os.path.isfile(yaml_path) and os.access(yaml_path, os.R_OK):
+        yaml_data = yaml.safe_load(open(yaml_path))
+      elif os.path.isfile(yaml_alt_path) and os.access(yaml_alt_path, os.R_OK):
+        yaml_data = yaml.safe_load(open(yaml_alt_path))
+      else:
+        openbot.logger.log(plugin_name,
+                           yaml_path=yaml_path,
+                           yaml_alt_path=yaml_alt_path,
+                           parent='core.error.plugin_missing_yaml',
                            send_to_chat=False)
-        del plugins[plugin]
         continue
 
       # Load python file dynamically
-      plugins.get(plugin)['store'] = getattr(importlib.import_module('{}.{}'.format(plugin, plugin_name)), 'BotPlugin')()
+      class_name = yaml_data.get('description', {}).get('plugin_name', 'BotPlugin')
 
+      module_name = '{}.{}'.format(plugin_dirname, plugin_name)
+      plugin_obj = getattr(importlib.import_module(module_name), class_name)(**yaml_data)
+      plugin_name = plugin_obj.get_full_name()
+      plugins[plugin_name] = plugin_obj
+
+    except DisabledPluginError as e:
+      openbot.logger.log(e,
+                         parent='core.warn.disabled_plugin',
+                         send_to_chat=False)
     except Exception as e:
-      openbot.logger.log(plugin,
+      openbot.logger.log(plugin_name,
                          parent='core.error.plugin_loading',
                          error_point=e,
                          send_to_chat=False)
-      try:
-        del plugins[plugin]
-      except:
-        pass
 
   return plugins
 
@@ -96,16 +104,16 @@ def load_functions(plugins):
   Functions are defined based upon the 'functions' section in the yml file located in the root of the plugin directory.
   For more information on this file see 'Basic Plugin Structure. -> Plugin Structure.' above.
 
-  Additionally, the function must also have a python file that contains a class 'BotFunction' that inherits
-  'FunctionBase' from 'openbot.abstract.function'. This class must at least implement the 'call()' function and can
-  override the other methods present in the abstract class for more customization such as providing more advanced
-  loading requirements
+  Additionally, the function must also have a python file that contains a class with the same name as 'plugin_name' from
+   the config that inherits 'FunctionBase' from 'openbot.abstract.function'. This class must at least implement the
+   'call()' function and can override the other methods present in the abstract class for more customization such as
+   providing more advanced loading requirements
 
   Internal Function Structure.
-  Each plugin is loaded into a dictionary with all the keys for that function from the 'pluginname.json' file with three
-  additional keys for 'store' which contains the initialized class for that function, 'simple_string' which contains the
-  calling command in the form 'core.command_prefix + function_name', and 'qualified string' which contains the longer
-  calling command with the plugin prefix included in the form 'core.command_prefix + plugin_prefix + function_name'.
+  Each function is initialized with all the keys for that function from the 'pluginname.yml' file with two additional
+  keys: 'simple_string' which contains the calling command in the form 'core.command_prefix + function_name' and
+  'qualified string' which contains the longer calling command with the plugin prefix included in the form
+  'core.command_prefix + plugin_prefix + function_name'.
   """
   functions = {}
 
@@ -114,24 +122,25 @@ def load_functions(plugins):
                        parent='core.debug.load_function_plugin_title',
                        send_to_chat=False)
 
-    for ftn_name, ftn in plugin.get('functions').items():
+    for ftn_name, ftn_data in plugin.functions.items():
       # ftn_path = 'plugins/{}/functions/{}.py'.format(plugin_name, ftn_name)
 
-      if not _test_function_valid(plugin_name, ftn_name):
+      class_name = 'Cmd' + ftn_data.get('function_name', 'Untitled').capitalize()
+      if not _test_function_valid(plugin_name, ftn_name, class_name):
         continue
 
       # Name without prefix (can be called if no conflicts)
       simple_string = '{}{}'.format(openbot.config.get_config('core.command_prefix'),
-                                    ftn.get('function_name'))
+                                    ftn_data.get('function_name'))
 
       # Name with prefix (can always be called, but must be used in case of name conflicts)
       qualified_string = '{}{}.{}'.format(openbot.config.get_config('core.command_prefix'),
-                                          plugin.get('description')['plugin_prefix'],
-                                          ftn.get('function_name'))
+                                          plugin.description.get('plugin_prefix'),
+                                          ftn_data.get('function_name'))
 
       try:
-        function_class = getattr(importlib.import_module('{}.functions.{}'.format(plugin_name, ftn_name)), 'BotFunction')
-        function = function_class(**{'simple_string': simple_string, 'qualified_string': qualified_string, **ftn})
+        function_class = getattr(importlib.import_module('{}.functions.{}'.format(plugin_name, ftn_name)), class_name)
+        function = function_class(**{'simple_string': simple_string, 'qualified_string': qualified_string, **ftn_data})
       except Exception as e:
         openbot.logger.log(openbot.logger.get_locale_string('core.segments.from').format(ftn_name, plugin_name),
                            parent='core.error.function_loading',
@@ -194,7 +203,7 @@ def load_tasks():
   pass
 
 
-def _test_function_valid(plugin_name, ftn_name):
+def _test_function_valid(plugin_name, ftn_name, class_name):
   """
   Test Function Valid.
   Tests if the function is a valid file; If discord-bot-core is ran on a develop release it will generate stub files
@@ -203,6 +212,7 @@ def _test_function_valid(plugin_name, ftn_name):
   Args:
     plugin_name: Full plugin name with domain included
     ftn_name: Name of function python file
+    class_name: Name of the class within the python file
 
   Returns:
     True if the function is valid, false otherwise
@@ -222,7 +232,7 @@ def _test_function_valid(plugin_name, ftn_name):
 
     with open(path, 'w+') as f:
       f.write(openbot.logger.get_locale_string('core.segments.stub_function')
-              .format(plugin=plugin_name, function=ftn_name, date=datetime.now()))
+              .format(plugin=plugin_name, function=ftn_name, date=datetime.now(), class_name=class_name))
     return False
   else:
     openbot.logger.log(ftn_name,
