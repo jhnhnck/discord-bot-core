@@ -1,9 +1,9 @@
 core:
   debug:
     col_value_error: Cannot determine column width; Using {message} columns instead
-    gen_stub_function:  Command "{message}" not found; Generating stub class
+    gen_stub_function: ' Command "{message}" not found; Generating stub class'
     load_function_plugin_title: Enumerating functions for [{message}]
-    load_function_success:  Added command "{message}" with qualified name "{error_point}"
+    load_function_success: ' Command "{message}" with qualified name "{error_point}" added'
     sys_info: |
       === Printing Version Info ===
       machine-type: {machine_type}
@@ -21,7 +21,7 @@ core:
     command_not_found: Command "{message}" is not found
     command_specifics: Which command Did you mean?\n{message}
     config_key_error: An error occurred while finding the config value at key "{message}"
-    function_loading:  Function {message} could not be loaded. [{error_point}]
+    function_loading: ' Command {message} could not be loaded. [{error_point}]'
     locale_early_termination: Message {message} provided with truncated parent "{error_point}"
     locale_mismatched_identity: Message {message} could not be inserted into parent "{error_point}" due to invalid formatting
     locale_missing: Message {message} could not be associated to parent "{error_point}"
