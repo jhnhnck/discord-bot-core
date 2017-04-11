@@ -1,10 +1,11 @@
 core:
   debug:
     col_value_error: Cannot determine column width; Using {message} columns instead
-    gen_stub_function: ' Command "{message}" not found; Generating stub class'
+    gen_stub_function: ' Command "{message}" not found; Generating stub class {extra_info}'
     load_function_plugin_title: Enumerating functions for [{message}]
     load_function_success: ' Command "{message}" with qualified name "{error_point}" added'
     load_plugin_value_omitted: Plugin "{message}" is missing {optional} value "{key_name}"; Using "{sub_value}" while in dev environment
+    stub_type_conflict: ' Command "{message}" could not be loaded from file "{path}" [invalid type "{type}"]'
     sys_info: |
       === Printing Version Info ===
       machine-type: {machine_type}
@@ -43,6 +44,7 @@ core:
     settle: Waiting {message} second(s) for things to settle\r
   name: openbot-discord
   segments:
+    at: at "{}"
     from: '"{}" from "{}"'
     stub_function: |
       from openbot.abstract.function import FunctionBase
@@ -57,12 +59,13 @@ core:
         def load_test(self):
           """
           Loading Self Test.
-          Implement this method to allow for more vigorous control over loading requirements.
+          Implement this method to allow for more vigorous control over loading requirements;
+          You can delete this if not needed.
 
           Returns:
             Dictionary with two keys:
               state: True if the command should be loaded
-              msg: Detailed error message (Do not use logging here; It may not always work)
+              msg: Detailed error message
           """
           return {{'state': False, 'msg': 'Stub Function'}}
 
@@ -80,6 +83,7 @@ core:
           pass
     two_length_and: '"{}" and "{}"'
     two_length_or: '"{}" or "{}"'
+    within: within file "{}"
     with_level: '"{}" with level "{}"'
   warn:
     bound_channel: Bot could not be bound to channel "{message}"

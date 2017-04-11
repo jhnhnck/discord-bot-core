@@ -1,5 +1,6 @@
 import importlib
 import os
+import inspect
 from datetime import datetime
 
 import ruamel.yaml as yaml
@@ -40,7 +41,8 @@ def load_plugins():
   """
   # TODO: Why is this so dumb and stupid?
   # Load built-in plugins
-  plugins = {}
+  builtins = openbot.builtins.Builtins()
+  plugins = {builtins.get_full_name(): builtins}
 
   for plugin_dirname in os.listdir('plugins/'):
     if not os.path.isdir('plugins/{}'.format(plugin_dirname)):
@@ -126,7 +128,7 @@ def load_functions(plugins):
       # ftn_path = 'plugins/{}/functions/{}.py'.format(plugin_name, ftn_name)
 
       class_name = 'Cmd' + ftn_data.get('function_name', 'Untitled').capitalize()
-      if not _test_function_valid(plugin_name, ftn_name, class_name):
+      if not _test_function_valid(plugin, ftn_name, class_name):
         continue
 
       # Name without prefix (can be called if no conflicts)
@@ -203,39 +205,95 @@ def load_tasks():
   pass
 
 
-def _test_function_valid(plugin_name, ftn_name, class_name):
+def _test_function_valid(plugin, ftn_name, class_name):
   """
   Test Function Valid.
   Tests if the function is a valid file; If discord-bot-core is ran on a develop release it will generate stub files
   for all functions that are not found
 
   Args:
-    plugin_name: Full plugin name with domain included
+    plugin: 
     ftn_name: Name of function python file
     class_name: Name of the class within the python file
 
   Returns:
     True if the function is valid, false otherwise
   """
-  path = 'plugins/{}/functions/{}.py'.format(plugin_name, ftn_name)
+  path = inspect.getfile(plugin.__class__)
 
-  if os.path.isfile(path):
-    return True
+  if plugin.description.get('plugin_type') == 'standard':
+    path = os.path.dirname(path) + '/functions/{}.py'.format(ftn_name)
 
-  elif openbot.RELEASE_TYPE == 0:
-    openbot.logger.log(ftn_name,
-                       parent='core.debug.gen_stub_function',
-                       send_to_chat=False)
+    if os.path.isfile(path):
+      return True
+    elif openbot.RELEASE_TYPE == 0:
+      openbot.logger.log(ftn_name,
+                         extra_info=openbot.logger.get_locale_string('core.segments.at').format(path),
+                         parent='core.debug.gen_stub_function',
+                         send_to_chat=False)
 
-    if not os.path.exists(os.path.dirname(path)):
-      os.makedirs(os.path.dirname(path))
+      if not os.path.exists(os.path.dirname(path)):
+        os.makedirs(os.path.dirname(path))
 
-    with open(path, 'w+') as f:
-      f.write(openbot.logger.get_locale_string('core.segments.stub_function')
-              .format(plugin=plugin_name, function=ftn_name, date=datetime.now(), class_name=class_name))
-    return False
-  else:
-    openbot.logger.log(ftn_name,
-                       parent='core.error.function_loading',
-                       send_to_chat=False,
-                       error_point='FileNotExistsError')
+      with open(path, 'w+') as f:
+        stub_class = openbot.logger.get_locale_string('core.segments.stub_function')\
+                .format(plugin=plugin.description.get('plugin_name'),
+                        function=ftn_name,
+                        date=datetime.now(),
+                        class_name=class_name)
+        f.write(stub_class)
+      return False
+    else:
+      openbot.logger.log(ftn_name,
+                         error_point='FileNotExistsError',
+                         parent='core.error.function_loading',
+                         send_to_chat=False)
+
+  elif plugin.description.get('plugin_type') == 'single-file':
+    try:
+      ftn_class = getattr(plugin, class_name)
+      if not inspect.isclass(ftn_class):
+        raise ValueError(type(ftn_class))
+
+    # We get here if it doesn't exist within the file
+    except AttributeError:
+      if openbot.RELEASE_TYPE == 0:
+        openbot.logger.log(ftn_name,
+                           extra_info=openbot.logger.get_locale_string('core.segments.within').format(path),
+                           parent='core.debug.gen_stub_function',
+                           send_to_chat=False)
+
+        if not os.path.exists(os.path.dirname(path)):
+          os.makedirs(os.path.dirname(path))
+
+        with open(path, 'a') as f:
+          stub_class = openbot.logger.get_locale_string('core.segments.stub_function')\
+                  .format(plugin=plugin.description.get('plugin_name'),
+                          function=ftn_name,
+                          date=datetime.now(),
+                          class_name=class_name)\
+                  .splitlines(keepends=True)
+
+          # This assumes the file ends in one newline already, I dunno how to check for that without reading the entire
+          # file and that is slow, I think, maybe
+
+          # Indent some things
+          import_line = False
+          for line in stub_class:
+            if not import_line:
+              import_line = True
+              continue
+            else:
+              f.write('  ' + line)
+
+        return False
+
+      # We get here if it exists but isn't a class
+    except ValueError as e:
+      openbot.logger.log(ftn_name,
+                         path=path,
+                         type=e,  # Maybe this works
+                         parent='core.debug.stub_type_conflict',
+                         send_to_chat=False)
+      return False
+
