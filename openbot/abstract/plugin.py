@@ -55,10 +55,11 @@ class PluginBase(ABC):
     self._validate_key('domain_name', self.description, 'nodomain')
     self._validate_key('plugin_prefix', self.description, ''.join(random.choices(string.ascii_lowercase, k=3)))
     self._validate_key('plugin_description', self.description, 'No description.')
-    self._validate_key('plugin_type', self.description, 'standard', optional=True)
-
-    if not user.get('enabled', True):
-      raise DisabledPluginError(self.description.get('plugin_name'))
+    self._validate_key('plugin_type',
+                       self.description,
+                       'standard',
+                       optional=True,
+                       valid_options=['standard', 'single-file'])
 
     # Validate versioning keys
     self._validate_key('plugin_version', self.versioning, '0.0.1a')
@@ -163,18 +164,30 @@ class PluginBase(ABC):
       return -2
 
 
-  def _validate_key(self, key_name, config_set, sub_value, optional=False):
+  def _validate_key(self, key_name, config_set, sub_value, optional=False, valid_options=None):
     if key_name not in config_set:
-        if openbot.RELEASE_TYPE == 0:
-          openbot.logger.log(type(self).__name__,
-                             key_name=key_name,
-                             sub_value=sub_value,
-                             optional='optional' if optional else 'required',
-                             parent='core.debug.load_plugin_value_omitted',
-                             send_to_chat=False)
-          config_set[key_name] = sub_value
-        elif optional:
-          config_set[key_name] = sub_value
-        else:
-          error = openbot.logger.get_locale_string('core.error.load_plugin_value_omitted')
-          raise PluginLoadingException(error.format(key_name=key_name))
+      if openbot.RELEASE_TYPE == 0:
+        openbot.logger.log(type(self).__name__, key_name=key_name, sub_value=sub_value,
+                           parent='core.debug.load_plugin_value_omitted_{}'.format('opt' if optional else 'req'),
+                           send_to_chat=False)
+        config_set[key_name] = sub_value
+      elif optional:
+        config_set[key_name] = sub_value
+      else:
+        error = openbot.logger.get_locale_string('core.error.load_plugin_value_omitted').format(key_name)
+        raise PluginLoadingException(error.format(key_name=key_name))
+
+    if valid_options is not None and config_set.get(key_name) not in valid_options:
+      if openbot.RELEASE_TYPE == 0:
+        openbot.logger.log(type(self).__name__,
+                           key_name=key_name,
+                           sub_value=sub_value,
+                           valid_options=' '.join(valid_options),
+                           parent='core.debug.load_plugin_value_invalid_{}'.format('opt' if optional else 'req'),
+                           send_to_chat=False)
+        config_set[key_name] = sub_value
+      elif optional:
+        config_set[key_name] = sub_value
+      else:
+        error = openbot.logger.get_locale_string('core.error.load_plugin_value_invalid').format(key_name)
+        raise PluginLoadingException(error.format(key_name=key_name))
