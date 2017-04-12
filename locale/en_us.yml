@@ -4,10 +4,10 @@ core:
     gen_stub_function: ' Command "{message}" not found; Generating stub class {extra_info}'
     load_function_plugin_title: Enumerating functions for [{message}]
     load_function_success: ' Command "{message}" with qualified name "{error_point}" added'
-    load_plugin_value_omitted_opt: Plugin "{message}" is missing optional key "{key_name}"; Using "{sub_value}" while in dev environment
-    load_plugin_value_omitted_req: Plugin "{message}" is missing required key "{key_name}"; Using "{sub_value}" while in dev environment
-    load_plugin_value_invalid_opt: Plugin "{message}" has an invalid value "{key_value}" for optional key "{key_name}" {valid_options}; Using "{sub_value}" while in dev environment
-    load_plugin_value_invalid_req: Plugin "{message}" has an invalid value "{key_value}" for required key "{key_name}" {valid_options}; Using "{sub_value}" while in dev environment
+    load_plugin_value_omitted_opt: ' Plugin "{message}" is missing optional key "{key_name}"; Defaulting to "{sub_value}"'
+    load_plugin_value_omitted_req: ' Plugin "{message}" is missing required key "{key_name}"; Using "{sub_value}" while in dev environment'
+    load_plugin_value_invalid_opt: ' Plugin "{message}" has an optional key "{key_name}" with value "{key_value}" but only <{valid_options}> accepted; Defaulting to "{sub_value}" instead'
+    load_plugin_value_invalid_req: ' Plugin "{message}" has an invalid value "{key_value}" for required key "{key_name}" {valid_options}; Using "{sub_value}" instead'
     stub_type_conflict: ' Command "{message}" could not be loaded from file "{path}" [invalid type "{type}"]'
     sys_info: |
       === Printing Version Info ===
@@ -31,7 +31,7 @@ core:
     load_plugin_value_invalid: Plugin value "{}" cannot be parsed
     locale_early_termination: Message {message} provided with truncated parent "{error_point}"
     locale_mismatched_identity: Message {message} could not be inserted into parent "{error_point}" due to invalid formatting
-    locale_missing: Message {message} could not be associated to parent "{error_point}"
+    locale_missing: Message data {message} could not be associated to parent "{error_point}"
     plugin_loading: Plugin "{message}" could not be loaded. [{error_point}]
     plugin_missing_yaml: Plugin "{message}" could not be loaded; Could not find or read from file "{yaml_path}" or "{yaml_alt_path}"
   fatal:
@@ -44,6 +44,8 @@ core:
     bot_logged: Bot connected to Discord as "{message}"
     bound_channel: Bot successfully bound to channel "{message}"
     gen_new_config: Generating new configuration file at "{message}"
+    plugin_embedded_title: Loading embedded plugin "{message}"
+    plugin_discovered_title: Discovered and loading plugin from directory "plugins/{message}"
     plaintext: "{message}"
     settle: Waiting {message} second(s) for things to settle\r
   name: openbot-discord
@@ -95,7 +97,7 @@ core:
     config_before_load: Config key "{message}" retrieved before config has been loaded
     config_loading_exception: File unable to be loaded from "{message}" due to {error_point}; Generating new version
     conflict_function_name: Command "{message}" has multiple targets; Specify which using {error_point}
-    disabled_plugin: Plugin "{message}" is disabled and will not be loaded
+    disabled_plugin: ' Plugin "{message}" is disabled and will not be loaded'
     # plugin_domain_malformed: Plugin "{message}" has malformed name; Substituting dummy domain "{error_point}"
 base:
   chat:

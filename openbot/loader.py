@@ -41,12 +41,15 @@ def load_plugins():
   """
   # TODO: Why is this so dumb and stupid?
   # Load built-in plugins
+  openbot.logger.log('Builtins', parent='core.info.plugin_embedded_title', send_to_chat=False)
   builtins = openbot.builtins.Builtins()
   plugins = {builtins.get_full_name(): builtins}
 
   for plugin_dirname in os.listdir('plugins/'):
     if not os.path.isdir('plugins/{}'.format(plugin_dirname)):
       continue
+
+    openbot.logger.log(plugin_dirname, parent='core.info.plugin_discovered_title', send_to_chat=False)
 
     try:
       # Splits fully-qualified plugin name into plugin domain/group name and plugin name.
