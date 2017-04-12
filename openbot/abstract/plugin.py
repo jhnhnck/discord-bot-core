@@ -72,19 +72,6 @@ class PluginBase(ABC):
     self._validate_key('beta_testing', self.user, False, optional=True)
 
 
-  def load_test(self):
-    """
-    Loading Self Test.
-    Implement this method to allow for more vigorous control over loading requirements.
-
-    Returns:
-      Dictionary with two keys:
-        state: True if the function should be loaded
-        msg: Detailed error message (Do not use logging here; It may not always work)
-    """
-    return {'state': True}
-
-
   @staticmethod
   def compare_versions(existing, other):
     """
