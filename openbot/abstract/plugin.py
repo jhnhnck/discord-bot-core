@@ -33,7 +33,7 @@ class PluginBase(ABC):
     self.config_template = config_template
 
     # Validate description keys
-    self._validate_key('plugin_name', self.description, os.path.basename(__file__))
+    self._validate_key('plugin_name', self.description, self.__class__.__name__)
     self._validate_key('domain_name', self.description, 'nodomain')
     self._validate_key('plugin_prefix', self.description, ''.join(random.choices(string.ascii_lowercase, k=3)))
     self._validate_key('plugin_description', self.description, 'No description.')
