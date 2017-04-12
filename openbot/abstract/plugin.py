@@ -2,7 +2,6 @@ import itertools
 import random
 import string
 from abc import ABC
-import os
 
 import openbot
 import openbot.logger
@@ -18,6 +17,9 @@ class DisabledPluginError(Exception):
 
 class PluginBase(ABC):
   def __init__(self, description=None, versioning=None, functions=None, user=None, config_template=None):
+    if user is not None and not user.get('enabled', True):
+      raise DisabledPluginError(description.get('plugin_name', self.__class__.__name__))
+
     description = self._validate_dict(description, 'description')
     versioning = self._validate_dict(versioning, 'versioning')
     config_template = self._validate_dict(config_template, 'config_template', optional=True)
