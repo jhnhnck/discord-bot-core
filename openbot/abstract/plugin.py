@@ -18,31 +18,11 @@ class DisabledPluginError(Exception):
 
 class PluginBase(ABC):
   def __init__(self, description=None, versioning=None, functions=None, user=None, config_template=None):
-    if description is None:
-      openbot.logger.log(type(self).__name__, key_name='description', sub_value='{}', optional='required',
-                         parent='core.debug.load_plugin_value_omitted',
-                         send_to_chat=False)
-      description = {}
-    if versioning is None:
-      openbot.logger.log(type(self).__name__, key_name='versioning', sub_value='{}', optional='required',
-                         parent='core.debug.load_plugin_value_omitted',
-                         send_to_chat=False)
-      versioning = {}
-    if config_template is None:
-      openbot.logger.log(type(self).__name__, key_name='config_template', sub_value='{}', optional='optional',
-                         parent='core.debug.load_plugin_value_omitted',
-                         send_to_chat=False)
-      config_template = {}
-    if functions is None:
-      openbot.logger.log(type(self).__name__, key_name='functions', sub_value='{}', optional='optional',
-                         parent='core.debug.load_plugin_value_omitted',
-                         send_to_chat=False)
-      functions = {}
-    if user is None:
-      openbot.logger.log(type(self).__name__, key_name='user', sub_value='{}', optional='optional',
-                         parent='core.debug.load_plugin_value_omitted',
-                         send_to_chat=False)
-      user = {}
+    description = self._validate_dict(description, 'description')
+    versioning = self._validate_dict(versioning, 'versioning')
+    config_template = self._validate_dict(config_template, 'config_template', optional=True)
+    functions = self._validate_dict(functions, 'functions', optional=True)
+    user = self._validate_dict(user, 'user', optional=True)
 
     self.description = description
     self.versioning = versioning
@@ -162,6 +142,22 @@ class PluginBase(ABC):
 
     except ValueError:
       return -2
+
+
+  def _validate_dict(self, config_set, key_name, optional=False):
+    if config_set is None:
+      if openbot.RELEASE_TYPE == 0:
+        openbot.logger.log(type(self).__name__, key_name=key_name, sub_value='{}',
+                           parent='core.debug.load_plugin_value_omitted_{}'.format('opt' if optional else 'req'),
+                           send_to_chat=False)
+        return {}
+      elif optional:
+        return {}
+      else:
+        error = openbot.logger.get_locale_string('core.error.load_plugin_value_invalid').format(key_name)
+        raise PluginLoadingException(error.format(key_name=key_name))
+    else:
+      return config_set
 
 
   def _validate_key(self, key_name, config_set, sub_value, optional=False, valid_options=None):
