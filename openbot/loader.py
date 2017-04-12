@@ -127,7 +127,7 @@ def load_functions(plugins):
     for ftn_name, ftn_data in plugin.functions.items():
       # ftn_path = 'plugins/{}/functions/{}.py'.format(plugin_name, ftn_name)
 
-      class_name = 'Cmd' + ftn_data.get('function_name', 'Untitled').capitalize()
+      class_name = 'Cmd' + ftn_data.get('function_name', ftn_name).capitalize()
       if not _test_function_valid(plugin, ftn_name, class_name):
         continue
 
@@ -141,8 +141,13 @@ def load_functions(plugins):
                                           ftn_data.get('function_name'))
 
       try:
-        function_class = getattr(importlib.import_module('{}.functions.{}'.format(plugin_name, ftn_name)), class_name)
-        function = function_class(**{'simple_string': simple_string, 'qualified_string': qualified_string, **ftn_data})
+        # Split depending on if standard plugin or not
+        if plugin.description.get('plugin_type') == 'single-file':
+          function_class = getattr(plugin, class_name)
+        else:
+          function_class = getattr(importlib.import_module('{}.functions.{}'.format(plugin_name, ftn_name)), class_name)
+
+        ftn = function_class(**{'simple_string': simple_string, 'qualified_string': qualified_string, **ftn_data})
       except Exception as e:
         openbot.logger.log(openbot.logger.get_locale_string('core.segments.from').format(ftn_name, plugin_name),
                            parent='core.error.function_loading',
@@ -151,7 +156,7 @@ def load_functions(plugins):
         continue
 
       # Run load_test()
-      load_test = function.load_test()
+      load_test = ftn.load_test()
       if not load_test.get('state'):
         if 'msg' not in load_test:
           load_test['msg'] = 'Load Test Failed (NoErrorReturned)'
@@ -162,13 +167,13 @@ def load_functions(plugins):
         continue
 
       # Adds function to dictionary
-      functions[qualified_string] = function
+      functions[qualified_string] = ftn
 
       # Checks for simple name conflicts
       if simple_string not in functions:
         functions[simple_string] = {'link': qualified_string}
       else:
-        functions[qualified_string] = function
+        functions[qualified_string] = ftn
         qualified_conflict = functions[functions.get(simple_string).get('link')].qualified_string
 
         # See if already conflicting
@@ -254,6 +259,7 @@ def _test_function_valid(plugin, ftn_name, class_name):
       ftn_class = getattr(plugin, class_name)
       if not inspect.isclass(ftn_class):
         raise ValueError(type(ftn_class))
+      return True
 
     # We get here if it doesn't exist within the file
     except AttributeError:
