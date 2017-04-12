@@ -4,7 +4,10 @@ core:
     gen_stub_function: ' Command "{message}" not found; Generating stub class {extra_info}'
     load_function_plugin_title: Enumerating functions for [{message}]
     load_function_success: ' Command "{message}" with qualified name "{error_point}" added'
-    load_plugin_value_omitted: Plugin "{message}" is missing {optional} value "{key_name}"; Using "{sub_value}" while in dev environment
+    load_plugin_value_omitted_opt: Plugin "{message}" is missing optional key "{key_name}"; Using "{sub_value}" while in dev environment
+    load_plugin_value_omitted_req: Plugin "{message}" is missing required key "{key_name}"; Using "{sub_value}" while in dev environment
+    load_plugin_value_invalid_opt: Plugin "{message}" has an invalid value "{key_value}" for optional key "{key_name}" {valid_options}; Using "{sub_value}" while in dev environment
+    load_plugin_value_invalid_req: Plugin "{message}" has an invalid value "{key_value}" for required key "{key_name}" {valid_options}; Using "{sub_value}" while in dev environment
     stub_type_conflict: ' Command "{message}" could not be loaded from file "{path}" [invalid type "{type}"]'
     sys_info: |
       === Printing Version Info ===
@@ -24,7 +27,8 @@ core:
     command_specifics: Which command Did you mean?\n{message}
     config_key_error: An error occurred while finding the config value at key "{message}"
     function_loading: ' Command {message} could not be loaded. [{error_point}]'
-    load_plugin_value_omitted: Plugin missing required value "{key_name}"
+    load_plugin_value_omitted: Plugin missing required value "{}"
+    load_plugin_value_invalid: Plugin value "{}" cannot be parsed
     locale_early_termination: Message {message} provided with truncated parent "{error_point}"
     locale_mismatched_identity: Message {message} could not be inserted into parent "{error_point}" due to invalid formatting
     locale_missing: Message {message} could not be associated to parent "{error_point}"
