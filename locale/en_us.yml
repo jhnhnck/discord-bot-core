@@ -26,6 +26,7 @@ core:
     command_not_found: Command "{message}" is not found
     command_specifics: Which command Did you mean?\n{message}
     config_key_error: An error occurred while finding the config value at key "{message}"
+    failed_execute: An error occurred while synchronously executing "{message}" on the client [{error_point}]
     function_loading: ' Command {message} could not be loaded. [{error_point}]'
     load_plugin_value_omitted: Plugin missing required value "{}"
     load_plugin_value_invalid: Plugin value "{}" cannot be parsed
@@ -52,6 +53,7 @@ core:
   name: openbot-discord
   segments:
     at: at "{}"
+    discord_link: https://discordapp.com/oauth2/authorize?client_id={message}&scope=bot&permissions=0
     from: '"{}" from "{}"'
     stub_function: |
       from openbot.abstract.function import FunctionBase

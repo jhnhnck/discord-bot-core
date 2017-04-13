@@ -24,6 +24,17 @@ class BotSyncedWrapper:
     self.client.run(*args, **kwargs)
 
 
+  def execute(self, fnc, *args, **kwargs):
+    """
+    Execute.
+    Synchronous wrapper for client actions
+    """
+    try:
+      asyncio.ensure_future(getattr(self.client, fnc)(*args, **kwargs))
+    except Exception as e:
+      openbot.logger.log(fnc, error_point=e, parent='core.error.failed_execute', send_to_chat=False)
+
+
   def print_message(self, content, channel=None, delete_after=None):
     """
     Print Message.
@@ -34,7 +45,7 @@ class BotSyncedWrapper:
       channel: (Optional) Channel to send the message to
       delete_after: (Optional) Seconds to delete message after; -1 to disable; defaults to config value
     """
-    asyncio.ensure_future(self.client.print_message(content, channel, delete_after))
+    self.execute('print_message', content, channel, delete_after)
 
 
 class BotClient(discord.Client):
@@ -49,6 +60,10 @@ class BotClient(discord.Client):
     openbot.logger.log('{} [{}]'.format(self.user.name, self.user.id),
                        parent='core.info.bot_logged',
                        send_to_chat=False)
+
+    # Checks for server
+    if len(self.servers) == 0:
+      openbot.logger.log(openbot.config.get_config())
 
     # Tries to match a binding channel
     self.bound_channel = await self._find_binding_channel()
