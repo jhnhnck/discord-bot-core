@@ -27,6 +27,7 @@ class LogLevel(Enum):
 
 
 locale = None
+locale_file = None
 # ['blank', 'trace', 'debug', 'info', 'warn', 'error', 'fatal']
 log_base_lengths = None
 col_override = -1           # Don't refresh columns; Cannot be determined
@@ -41,6 +42,9 @@ def setup(locale_name):
   Args:
     locale_name: Name of locale
   """
+  global locale_file
+  locale_file = locale_name
+
   global locale
   locale = _load_locale(locale_name)
 

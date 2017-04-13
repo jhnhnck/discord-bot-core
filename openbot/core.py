@@ -45,11 +45,11 @@ def startup(config_file, locale):
   # tasks = loader.load_tasks()
 
 
-def run():
+def run(reload=None):
   # Client token: '***REMOVED***'
   global server
   server = openbot.client.BotSyncedWrapper()
-  server.run(openbot.config.get_config('core.token'))
+  server.run(openbot.config.get_config('core.token'), reload=reload)
 
 
 def _log_system_info():

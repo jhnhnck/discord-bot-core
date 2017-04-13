@@ -48,6 +48,7 @@ core:
     plugin_discovered_title: Discovered and loading plugin from directory "plugins/{message}"
     plaintext: "{message}"
     settle: Waiting {message} second(s) for things to settle\r
+    reload_time: Successfully reloaded in {message} seconds
   name: openbot-discord
   segments:
     at: at "{}"

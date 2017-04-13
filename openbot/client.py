@@ -1,6 +1,7 @@
 import discord
 import asyncio
 import inspect
+import time
 
 import openbot.core
 import openbot.config
@@ -40,7 +41,8 @@ class BotClient(discord.Client):
 
   bound_channel = None
 
-  def __init__(self):
+  def __init__(self, reloaded=None):
+    self.reloaded = reloaded
     super().__init__()
 
   async def on_ready(self):
@@ -54,6 +56,8 @@ class BotClient(discord.Client):
 
     # if openbot.RELEASE_TYPE == 0:
     #   openbot.logger.self_test(send_to_chat=True)
+
+    openbot.logger.log(self.reloaded - time.time(), parent='core.info.reload_time')
 
 
   async def on_message(self, message):
