@@ -91,25 +91,19 @@ def _match_keys(old, new):
   """
   matched_set = {}
 
-  for key, value in new:
+  for key, value in new.items():
     if key == 'user_perms':
       continue
     elif key in old:
-      if value.isinstance(type(old[key])):
-        if key.isinstance(dict):
+      if type(old[key]) is type(new[key]):
+        if isinstance(value, dict):
           matched_set[key] = _match_keys(old[key], value)
         else:
-          # TODO: Match string keys
-          pass
+          matched_set[key] = old[key]
     else:
-      # TODO: Add new keys
+      matched_set[key] = new[key]
       pass
   return matched_set
-
-
-def _trim_perms(perms):
-  # TODO: Stub function > Removes permissions that aren't relevant
-  return perms
 
 
 def get_config(key, safe_mode=True):
