@@ -26,22 +26,17 @@
 ## Available Keys ##
   + `grand_to`
     - array of user ids
-  - `full_access`
+  + `full_access`
     - True or False 
     - Warning --- This makes all commands acceptable regardless of whitelist/blacklist
-  - `command_whitelist` and `command_blacklist`
+  + `command_whitelist` and `command_blacklist`
     - array of commands
     - omit command_prefix
     - this will match any valid command with that name
-  - `voice_auto_summon`
+  + `voice_auto_summon`
     - True or False
     - Warning --- Higher permission groups take priority
-  - `permission_whitelist` and `permission_blacklist`
+  + `permission_whitelist` and `permission_blacklist`
     - array of permissions
-    
-## Built-in Permissions ##
-  - `core_config_access`: Allows changing of config values
-  - `core_power_control`: Allows restarting and reloading
-  - `core_power_stop`: Allows turning the bot off
     
 
