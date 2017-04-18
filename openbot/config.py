@@ -24,7 +24,7 @@ def setup(config_path):
 
   try:
     with open(config_file) as file:
-      _config = yaml.round_trip_load(file)
+      _config = yaml.safe_load(file)
 
     # Test if config should be upgraded
     if openbot.VERSION != _config.get('core').get('version'):
@@ -67,6 +67,11 @@ def _unload_at(data, location, force=False):
     if not os.path.exists(os.path.dirname(location)):
       os.makedirs(os.path.dirname(location))
 
+    with open(location) as file:
+      preserved = yaml.round_trip_load(file)
+
+    data = _match_keys(data, preserved, merge_perms=True)
+
     with open(location, 'w+') as file:
       yaml.round_trip_dump(data, file, default_flow_style=False, indent=2)
   except:
@@ -77,7 +82,7 @@ def _unload_at(data, location, force=False):
                        send_to_chat=False)
 
 
-def _match_keys(old, new):
+def _match_keys(old, new, merge_perms=False):
   """
   Match Keys.
   Merges the changes from a new config with an old config with the new config taking priority
@@ -92,10 +97,10 @@ def _match_keys(old, new):
   matched_set = {}
 
   for key, value in new.items():
-    if key == 'user_perms':
+    if key == 'user_perms' and not merge_perms:
       continue
     elif key in old:
-      if type(old[key]) is type(new[key]):
+      if isinstance(old[key], type(new[key])):
         if isinstance(value, dict):
           matched_set[key] = _match_keys(old[key], value)
         else:
@@ -110,6 +115,7 @@ def get_config(key, safe_mode=True):
   """
   Get Config.
   Gets the value of the key value in the config dictionary
+  
   Args:
     key: (:type: dict) Dot-separated keys
     safe_mode: (:type: bool) Prevent ending on dictionary values
