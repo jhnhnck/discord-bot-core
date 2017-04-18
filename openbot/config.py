@@ -2,12 +2,14 @@ import ruamel.yaml as yaml
 import os
 
 import openbot
+import openbot.core
 import openbot.logger
 
 
 config_file = ""            # Path to the config file
 _config = {}                # Dictionary of the config values
 state = False               # Should config be unloaded
+users = {}                  # Permissions unpacked to each user
 
 
 def setup(config_path):
@@ -111,6 +113,29 @@ def _match_keys(old, new, merge_perms=False):
   return matched_set
 
 
+def _enum_perms(user_perms):
+  if openbot.core.server.client is None:
+    # logger no init
+    return
+
+  servers = openbot.core.server.client.servers
+  for server in servers:
+    for user in server.members:
+
+  # for each user on server
+    # is server owner?
+      # perms = full access
+      # rank = 0
+    # is member of group Admin
+      # perms = full access
+      # rank = 1
+    # is member of group Moderators
+      # perms = allowed commands ['help']
+      #         escalated commands ['reload', ...]
+    #
+  pass
+
+
 def get_config(key, safe_mode=True):
   """
   Get Config.
@@ -158,23 +183,45 @@ def set_config(key, value, safe_mode=True):
   Args:
     key: (:type: str) Dot-separated keys
     value: Value to replace in config
-    safe_mode: Prevent dictionaries from being overridden
+    safe_mode: (:type: bool) Prevent overriding of unsafe types
   """
-  # TODO: Get config from package and key
-  pass
+  if len(_config) == 0:
+    openbot.logger.log(key,
+                       parent='core.warn.config_before_load',
+                       send_to_chat=False)
+    return None
+
+  # Make a copy of the config
+  store = _config
+  branches = key.split('.')
+
+  try:
+    for i in range(len(branches) - 1):
+      store = store[branches[i]]
+    if safe_mode and type(store[branches[-1]]) is dict:
+      raise KeyError('core_error: endnode is dict')
+    elif type(store[branches[-1]]) is list:
+      store[branches[-1]].append(value)
+    else:
+      store[branches[-1]] = value
+  except KeyError as e:
+    openbot.logger.log(key,
+                       error_point=e,
+                       parent='core.error.config_key_error',
+                       send_to_chat=False)
 
 
-def has_perm(user, key):
+def has_perm(user, type, value):
   # TODO: Stub function > Tests if user has listed permission
   return True
 
 
-def grant_perm(user, key):
+def grant_perm(user, type, value):
   # TODO: Stub function > Gives from user the permission if they do not already have it
   pass
 
 
-def revoke_perm(user, key):
+def revoke_perm(user, type, value):
   # TODO: Stub function > Removes from user the permission if they already have it
   pass
 
