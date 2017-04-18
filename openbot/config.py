@@ -136,8 +136,9 @@ def get_config(key, safe_mode=True):
   try:
     for branch in key.split('.'):
       store = store[branch]
-  except KeyError:
+  except KeyError as e:
     openbot.logger.log(key,
+                       error_point=e,
                        parent='core.warn.config_key_error',
                        send_to_chat=False)
     return None

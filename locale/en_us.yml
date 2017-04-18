@@ -25,7 +25,7 @@ core:
     command_error_suggest: Command "{error_point}" is not found; Did you mean "{message}"?
     command_not_found: Command "{message}" is not found
     command_specifics: Which command Did you mean?\n{message}
-    config_key_error: An error occurred while finding the config value at key "{message}"
+    config_key_error: An error occurred while finding the config value at key "{message}" [{error_point}]
     failed_execute: An error occurred while synchronously executing "{message}" on the client [{error_point}]
     function_loading: ' Command {message} could not be loaded. [{error_point}]'
     load_plugin_value_omitted: Plugin missing required value "{}"
