@@ -7,6 +7,17 @@ class OpenbotRestart(Exception):
   pass
 
 
+def _block_modules(*blocked):
+  """
+  Disable some of Discord.py's features from working 
+   -> http://stackoverflow.com/a/1350574
+  """
+  for item in blocked:
+    sys.modules[item] = None
+
+  return list(blocked)
+
+
 # Global Definitions
 NAME = 'discord-bot-core'
 RELEASE_TYPES = ['develop', 'alpha', 'beta', 'preview', 'release']
@@ -24,6 +35,12 @@ try:
   GIT_VERSION = subprocess.check_output(["git", "describe", "--always"]).decode('utf-8')[:-1]
 except:
   GIT_VERSION = 'unknown'
+"""
+Reasons for blocking.
+discord.ext: This framework implements more structured and easy to understand 
+"""
+_BLOCKED_MODULES = _block_modules('discord.ext')
+
 
 # Add plugin directory to path
 sys.path.insert(0, os.path.abspath('plugins'))
