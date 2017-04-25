@@ -25,3 +25,9 @@ try:
 except openbot.OpenbotRestart:
   import os
   os.execl(sys.executable, sys.executable, *sys.argv)
+except KeyboardInterrupt:
+  # Try to logout on ^c
+  try:
+    core.server.execute('logout')
+  except:
+    sys.exit()
