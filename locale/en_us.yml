@@ -2,6 +2,10 @@ core:
   debug:
     col_value_error: Cannot determine column width; Using {message} columns instead
     gen_stub_function: ' Command "{message}" not found; Generating stub class {extra_info}'
+    grant_perms_title_auto: Enumerating automated permissions for [{message}]
+    grant_perms_title_config: Enumerating permissions corrections from config
+    grant_perm_message: ' Permission [{}] granted to {user}'
+    grant_perm_message: ' Permission [{}] revoked from {user}'
     load_function_plugin_title: Enumerating functions for [{message}]
     load_function_success: ' Command "{message}" with qualified name "{error_point}" added'
     load_plugin_value_omitted_opt: ' Plugin "{message}" is missing optional key "{key_name}"; Defaulting to "{sub_value}"'
