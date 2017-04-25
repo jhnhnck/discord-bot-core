@@ -2,6 +2,11 @@ import sys
 import os
 import subprocess
 
+# Handles restart calls
+class OpenbotRestart(Exception):
+  pass
+
+
 # Global Definitions
 NAME = 'discord-bot-core'
 RELEASE_TYPES = ['develop', 'alpha', 'beta', 'preview', 'release']

@@ -104,15 +104,9 @@ class Builtins(PluginBase):
       Restart.
       Completely stops then starts the bot again
       """
-      import os
-      import sys
       openbot.logger.log(':wave:', log_type=openbot.logger.LogLevel.info)
       openbot.core.server.execute('logout')
-      os.execl(sys.executable, sys.executable, *sys.argv)
-
-      # TODO: See if this actually prints and remove later
-      print('This shouldn\'t happen')
-      exit()
+      raise openbot.OpenbotRestart
 
 
   class CmdSleep(FunctionBase):
