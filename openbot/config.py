@@ -29,9 +29,9 @@ def setup(config_path):
       _config = yaml.safe_load(file)
 
     # Test if config should be upgraded
-    if openbot.VERSION != _config.get('core').get('version'):
+    if openbot.__version__ != _config.get('core').get('version'):
       _config = _match_keys(_config, get_default_config())
-      _config['core']['version'] = openbot.VERSION
+      _config['core']['version'] = openbot.__version__
       state = True
 
   # Make a new config if doesn't exist
@@ -240,7 +240,7 @@ def get_default_config():
       'owner_id': None,
       'command_prefix': '//',
       'debug_mode': False,
-      'version': openbot.VERSION,
+      'version': openbot.__version__,
       'locale': 'en_us',
     },
     'chat': {

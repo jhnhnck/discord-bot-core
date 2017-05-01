@@ -31,7 +31,7 @@ def startup(config_file, locale):
   if locale == 'en_us' and openbot.config.get_config('core.locale') != 'en_us':
     openbot.logger.setup(openbot.config.get_config('core.locale'))
 
-  if openbot.RELEASE_TYPE == 0:
+  if openbot.__release_level__ == 0:
     openbot.logger.self_test()
 
   global plugins
@@ -59,8 +59,8 @@ def _log_system_info():
     'platform': platform.platform(),
     'python_version': platform.python_version(),
     'python_implementation': platform.python_implementation(),
-    'core_full_version': openbot.FULL_VERSION,
-    'core_git_version': openbot.GIT_VERSION
+    'core_full_version': openbot.version_info,
+    'core_git_version': openbot.__commit__
   }
 
   openbot.logger.log(sys_info,

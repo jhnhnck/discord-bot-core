@@ -5,10 +5,10 @@ import openbot
 from openbot import core
 
 if sys.version_info < (3, 6):
-  print('error > ' + openbot.NAME + ' requires python version 3.6 or greater')
+  print('error > ' + openbot.__title__ + ' requires python version 3.6 or greater')
   exit()
 
-parser = argparse.ArgumentParser(description=openbot.DESCRIPTION)
+parser = argparse.ArgumentParser(description=openbot.__description__)
 parser.add_argument('-c', '--config', nargs=1, default='config/openbot.yml',
                     help='location of config file')
 parser.add_argument('-l', '--locale', nargs=1, default='en_us',

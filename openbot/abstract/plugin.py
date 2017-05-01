@@ -148,7 +148,7 @@ class PluginBase(ABC):
 
   def _validate_dict(self, config_set, key_name, optional=False):
     if config_set is None:
-      if openbot.RELEASE_TYPE == 0:
+      if openbot.__release_level__ == 0:
         openbot.logger.log(type(self).__name__, key_name=key_name, sub_value='{}',
                            parent='core.debug.load_plugin_value_omitted_{}'.format('opt' if optional else 'req'),
                            send_to_chat=False)
@@ -164,7 +164,7 @@ class PluginBase(ABC):
 
   def _validate_key(self, key_name, config_set, sub_value, optional=False, valid_options=None):
     if key_name not in config_set:
-      if openbot.RELEASE_TYPE == 0:
+      if openbot.__release_level__ == 0:
         openbot.logger.log(type(self).__name__, key_name=key_name, sub_value=sub_value,
                            parent='core.debug.load_plugin_value_omitted_{}'.format('opt' if optional else 'req'),
                            send_to_chat=False)
@@ -176,7 +176,7 @@ class PluginBase(ABC):
         raise PluginLoadingException(error.format(key_name=key_name))
 
     if valid_options is not None and config_set.get(key_name) not in valid_options:
-      if openbot.RELEASE_TYPE == 0:
+      if openbot.__release_level__ == 0:
         openbot.logger.log(type(self).__name__,
                            key_name=key_name,
                            sub_value=sub_value,
