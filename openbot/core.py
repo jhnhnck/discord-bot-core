@@ -53,6 +53,7 @@ def run(reload=None):
 
 
 def _log_system_info():
+  uname = platform.uname()  # TODO: system, node, release, version, machine, and processor.
   sys_info = {
     'machine_type': platform.machine(),
     'processor': platform.processor(),
