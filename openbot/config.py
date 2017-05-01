@@ -107,6 +107,8 @@ def _match_keys(old, new, merge_perms=False):
           matched_set[key] = _match_keys(old[key], value)
         else:
           matched_set[key] = old[key]
+      else:
+        matched_set[key] = new[key]
     else:
       matched_set[key] = new[key]
       pass
