@@ -72,7 +72,7 @@ def _unload_at(data, location, force=False):
     with open(location) as file:
       preserved = yaml.round_trip_load(file)
 
-    data = _match_keys(data, preserved, merge_perms=True)
+    data = _match_keys(preserved, data, merge_perms=True)
 
     with open(location, 'w+') as file:
       yaml.round_trip_dump(data, file, default_flow_style=False, indent=2)
