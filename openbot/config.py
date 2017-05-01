@@ -189,7 +189,7 @@ def set_config(key, value, safe_mode=True):
                        send_to_chat=False)
 
 
-def has_perm(user, type, value):
+def has_perm(user, type):
   # TODO: Stub function > Tests if user has listed permission
   return True
 
