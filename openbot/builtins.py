@@ -25,6 +25,8 @@ class Builtins(PluginBase):
       plugin_prefix: core
       plugin_description: Core functions included with discord-bot-core
       plugin_type: single-file
+    versioning:
+      plugin_version: {bot_core_version}
     functions:
       chat_bind:
         function_name: bind
@@ -47,7 +49,7 @@ class Builtins(PluginBase):
         args_description:
         - '[seconds]'
     """
-    config = yaml.safe_load(plugin)
+    config = yaml.safe_load(plugin.format(bot_core_version=openbot.version_info))
     super().__init__(**config)
 
 
