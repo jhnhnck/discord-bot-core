@@ -140,17 +140,16 @@ def get_config(key, safe_mode=True):
   try:
     for branch in key.split('.'):
       store = store[branch]
+
+    if safe_mode and type(store) is dict:
+      raise KeyError('core_error: endnode is dict')
+
   except KeyError as e:
     openbot.logger.log(key,
                        error_point=e,
                        parent='core.warn.config_key_error',
                        send_to_chat=False)
     return None
-
-  # TODO: Handle safe_mode
-  if safe_mode and type(store) is dict:
-    pass
-
   return store
 
 
