@@ -113,29 +113,6 @@ def _match_keys(old, new, merge_perms=False):
   return matched_set
 
 
-def _enum_perms(user_perms):
-  if openbot.core.server.client is None:
-    # logger no init
-    return
-
-  servers = openbot.core.server.client.servers
-  for server in servers:
-    for user in server.members:
-
-  # for each user on server
-    # is server owner?
-      # perms = full access
-      # rank = 0
-    # is member of group Admin
-      # perms = full access
-      # rank = 1
-    # is member of group Moderators
-      # perms = allowed commands ['help']
-      #         escalated commands ['reload', ...]
-    #
-  pass
-
-
 def get_config(key, safe_mode=True):
   """
   Get Config.

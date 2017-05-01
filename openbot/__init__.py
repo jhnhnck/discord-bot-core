@@ -1,6 +1,8 @@
 import sys
-import os
 import subprocess
+from tempfile import mkstemp
+from shutil import move
+from os import remove, close, path
 
 class VersionInfo:
 
@@ -42,6 +44,32 @@ def _block_modules(*blocked):
   return list(blocked)
 
 
+def _bootstrap_user():
+  import discord.user
+  import openbot.user
+
+  if '__dict__' not in discord.user.User.__slots__:
+    # Create temp file
+    fh, temp_path = mkstemp()
+    with open(temp_path, 'w') as new_file:
+      with open(discord.user.__file__) as old_file:
+        for line in old_file:
+          if '__slots__' in line:
+            ws = len(line) - len(line.lstrip(' '))
+            new_file.write(' ' * ws + '# discord-bot-core patched file\n')
+            new_file.write(line.rstrip()[:-1] + ', \'__dict__\']\n')
+          else:
+            new_file.write(line)
+    close(fh)
+    # Remove original file
+    remove(discord.user.__file__)
+    # Move new file
+    move(temp_path, discord.user.__file__)
+
+  discord.user.User.__init__ = openbot.user.User.__init__
+  discord.user.User.dbc_patched = False
+
+
 # Global Definitions
 __title__ = 'discord-bot-core'
 __author__ = 'jhnhnck'
@@ -68,6 +96,19 @@ __blocked__ = _block_modules('discord.ext')
 
 
 # Add plugin directory to path
-sys.path.insert(0, os.path.abspath('plugins'))
+sys.path.insert(0, path.abspath('plugins'))
 
-
+try:
+  _bootstrap_user()
+except Exception as e:
+  print('> error. {}'.format(e),
+        '> Usually this means you don\'t have permission to write to the discord.py library.',
+        '  You have some options to fix this...',
+        '   - (easiest) remove discord.py and re-install locally using the following command',
+        '     sudo pip uninstall discord.py && pip install --user discord.py',
+        '   - run discord-bot-core as the root/admin user (this may mess up permissions)',
+        '   - manually patch the file yourself by adding \'__dict__\' (with the quotes)',
+        '     to the __slots__ list in the discord.py/user.py file.',
+        '     where this is at is probably in the error message above', sep='\n')
+  from sys import exit
+  exit(-1)
