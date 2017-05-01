@@ -44,7 +44,7 @@ class PluginBase(ABC):
                        valid_options=['standard', 'single-file'])
 
     # Validate versioning keys
-    self._validate_key('plugin_version', self.versioning, '0.0.1a')
+    self._validate_key('plugin_version', self.versioning, '0.0.1-unknown')
     self._validate_key('requires', self.versioning, '*', optional=True)
     self._validate_key('update_repo', self.versioning, None, optional=True)
     self._validate_key('beta_update_repo', self.versioning, None, optional=True)
