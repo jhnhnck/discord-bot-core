@@ -105,7 +105,7 @@ except Exception as e:
         '> Usually this means you don\'t have permission to write to the discord.py library.',
         '  You have some options to fix this...',
         '   - (easiest) remove discord.py and re-install locally using the following command',
-        '     sudo pip uninstall discord.py && pip install --user discord.py',
+        '     sudo pip uninstall discord.py && pip install --user \'discord.py[voice]\'',
         '   - run discord-bot-core as the root/admin user (this may mess up permissions)',
         '   - manually patch the file yourself by adding \'__dict__\' (with the quotes)',
         '     to the __slots__ list in the discord.py/user.py file.',
