@@ -6,6 +6,8 @@ config/*
 .idea/discord-bot-core.iml
 plugins/*
 !plugins/plugins.txt
+.idea/modules.xml
+.idea/vcs.xml
 
 # Created by https://www.gitignore.io/api/pycharm,python,linux,windows,macos
 
