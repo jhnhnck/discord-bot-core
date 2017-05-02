@@ -47,6 +47,8 @@ core:
       ### FILE START ###
       {error_point}
       ### FILE END ###\n"
+  trace:
+    note: '{message}'
   info:
     bot_logged: Bot connected to Discord as "{message}"
     bound_channel: Bot successfully bound to channel "{message}"
