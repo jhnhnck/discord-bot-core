@@ -2,6 +2,7 @@ core:
   debug:
     bootstrapped_success: 'Successfully bootstrapped "{message}" class'
     col_value_error: Cannot determine column width; Using {message} columns instead
+    config_key_error: Cannot determine the config value at key "{message}"; Defaulting to "{default}"
     gen_stub_function: ' Command "{message}" not found; Generating stub class {extra_info}'
     grant_perms_title_auto: Enumerating automated permissions for [{message}]
     grant_perms_title_config: Enumerating permissions corrections from config

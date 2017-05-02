@@ -115,18 +115,24 @@ def _match_keys(old, new, merge_perms=False):
   return matched_set
 
 
-def get_config(key, safe_mode=True):
+def get_config(*args, safe_mode=True):
   """
   Get Config.
   Gets the value of the key value in the config dictionary
   
   Args:
     key: (:type: dict) Dot-separated keys
+    default: (:type: optional) Value to return if error
     safe_mode: (:type: bool) Prevent ending on dictionary values
 
   Returns:
     Value from the config
   """
+  key = args[0]
+  default_exists = len(args) > 1
+  default = args[-1]
+  print(args, key, default_exists, default)
+
   # Checks for config loaded already
   if len(_config) == 0:
     openbot.logger.log(key,
@@ -144,12 +150,19 @@ def get_config(key, safe_mode=True):
     if safe_mode and type(store) is dict:
       raise KeyError('core_error: endnode is dict')
 
-  except KeyError as e:
-    openbot.logger.log(key,
-                       error_point=e,
-                       parent='core.warn.config_key_error',
-                       send_to_chat=False)
-    return None
+  except Exception as e:
+    if default_exists:
+      openbot.logger.log(key,
+                         default=default,
+                         parent='core.debug.config_key_error',
+                         send_to_chat=False)
+      return default
+    else:
+      openbot.logger.log(key,
+                         error_point=e,
+                         parent='core.error.config_key_error',
+                         send_to_chat=False)
+      return None
   return store
 
 
