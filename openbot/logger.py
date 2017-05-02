@@ -6,6 +6,7 @@ from enum import Enum
 import ruamel.yaml as yaml
 
 import openbot.core
+import openbot.config
 
 
 class ParentNotFoundException(Exception):
@@ -17,9 +18,9 @@ class ParentScopeException(Exception):
 
 
 class LogLevel(Enum):
-  blank = -3
   trace = -2
   debug = -1
+  blank = 0
   info = 1
   warn = 2
   error = 3
@@ -75,6 +76,10 @@ def log(message,
     **kwargs: Arbitrary locale formatting strings (i.e. error_point)
   """
   log_type = _type_from_parent(parent, log_type)
+
+  if log_type.value < 0 and not debug_output:
+    # TODO: Eventually this should be where print is because you still should log debug errors to log file
+    return
 
   if not isinstance(message, dict):
     message = {'message': message, **kwargs}
@@ -134,6 +139,11 @@ def log(message,
         log_type=LogLevel.error,
         error_point=parent,
         send_to_chat=send_to_chat)
+
+
+@property
+def debug_output():
+  return openbot.__release_level__ == 0 or openbot.config.get_config('core.debug_mode.things', 'ignored_right?', True)
 
 
 def self_test(send_to_chat=False):
