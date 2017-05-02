@@ -53,11 +53,11 @@ def run(reload=None):
 
 
 def _log_system_info():
-  uname = platform.uname()  # TODO: system, node, release, version, machine, and processor.
+  uname = platform.uname()
   sys_info = {
-    'machine_type': platform.machine(),
-    'processor': platform.processor(),
-    'platform': platform.platform(),
+    'system_type': uname.system,
+    'system_version': uname.version,
+    'processor': uname.processor,
     'python_version': platform.python_version(),
     'python_implementation': platform.python_implementation(),
     'core_full_version': openbot.version_info,
@@ -68,4 +68,3 @@ def _log_system_info():
                      parent='core.debug.sys_info',
                      log_type=openbot.logger.LogLevel.blank,
                      send_to_chat=False)
-  openbot.logger.newline()

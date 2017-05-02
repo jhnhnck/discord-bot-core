@@ -16,13 +16,13 @@ core:
     stub_type_conflict: ' Command "{message}" could not be loaded from file "{path}" [invalid type "{type}"]'
     sys_info: |
       === Printing Version Info ===
-      machine-type: {machine_type}
-      machine-processor: {processor}
-      machine-platform: platform
-      python-version: {python_version}
-      python-implementation: {python_implementation}
-      bot-core-version: {core_full_version}
-      bot-git-version: {core_git_version}
+      system_type: {system_type}
+      system_version: {system_version}
+      processor: {processor}
+      python_version: {python_version}
+      python_implementation: {python_implementation}
+      core_full_version: {core_full_version}
+      core_git_version: {core_git_version}
   error:
     args_length: Syntax Invalid on command \"{message}\". \n{error_point}
     bound_channel: An error occurred while binding to channel "{message}" [{error_point}]
