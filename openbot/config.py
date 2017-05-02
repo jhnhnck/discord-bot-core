@@ -30,8 +30,9 @@ def setup(config_path):
 
     # Test if config should be upgraded
     if openbot.__version__ != _config.get('core').get('version'):
+      openbot.logger.log('here', parent='core.trace.note')
       _config = _match_keys(_config, get_default_config())
-      _config['core']['version'] = openbot.__version__
+
       state = True
 
   # Make a new config if doesn't exist
@@ -73,6 +74,7 @@ def _unload_at(data, location, force=False):
       preserved = yaml.round_trip_load(file)
 
     data = _match_keys(preserved, data, merge_perms=True)
+    data['core']['version'] = openbot.__version__
 
     with open(location, 'w+') as file:
       yaml.round_trip_dump(data, file, default_flow_style=False, indent=2)
@@ -102,7 +104,8 @@ def _match_keys(old, new, merge_perms=False):
     if key == 'user_perms' and not merge_perms:
       continue
     elif key in old:
-      if isinstance(old[key], type(new[key])):
+      print('Comparing values {} and {}'.format(old[key], new[key]))
+      if isinstance(old[key], type(new[key])) or value is None:
         if isinstance(value, dict):
           matched_set[key] = _match_keys(old[key], value)
         else:
