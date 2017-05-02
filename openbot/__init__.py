@@ -1,8 +1,7 @@
 import sys
 import subprocess
-from tempfile import mkstemp
 from shutil import move
-from os import remove, close, path
+from os import path as os_path
 
 class VersionInfo:
 
@@ -49,6 +48,10 @@ def _bootstrap_user():
   import openbot.user
 
   if '__dict__' not in discord.user.User.__slots__:
+    # import what's need here
+    from tempfile import mkstemp
+    from os import remove, close
+
     # Create temp file
     fh, temp_path = mkstemp()
     with open(temp_path, 'w') as new_file:
@@ -96,7 +99,7 @@ __blocked__ = _block_modules('discord.ext')
 
 
 # Add plugin directory to path
-sys.path.insert(0, path.abspath('plugins'))
+sys.path.insert(0, os_path.abspath('plugins'))
 
 try:
   _bootstrap_user()
@@ -110,5 +113,4 @@ except Exception as e:
         '   - manually patch the file yourself by adding \'__dict__\' (with the quotes)',
         '     to the __slots__ list in the discord.py/user.py file.',
         '     where this is at is probably in the error message above', sep='\n')
-  from sys import exit
   exit(-1)
