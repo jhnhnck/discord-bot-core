@@ -31,7 +31,7 @@ def startup(config_file, locale):
   if locale == 'en_us' and openbot.config.get_config('core.locale') != 'en_us':
     openbot.logger.setup(openbot.config.get_config('core.locale'))
 
-  if openbot.__release_level__ == 0:
+  if openbot.logger.debug_output:
     openbot.logger.self_test()
 
   global plugins

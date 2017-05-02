@@ -148,12 +148,10 @@ class PluginBase(ABC):
 
   def _validate_dict(self, config_set, key_name, optional=False):
     if config_set is None:
-      if openbot.__release_level__ == 0:
-        openbot.logger.log(type(self).__name__, key_name=key_name, sub_value='{}',
-                           parent='core.debug.load_plugin_value_omitted_{}'.format('opt' if optional else 'req'),
-                           send_to_chat=False)
-        return {}
-      elif optional:
+      openbot.logger.log(type(self).__name__, key_name=key_name, sub_value='{}',
+                         parent='core.debug.load_plugin_value_omitted_{}'.format('opt' if optional else 'req'),
+                         send_to_chat=False)
+      if optional or openbot.__release_level__ == 0:
         return {}
       else:
         error = openbot.logger.get_locale_string('core.error.load_plugin_value_invalid').format(key_name)
@@ -164,27 +162,23 @@ class PluginBase(ABC):
 
   def _validate_key(self, key_name, config_set, sub_value, optional=False, valid_options=None):
     if key_name not in config_set:
-      if openbot.__release_level__ == 0:
-        openbot.logger.log(type(self).__name__, key_name=key_name, sub_value=sub_value,
-                           parent='core.debug.load_plugin_value_omitted_{}'.format('opt' if optional else 'req'),
-                           send_to_chat=False)
-        config_set[key_name] = sub_value
-      elif optional:
+      openbot.logger.log(type(self).__name__, key_name=key_name, sub_value=sub_value,
+                         parent='core.debug.load_plugin_value_omitted_{}'.format('opt' if optional else 'req'),
+                         send_to_chat=False)
+      if optional or openbot.__release_level__ == 0:
         config_set[key_name] = sub_value
       else:
         error = openbot.logger.get_locale_string('core.error.load_plugin_value_omitted').format(key_name)
         raise PluginLoadingException(error.format(key_name=key_name))
 
     if valid_options is not None and config_set.get(key_name) not in valid_options:
-      if openbot.__release_level__ == 0:
-        openbot.logger.log(type(self).__name__,
-                           key_name=key_name,
-                           sub_value=sub_value,
-                           valid_options=' '.join(valid_options),
-                           parent='core.debug.load_plugin_value_invalid_{}'.format('opt' if optional else 'req'),
-                           send_to_chat=False)
-        config_set[key_name] = sub_value
-      elif optional:
+      openbot.logger.log(type(self).__name__,
+                         key_name=key_name,
+                         sub_value=sub_value,
+                         valid_options=' '.join(valid_options),
+                         parent='core.debug.load_plugin_value_invalid_{}'.format('opt' if optional else 'req'),
+                         send_to_chat=False)
+      if optional or openbot.__release_level__ == 0:
         config_set[key_name] = sub_value
       else:
         error = openbot.logger.get_locale_string('core.error.load_plugin_value_invalid').format(key_name)
