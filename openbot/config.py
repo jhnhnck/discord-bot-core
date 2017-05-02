@@ -134,7 +134,6 @@ def get_config(*args, safe_mode=True):
   key = args[0]
   default_exists = len(args) > 1
   default = args[-1]
-  print(args, key, default_exists, default)
 
   # Checks for config loaded already
   if len(_config) == 0:
