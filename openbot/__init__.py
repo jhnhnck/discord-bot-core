@@ -57,7 +57,7 @@ def _bootstrap_user():
     with open(temp_path, 'w') as new_file:
       with open(discord.user.__file__) as old_file:
         for line in old_file:
-          if '__slots__' in line:
+          if '__slots__ = ' in line:
             ws = len(line) - len(line.lstrip(' '))
             new_file.write(' ' * ws + '# discord-bot-core patched file\n')
             new_file.write(line.rstrip()[:-1] + ', \'__dict__\']\n')
@@ -70,7 +70,6 @@ def _bootstrap_user():
     move(temp_path, discord.user.__file__)
 
   discord.user.User.__init__ = openbot.user.User.__init__
-  discord.user.User.dbc_patched = False
 
 
 # Global Definitions

@@ -4,13 +4,15 @@ import os
 import openbot
 import openbot.core
 import openbot.logger
+from openbot.perms import *
 
 
 config_file = ""            # Path to the config file
 _config = {}                # Dictionary of the config values
 state = False               # Should config be unloaded
 users = {}                  # Permissions unpacked to each user
-
+voice_auto_summon = []      # Array of users allowed to auto summon the bot
+role_members = {}           # Quick access to
 
 def setup(config_path):
   """
@@ -270,3 +272,19 @@ def get_default_perms():
   }
 
   return perms
+
+
+def get_perms_by_id(id):
+  if len(users) == 0 and len(role_members) == 0:
+    for name, role in get_config('user_perms'):
+      if 'grant_to' in role:
+        for user in role.get('grant_to'):
+          role_members[user] = name
+
+          if 'auto_summon' in role:
+            voice_auto_summon.append(user)
+
+  if id in users:
+    return users.get(id)
+  else:
+    users[id] = Perms(id)

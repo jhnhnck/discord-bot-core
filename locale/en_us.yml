@@ -26,6 +26,7 @@ core:
       core_git_version: {core_git_version}
   error:
     args_length: Syntax Invalid on command \"{message}\". \n{error_point}
+    bootstrapped_fail: Could not bootstrap permissions into user "{message}" [{error_point}]
     bound_channel: An error occurred while binding to channel "{message}" [{error_point}]
     channel_none: The previous message starting with "{message}" could not be send
     command_error_suggest: Command "{error_point}" is not found; Did you mean "{message}"?
