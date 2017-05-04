@@ -4,15 +4,13 @@ import os
 import openbot
 import openbot.core
 import openbot.logger
-from openbot.perms import *
+import openbot.perms as perms
 
 
 config_file = ""            # Path to the config file
 _config = {}                # Dictionary of the config values
 state = False               # Should config be unloaded
-users = {}                  # Permissions unpacked to each user
-voice_auto_summon = []      # Array of users allowed to auto summon the bot
-role_members = {}           # Quick access to
+
 
 def setup(config_path):
   """
@@ -36,6 +34,8 @@ def setup(config_path):
       _config = _match_keys(_config, get_default_config())
 
       state = True
+
+    perms.init_perms()
 
   # Make a new config if doesn't exist
   except FileNotFoundError:
@@ -206,21 +206,6 @@ def set_config(key, value, safe_mode=True):
                        send_to_chat=False)
 
 
-def has_perm(user, type):
-  # TODO: Stub function > Tests if user has listed permission
-  return True
-
-
-def grant_perm(user, type, value):
-  # TODO: Stub function > Gives from user the permission if they do not already have it
-  pass
-
-
-def revoke_perm(user, type, value):
-  # TODO: Stub function > Removes from user the permission if they already have it
-  pass
-
-
 def get_default_config():
   """
   Get Default Config
@@ -253,38 +238,7 @@ def get_default_config():
         'delay': 5,
       }
     },
-    'user_perms': get_default_perms()
+    'user_perms': perms.get_default_perms()
   }
 
   return config
-
-
-def get_default_perms():
-  """
-  Get Default Permissions.
-  Generate a new permissions dictionary from the default values and permissions found in discord
-
-  Returns:
-    Default permissions values
-  """
-  perms = {
-    # TODO: Default permission generation
-  }
-
-  return perms
-
-
-def get_perms_by_id(id):
-  if len(users) == 0 and len(role_members) == 0:
-    for name, role in get_config('user_perms'):
-      if 'grant_to' in role:
-        for user in role.get('grant_to'):
-          role_members[user] = name
-
-          if 'auto_summon' in role:
-            voice_auto_summon.append(user)
-
-  if id in users:
-    return users.get(id)
-  else:
-    users[id] = Perms(id)

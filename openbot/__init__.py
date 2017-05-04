@@ -100,6 +100,7 @@ __blocked__ = _block_modules('discord.ext')
 # Add plugin directory to path
 sys.path.insert(0, os_path.abspath('plugins'))
 
+"""
 try:
   _bootstrap_user()
 except Exception as e:
@@ -113,3 +114,4 @@ except Exception as e:
         '     to the __slots__ list in the discord.py/user.py file.',
         '     where this is at is probably in the error message above', sep='\n')
   exit(-1)
+"""
