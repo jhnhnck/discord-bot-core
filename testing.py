@@ -1,7 +1,6 @@
-import ruamel.yaml as yaml
+import openbot
+from openbot import core
+from openbot.hooks import important, dbc_hook, execute_hook
 
-with open('locale/en_us.yml') as file:
-  yaml_file = yaml.round_trip_load(file)
 
-for key in yaml_file:
-  print(yaml_file.get(key))
+core.startup('config/openbot.yml', 'en_us')
