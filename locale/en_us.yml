@@ -14,6 +14,11 @@ core:
     load_plugin_value_omitted_req: ' Plugin "{message}" is missing required key "{key_name}"; Using "{sub_value}" while in dev environment'
     load_plugin_value_invalid_opt: ' Plugin "{message}" has an optional key "{key_name}" with value "{key_value}" but only <{valid_options}> accepted; Defaulting to "{sub_value}" instead'
     load_plugin_value_invalid_req: ' Plugin "{message}" has an invalid value "{key_value}" for required key "{key_name}" {valid_options}; Using "{sub_value}" instead'
+    register_hook: A function "{message}" was associated to the hook "{event}"
+    register_hook_bad_event: A function "{message}" was associated to the custom hook "{event}"; this may not be wanted
+    register_hook_important: A function "{message}" was associated importantly to the hook "{event}"
+    run_hook: Executing function "{message}" for hook "{event}"
+    run_hook_no_events: An attempt to run hooks for event "{message}" failed; human error produced invalid event
     stub_type_conflict: ' Command "{message}" could not be loaded from file "{path}" [invalid type "{type}"]'
     sys_info: |
       === Printing Version Info ===
@@ -42,6 +47,8 @@ core:
     locale_missing: Message data {message} could not be associated to parent "{error_point}"
     plugin_loading: Plugin "{message}" could not be loaded. [{error_point}]
     plugin_missing_yaml: Plugin "{message}" could not be loaded; Could not find or read from file "{yaml_path}" or "{yaml_alt_path}"
+    register_hook_fail: An attempt to hook function "{message}" for event "{event}" failed [{error_point}]
+    run_hook_failed: An error was encountered trying to run "{message}" for hook "{hook}" [{error_point}]
   fatal:
     unload_at_error: |
       File could not be unloaded at "{message}"; Dumping here instead:\n
