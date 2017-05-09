@@ -132,7 +132,7 @@ def log(message,
         log_type=LogLevel.error,
         error_point=parent,
         send_to_chat=send_to_chat)
-  except IndexError:
+  except KeyError:
     # Occurs when parent string does not identify formatting
     log(get_locale_string('core.segments.with_level').format(message, log_type),
         parent='core.error.locale_mismatched_identity',
