@@ -35,7 +35,7 @@ def setup(config_path):
 
       state = True
 
-    perms.init_perms()
+    # perms.init_perms()
 
   # Make a new config if doesn't exist
   except FileNotFoundError:
