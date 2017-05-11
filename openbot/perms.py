@@ -6,11 +6,19 @@ user_perms = {}             # Permissions unpacked to each user
 
 
 class PermGroup:
-  def __init__(self, name, auto_summon=False, full_access=False, grant_to=None, whitelist=None, blacklist=None):
+  def __init__(self,
+               name,
+               owner=False,
+               auto_summon=False,
+               full_access=False,
+               grant_to=None,
+               whitelist=None,
+               blacklist=None):
     self.rank_name = name
 
     self.full_access = full_access
     self.auto_summon = auto_summon
+    self.owner = owner
 
     self.whitelist = [] if whitelist is None else whitelist
     self.blacklist = [] if blacklist is None else blacklist
@@ -24,6 +32,18 @@ class PermGroup:
     return False
 
 
+  def granted_explict(self, perm):
+    return self.owner or perm in self.whitelist and perm not in self.blacklist
+
+
+  def granted_implict(self, perm):
+    return not self.granted_explict(perm) and self.full_access
+
+
+  def granted(self, perm):
+    return self.granted_explict(perm) or self.granted_implict(perm)
+
+
   def update(self):
     pass
 
@@ -35,7 +55,8 @@ class PermGroup:
       'whitelist': self.whitelist,
       'blacklist': self.blacklist,
       'auto_summon': self.auto_summon,
-      'grant_to': self.grant_to
+      'grant_to': self.grant_to,
+      'owner': self.owner
     }
 
 
@@ -80,11 +101,15 @@ def get_perms_by_id(id):
       return user_perms.get(id)
 
 
-def get_perm(user, perm):
-  # TODO: Stub function > Tests if user has listed permission
-  return True
+def get_perm(user):
+  return get_perms_by_id(user.id)
 
 
 def set_perm(user, perm, state=True):
-  # TODO: Stub function > Gives from user the permission if they do not already have it
+  # TODO: Stub function > Gives from user the permission if they do not already have it by creating a "user group"
+  pass
+
+
+def has_perm(user, perm, explict=False):
+  # TODO: Stub Function > Returns if the permission is granted
   pass
